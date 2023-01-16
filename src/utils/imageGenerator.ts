@@ -1,40 +1,47 @@
 import { createCanvas, loadImage } from "canvas";
 
-const canvas = createCanvas(400, 200);
+const canvas = createCanvas(400, 400);
 const ctx = canvas.getContext("2d");
 
 
-const generateBalance = async (balance: number | string, cps: number | string, username: string): Promise<Buffer> => {
+const generateBalance = async (balance: number | string, cps: number | string, username: string, profileURL: string): Promise<Buffer> => {
   const balanceReadable = balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const bg = await loadImage("./backdrop-scaled.jpg")
-  ctx.drawImage(bg, 0, 0, 400, 200);
+  const bg = await loadImage("./src/utils/backdrop-scaled.jpg")
+  ctx.drawImage(bg, 0, 0, 400, 400);
 
+  const profile = await loadImage(profileURL);
+  ctx.drawImage(profile, 140, 50, 125, 125);
 
   ctx.fillStyle = "#FFFFFF";
   ctx.font = "34px Arial";
   ctx.textAlign = "center";
-  ctx.fillText(`${username}'s balance`, 200, 50);
+  ctx.fillText(`${username}'s balance`, 200, 225);
 
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "30px Arial";
+  ctx.font = "28px Arial";
   ctx.textAlign = "center";
-  ctx.fillText(`${balanceReadable}`, 200, 100);
+  ctx.fillText(`${balanceReadable} bits`, 200, 275);
 
   if(balance.toString().length > 1) {
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "30px Arial";
+    ctx.font = "24px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(`CPS: ${cps}`, 200, 150);
+    ctx.fillText(`CPS: ${cps} bits/s`, 200, 325);
   }
-
-
 
 
   const buffer = canvas.toBuffer("image/png");
   return buffer;
 };
 
+// const save = async (balance: number | string, cps: number | string, username: string, profileURL: string): Promise<void> => {
+//   const buffer = await generateBalance(balance, cps, username, profileURL);
+//   const fs = require("fs");
+//   fs.writeFileSync("balance.png", buffer);
+// };
+
+// save(1000, 1, "test", "https://cdn.discordapp.com/avatars/184366854674972672/7b008cc762b02513f16a0012a7529de5.png?size=128")
 
 
 export {
