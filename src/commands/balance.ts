@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Player } from "../types";
 import { generateBalance } from "../utils/imageGenerator";
 
-const pingCommand = {
+const balanceCommand = {
   data: new SlashCommandBuilder()
     .setName("balance")
     .setDescription("Replies with your current balance"),
@@ -14,7 +14,7 @@ const pingCommand = {
         discordId: interaction.user.id,
       })
 
-      const img = await generateBalance(data.balance, data.cps, interaction.user.username)
+      const img = await generateBalance(data.balance, data.cps, interaction.user.username, interaction.user.displayAvatarURL({extension: "png", size: 128}))
       await interaction.reply({ files: [img] });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
@@ -28,4 +28,4 @@ const pingCommand = {
   }
 }
 
-export default pingCommand;
+export default balanceCommand;
