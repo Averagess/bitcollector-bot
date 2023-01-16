@@ -31,12 +31,12 @@ const statsCommand = {
         .setTimestamp();
       await interaction.reply({ embeds: [statsEmbed] })
     } catch (error) {
-      if(error instanceof AxiosError && error.response?.status === 404) {
-        await interaction.reply({ content: "You don't have an account yet! Use /start to create one", ephemeral: true });
+      if(error instanceof AxiosError) {
+        if(!error.response) throw new Error("No response from server")
+        else if(error.response.status === 404) return await interaction.reply({ content: "You don't have an account yet! Use /start to create one", ephemeral: true });
       }
       else {
-        console.error(`error happened getting stats: ${error}`);
-        await interaction.reply({ content: "There was an error while getting your stats... please try again later", ephemeral: true });
+        throw new Error(`Unknown error raised when trying to fetch stats.. error: ${error}`);
       }
     }
   },

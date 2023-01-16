@@ -8,6 +8,7 @@ import {
 import { Player } from "../types";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
+import logger from "../utils/logger";
 
 const buyCommand = {
   data: new SlashCommandBuilder()
@@ -66,15 +67,16 @@ const buyCommand = {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
+        if(!error.response) throw new Error("No response from server");
         if (
-          error.response?.status === 404 &&
-          error.response?.data === "No such player"
+          error.response.status === 404 &&
+          error.response.data === "No such player"
         ) {
           await interaction.reply({
             content: "You don't have an account! Use /create to make one",
             ephemeral: true,
           });
-        } else if (error.response?.data === "No such item in the shop") {
+        } else if (error.response.data === "No such item in the shop") {
           const errorEmbed = ErrorEmbed({
             title: "Purchase failed!",
             description: `There is no item called ${interaction.options.getString("item")} in the shop`,
@@ -83,7 +85,7 @@ const buyCommand = {
           await interaction.reply({
             embeds: [errorEmbed],
           });
-        } else if (error.response?.data.error === "not enough money") {
+        } else if (error.response.data.error === "not enough money") {
           const errorEmbed = ErrorEmbed({
             title:"Purchase failed!",
             description:`You dont have enough bits!\nYou need ${intToString(
@@ -97,7 +99,7 @@ const buyCommand = {
           await interaction.reply({ embeds: [errorEmbed] });
         }
       } else {
-        console.error(`unknown error happened buying item: ${error}`);
+        logger.error(`unknown error happened buying item: ${error}`);
         await interaction.reply({
           content:
             "There was an error while buying the item... please try again later",
