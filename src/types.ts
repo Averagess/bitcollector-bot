@@ -1,11 +1,17 @@
+import { Client, Collection } from "discord.js";
+
+export interface extendedClient extends Client {
+  commands?: Collection<string, any>;
+}
+
 export interface Player {
   discordDisplayName: string
   discordId: string
   balance: string
   cps: number
   inventory: InventoryItem[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 
 export interface InventoryItem {
