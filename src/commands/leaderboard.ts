@@ -2,11 +2,10 @@ import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "
 import axios from "axios";
 import { LeaderboardItem } from "../types";
 
-
-const pingCommand = {
+const leaderboardCommand = {
   data: new SlashCommandBuilder()
     .setName("leaderboard")
-    .setDescription("Replies with an TOP 10 Global leaderboard"),
+    .setDescription("Replies with an Global leaderboard"),
     
   async execute(interaction: ChatInputCommandInteraction) {
     const leaderboard = await axios.get<LeaderboardItem[]>(
@@ -17,10 +16,10 @@ const pingCommand = {
       .setTitle("Global Leaderboard")
       .addFields(
         leaderboard.data.map((item, index) => {
-          const balanceReadable = item.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          const balanceReadable = item.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           return {
-            value: `**Balance:** ${balanceReadable} bits\n**CPS:** ${item.cps}`,
             name: `${index + 1}. ${item.discordDisplayName}`,
+            value: `💰**Balance:** ${balanceReadable} bits\n🕓**CPS:** ${item.cps} bits/s`,
           };
         })
       )
@@ -32,4 +31,4 @@ const pingCommand = {
   },
 };
 
-export default pingCommand;
+export default leaderboardCommand;
