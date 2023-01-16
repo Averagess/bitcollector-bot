@@ -5,7 +5,7 @@ import { LeaderboardItem } from "../types";
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
     .setName("leaderboard")
-    .setDescription("Replies with an Global leaderboard"),
+    .setDescription("Replies with the global leaderboard"),
     
   async execute(interaction: ChatInputCommandInteraction) {
     const leaderboard = await axios.get<LeaderboardItem[]>(
@@ -18,7 +18,7 @@ const leaderboardCommand = {
         leaderboard.data.map((item, index) => {
           const balanceReadable = item.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           return {
-            name: `${index + 1}. ${item.discordDisplayName}`,
+            name: `${index+1}. ${item.discordDisplayName}`,
             value: `💰**Balance:** ${balanceReadable} bits\n🕓**CPS:** ${item.cps} bits/s`,
           };
         })

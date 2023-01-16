@@ -20,7 +20,7 @@ const createCommand = {
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
-          await interaction.reply({ content: "You already have an account!" });
+          await interaction.reply({ content: "You already have an account!", ephemeral: true });
         }
       else {
         console.error(`error happened creating an account: ${error}`);

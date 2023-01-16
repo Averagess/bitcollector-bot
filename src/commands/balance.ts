@@ -15,7 +15,9 @@ const balanceCommand = {
       })
 
       const img = await generateBalance(data.balance, data.cps, interaction.user.username, interaction.user.displayAvatarURL({extension: "png", size: 128}))
+
       await interaction.reply({ files: [img] });
+      
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
         await interaction.reply({ content: "You don't have an account! Use /create to create one", ephemeral: true });

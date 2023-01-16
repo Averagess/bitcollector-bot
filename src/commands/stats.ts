@@ -22,7 +22,7 @@ const statsCommand = {
         .setTitle(`${interaction.user.tag}'s stats`)
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
-          { name: "🕓CPS", value: `${player.data.cps.toString()} Bits/s`, inline: true },
+          { name: "🕓CPS", value: `${player.data.cps.toString()} bits/s`, inline: true },
           { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleDateString(), inline: true },
         )
         .setThumbnail(interaction.user.displayAvatarURL())
@@ -31,9 +31,12 @@ const statsCommand = {
         .setTimestamp();
       await interaction.reply({ embeds: [statsEmbed] })
     } catch (error) {
-      console.error(`error happened getting stats: ${error}`);
       if(error instanceof AxiosError && error.response?.status === 404) {
         await interaction.reply({ content: "You don't have an account yet! Use /start to create one", ephemeral: true });
+      }
+      else {
+        console.error(`error happened getting stats: ${error}`);
+        await interaction.reply({ content: "There was an error while getting your stats... please try again later", ephemeral: true });
       }
     }
   },

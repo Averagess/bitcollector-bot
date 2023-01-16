@@ -4,14 +4,15 @@ import {
   EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
-import { Player } from "../types";
 
+import { Player } from "../types";
+import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
 
 const buyCommand = {
   data: new SlashCommandBuilder()
     .setName("buy")
-    .setDescription("Buys an item from the shop")
+    .setDescription("Buy an item from the shop")
     .addStringOption((option: any) =>
       option
         .setName("item")
@@ -21,7 +22,7 @@ const buyCommand = {
     .addIntegerOption((option: any) =>
       option
         .setName("amount")
-        .setDescription("The amount of items you want to buy")
+        .setDescription("The amount of items you want to buy, defaults to 1")
     ),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
@@ -42,7 +43,6 @@ const buyCommand = {
           inventoryItem.name.toLowerCase() === item?.toLowerCase()
       );
 
-      console.log(findMatchingItem);
 
       const resultEmbed = new EmbedBuilder()
         .setTitle("Purchase successful!")
@@ -75,25 +75,25 @@ const buyCommand = {
             ephemeral: true,
           });
         } else if (error.response?.data === "No such item in the shop") {
+          const errorEmbed = ErrorEmbed({
+            title: "Purchase failed!",
+            description: `There is no item called ${interaction.options.getString("item")} in the shop`,
+            interaction,
+          });
           await interaction.reply({
-            content: "No such item in the shop",
-            ephemeral: true,
+            embeds: [errorEmbed],
           });
         } else if (error.response?.data.error === "not enough money") {
-          console.log(error.response.data);
-          const errorEmbed = new EmbedBuilder()
-            .setTitle("Purchase failed!")
-            .setColor("#fc0303")
-            .setDescription(
-              `You dont have enough bits! \nYou need: ${intToString(
-                error.response?.data.itemPrice
-              )} bits \nto buy ${intToString(error.response?.data.amount)} ${
-                error.response?.data.itemName
-              } and currently you have ${intToString(
-                error.response?.data.balance
-              )} bits.`
-            )
-            .setFooter({ text: `Requested by ${interaction.user.tag}` });
+          const errorEmbed = ErrorEmbed({
+            title:"Purchase failed!",
+            description:`You dont have enough bits!\nYou need ${intToString(
+              error.response?.data.itemPrice
+            )} bits to purchase\n${intToString(error.response?.data.amount)} ${
+              error.response.data.itemName
+            }`,
+            interaction}
+          );
+
           await interaction.reply({ embeds: [errorEmbed] });
         }
       } else {

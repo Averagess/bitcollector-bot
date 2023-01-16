@@ -5,7 +5,7 @@ import { InventoryItem } from "../types";
 const storeCommand = {
   data: new SlashCommandBuilder()
     .setName("store")
-    .setDescription("Replies with an store page!"),
+    .setDescription("Replies with the store page"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       const { data } = await axios.post<InventoryItem[]>("http://localhost:3000/getShopForPlayer", {
@@ -18,8 +18,8 @@ const storeCommand = {
           data.map((item, index) => {
             const priceReadable = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             return {
-              value: `**Price:** ${priceReadable} bits\n**CPS:** ${item.cps}\n**You own:** ${item.amount}`,
               name: `${index + 1}. ${item.name}`,
+              value: `**Price:** ${priceReadable} bits\n**CPS:** ${item.cps}\n**You own:** ${item.amount}`,
             };
           })
         )
