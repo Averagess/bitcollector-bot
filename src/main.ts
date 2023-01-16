@@ -1,37 +1,13 @@
-import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
-import { readdirSync } from "fs";
-import path from "node:path";
+import { Events } from "discord.js";
 
 import config from "./utils/config";
 
+import { client } from "./client";
+import axios, { AxiosError } from "axios";
 
-export interface extendedClient extends Client {
-  commands?: Collection<string, any>;
-}
-
-export const client: extendedClient = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-client.once(Events.ClientReady, c => {
-  if(c.user) console.log(`Ready, logged in as ${c.user.tag}`);
-  else console.log("Ready, but not logged in");
-});
-
-
-client.commands = new Collection();
-const commandsPath = path.join(__dirname, "commands");
-const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith(".ts"));
-
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	// Set a new item in the Collection with the key as the command name and the value as the exported module
-	if ('data' in command.default && 'execute' in command.default) {
-		client.commands.set(command.default.data.name, command);
-	} else {
-		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-	}
-}
-
+client.once(Events.ClientReady, (c) => {
+  console.log(`Logged in as ${c.user.tag}!`);
+})
 
 client.on(Events.InteractionCreate, async interaction => {
   if(!interaction.isChatInputCommand()) return;
@@ -47,5 +23,15 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 })
 
+client.on(Events.MessageCreate, async message => {
+  if(message.author.bot) return;
+  try {
+    await axios.post("http://localhost:3000/addBitToPlayer", { discordId: message.author.id })
+    console.log(`Succesfully added bit to ${message.author.tag}`)
+  } catch (error) {
+    if(error instanceof AxiosError && error.response?.status === 404) return;
+    else console.error("Error while adding bit", error)
+  }
+})
 
 client.login(config.DISCORD_TOKEN);
