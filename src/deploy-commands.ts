@@ -1,6 +1,6 @@
 import config from "./utils/config";
-const { REST, Routes } = require('discord.js');
-const fs = require('node:fs');
+import { REST, Routes } from 'discord.js';
+import fs from 'node:fs';
 
 
 const commands = [];
@@ -22,11 +22,10 @@ const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
-		const data = await rest.put(
+		const data: any = await rest.put(
 			Routes.applicationGuildCommands(config.CLIENT_ID, config.GUILD_ID),
 			{ body: commands },
 		);
-
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
