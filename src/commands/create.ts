@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import axios, { AxiosError } from "axios";
 
-const pingCommand = {
+const createCommand = {
   data: new SlashCommandBuilder()
     .setName("create")
     .setDescription("Creates an BitCollector account"),
@@ -30,4 +30,4 @@ const pingCommand = {
   },
 };
 
-export default pingCommand;
+export default createCommand;
