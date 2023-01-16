@@ -1,12 +1,6 @@
 import axios from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-
-interface ShopItem {
-  name: string;
-  price: number;
-  cps: number;
-  amount: number;
-}
+import { InventoryItem } from "../types";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -14,7 +8,7 @@ const storeCommand = {
     .setDescription("Replies with an store page!"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
-      const { data } = await axios.post<ShopItem[]>("http://localhost:3000/getShopForPlayer", {
+      const { data } = await axios.post<InventoryItem[]>("http://localhost:3000/getShopForPlayer", {
         discordId: interaction.user.id,
       });
 
@@ -32,7 +26,6 @@ const storeCommand = {
         .setColor("#ebc034")
         .setFooter({ text: `Requested by ${interaction.user.tag}` })
         .setTimestamp();
-
 
       interaction.reply({ embeds: [shopEmbed] });
     } catch (error) {
