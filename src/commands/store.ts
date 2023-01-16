@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { InventoryItem } from "../types";
 
@@ -29,8 +29,12 @@ const storeCommand = {
 
       interaction.reply({ embeds: [shopEmbed] });
     } catch (error) {
-      console.error(`error happened getting store: ${error}`);
-      await interaction.reply({ content: "There was an error while getting the store... please try again later", ephemeral: true });
+      if(error instanceof AxiosError) {
+        if(!error.response) throw new Error("No response from server")
+        else if(error.response.status === 404) await interaction.reply({ content: "You don't have an account yet! Please create one with /create", ephemeral: true })
+        else throw new Error(`There was an unknown AxiosError error while getting the store, error: ${error}`)
+      }
+      else throw new Error(`There was an unknown error while getting the store, error: ${error}`)
     }
   }
 }

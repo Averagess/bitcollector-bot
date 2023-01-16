@@ -19,12 +19,14 @@ const createCommand = {
         await interaction.reply({ content: "Account created successfully!" });
       }
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 409) {
+      if (error instanceof AxiosError) {
+        if(!error.response) throw new Error("No response from server");
+        else if(error.response.status === 409){
           await interaction.reply({ content: "You already have an account!", ephemeral: true });
         }
+        }
       else {
-        console.error(`error happened creating an account: ${error}`);
-        await interaction.reply({ content: "There was an error while creating your account... please try again later", ephemeral: true });
+        throw new Error(`Unknown error happened creating an account.. Reason: ${error}`)
       }
     }
   },
