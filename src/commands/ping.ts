@@ -6,7 +6,7 @@ const pingCommand = {
     .setDescription("Replies with Pong!"),
   async execute(interaction: ChatInputCommandInteraction) {
     const timeTook = Date.now() - interaction.createdAt.valueOf()
-    await interaction.reply("Pong " + timeTook + "ms");
+    await interaction.reply(`Pong! after ${timeTook}ms`);
   }
 }
 
