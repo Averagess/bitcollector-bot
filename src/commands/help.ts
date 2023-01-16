@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { client } from "../main";
+
+import { client } from "../client";
 
 
 const helpCommand = {
@@ -7,7 +8,7 @@ const helpCommand = {
     .setName("help")
     .setDescription("Replies with the commands you can use"),
   async execute(interaction: ChatInputCommandInteraction) {
-    if(!client.commands) throw new Error("Commands not loaded yet")
+    if(!client.commands) return await interaction.reply("There are no commands to show")
     const cmds = client.commands.map(cmd => ({ name: cmd.default.data.name, description: cmd.default.data.description}))
 
     const helpEmbed = new EmbedBuilder()
@@ -23,7 +24,7 @@ const helpCommand = {
       .setFooter({ text: `Requested by ${interaction.user.tag}` })
       .setTimestamp();
     
-      interaction.reply({ embeds: [helpEmbed] });
+      return await interaction.reply({ embeds: [helpEmbed] });
   }
 }
 
