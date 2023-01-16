@@ -19,9 +19,12 @@ function intToString(num : string) {
             break;
         }
     }
-    return ((bignum / BigInt(si[index].v)).toString().replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[index].s);    
+    if(bignum < Number.MAX_SAFE_INTEGER) {
+      return (Number(bignum) / si[index].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[index].s;
+    }
+    else return ((bignum / BigInt(si[index].v)).toString().replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[index].s);    
   } catch (error) {
-    return num.toString()
+    return num
   }
 }
 
