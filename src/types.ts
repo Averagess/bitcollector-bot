@@ -14,6 +14,11 @@ export interface Player {
   updatedAt: string
 }
 
+export interface PurchaseResponse {
+  player: Player
+  purchasedItem: InventoryItem
+}
+
 export interface InventoryItem {
   name: string
   price: number
