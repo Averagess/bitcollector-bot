@@ -18,7 +18,7 @@ const clientActivities: ClientActivity[] = [
     type: ActivityType.Watching
   },
   {
-    name: "to your commands",
+    name: "your commands",
     type: ActivityType.Listening
   }
 ]
