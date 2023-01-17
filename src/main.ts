@@ -1,10 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { Events } from "discord.js";
-
+import cron from "node-cron";
 import config from "./utils/config";
 
 import { client } from "./client";
 import logger from "./utils/logger";
+import clientActivities from "./clientActivities";
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
@@ -48,5 +49,18 @@ client.on(Events.MessageCreate, async message => {
     else logger.error("Unknown Error when adding bit to user!", error)
   }
 })
+
+
+cron.schedule('*/30 * * * *', () => {
+  console.log('running a task every minute');
+  logger.info("Switching client activity...")
+  const {name, type} = clientActivities[Math.floor(Math.random() * clientActivities.length)]
+  try {
+    client.user?.setActivity(name, { type })
+    logger.info(`Succesfully switched client activity to ${name} (${type})`)
+  } catch (error) {
+    logger.error("Error when switching client activity!", error)
+  }
+});
 
 client.login(config.DISCORD_TOKEN);
