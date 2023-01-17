@@ -1,10 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { Events } from "discord.js";
 import cron from "node-cron";
-import config from "./utils/config";
 
 import { client } from "./client";
 import logger from "./utils/logger";
+import config from "./utils/config";
 import clientActivities from "./clientActivities";
 
 client.once(Events.ClientReady, (c) => {
@@ -67,3 +67,15 @@ cron.schedule('*/30 * * * *', () => {
 });
 
 client.login(config.DISCORD_TOKEN);
+
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received. Exiting...")
+  client.destroy()
+  process.exit(0)
+})
+
+process.on("SIGINT", () => {
+  logger.info("SIGINT received. Exiting...")
+  client.destroy()
+  process.exit(0)
+})
