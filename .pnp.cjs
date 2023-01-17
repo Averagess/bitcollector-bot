@@ -29,12 +29,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@types/node", "npm:18.11.18"],\
+            ["@types/node-cron", "npm:3.0.7"],\
             ["axios", "npm:1.2.2"],\
             ["canvas", "npm:2.11.0"],\
             ["discord.js", "npm:14.7.1"],\
             ["dotenv", "npm:16.0.3"],\
             ["eslint", "npm:8.31.0"],\
             ["fs", "npm:0.0.1-security"],\
+            ["node-cron", "npm:3.0.2"],\
             ["path", "npm:0.12.7"],\
             ["prettier", "npm:2.8.2"],\
             ["ts-node", "virtual:ba45edc22c8ae392f22ffb08dc56bb10a9c4dbedf3eaf58cf504b61e0aeeea0c828a19d560b641271a3c83cd9ea1e2b36c84195d6111660f32b42bcbc52a22ae#npm:10.9.1"],\
@@ -376,6 +378,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/node-cron", [\
+        ["npm:3.0.7", {\
+          "packageLocation": "./.yarn/cache/@types-node-cron-npm-3.0.7-a36026eb40-1a37bd32ef.zip/node_modules/@types/node-cron/",\
+          "packageDependencies": [\
+            ["@types/node-cron", "npm:3.0.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/strip-bom", [\
         ["npm:3.0.0", {\
           "packageLocation": "./.yarn/cache/@types-strip-bom-npm-3.0.0-495ea2cef5-cb165d0c2c.zip/node_modules/@types/strip-bom/",\
@@ -410,12 +421,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["BitCollector-Bot", "workspace:."],\
             ["@types/node", "npm:18.11.18"],\
+            ["@types/node-cron", "npm:3.0.7"],\
             ["axios", "npm:1.2.2"],\
             ["canvas", "npm:2.11.0"],\
             ["discord.js", "npm:14.7.1"],\
             ["dotenv", "npm:16.0.3"],\
             ["eslint", "npm:8.31.0"],\
             ["fs", "npm:0.0.1-security"],\
+            ["node-cron", "npm:3.0.2"],\
             ["path", "npm:0.12.7"],\
             ["prettier", "npm:2.8.2"],\
             ["ts-node", "virtual:ba45edc22c8ae392f22ffb08dc56bb10a9c4dbedf3eaf58cf504b61e0aeeea0c828a19d560b641271a3c83cd9ea1e2b36c84195d6111660f32b42bcbc52a22ae#npm:10.9.1"],\
@@ -2221,6 +2234,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["node-cron", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/node-cron-npm-3.0.2-5ee1c1c226-dd21585c0d.zip/node_modules/node-cron/",\
+          "packageDependencies": [\
+            ["node-cron", "npm:3.0.2"],\
+            ["uuid", "npm:8.3.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["node-fetch", [\
         ["npm:2.6.8", {\
           "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.8-ddb8bfc274-91f57be68e.zip/node_modules/node-fetch/",\
@@ -3258,6 +3281,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/util-deprecate-npm-1.0.2-e3fe1a219c-474acf1146.zip/node_modules/util-deprecate/",\
           "packageDependencies": [\
             ["util-deprecate", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["uuid", [\
+        ["npm:8.3.2", {\
+          "packageLocation": "./.yarn/cache/uuid-npm-8.3.2-eca0baba53-5575a8a75c.zip/node_modules/uuid/",\
+          "packageDependencies": [\
+            ["uuid", "npm:8.3.2"]\
           ],\
           "linkType": "HARD"\
         }]\
