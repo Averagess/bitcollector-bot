@@ -13,7 +13,7 @@ interface generateBalanceParams {
 const generateBalance = async ({balance, cps, username, avatarURL}: generateBalanceParams): Promise<Buffer> => {
   const balanceReadable = balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const bg = await loadImage("./src/utils/backdrop-scaled.jpg")
+  const bg = await loadImage("./src/utils/backdrop-scaled.png")
   ctx.drawImage(bg, 0, 0, 400, 400);
 
   const profile = await loadImage(avatarURL);
