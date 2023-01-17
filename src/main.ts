@@ -56,7 +56,6 @@ client.on(Events.MessageCreate, async message => {
 
 
 cron.schedule('*/30 * * * *', () => {
-  console.log('running a task every minute');
   logger.info("Switching client activity...")
   const {name, type} = clientActivities[Math.floor(Math.random() * clientActivities.length)]
   try {
