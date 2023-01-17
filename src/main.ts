@@ -35,16 +35,17 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
+
   try {
     await axios.post("http://localhost:3000/addBitToPlayer", { discordId: message.author.id })
     logger.info(`Succesfully added bit to ${message.author.tag}`)
   } catch (error) {
     if(error instanceof AxiosError){
-      if(!error.response) logger.error("No response from server while adding bit to user! Backend or DB Down?", error)
+      if(!error.response) logger.error("No response from server when adding bit to user! Backend or DB Down?", error)
       else if(error.response.status === 404) return;
     }
 
-    else logger.error("Unknown Error while adding bit to user!", error)
+    else logger.error("Unknown Error when adding bit to user!", error)
   }
 })
 
