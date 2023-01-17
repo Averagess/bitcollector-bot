@@ -14,8 +14,8 @@ const clientActivities: ClientActivity[] = [
     type: ActivityType.Playing
   },
   {
-    name: "your bits",
-    type: ActivityType.Watching
+    name: "Counting your bits",
+    type: ActivityType.Custom
   },
   {
     name: "your commands",
