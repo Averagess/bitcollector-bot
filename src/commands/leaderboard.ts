@@ -4,8 +4,9 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import axios, { AxiosError } from "axios";
+
 import { Leaderboard } from "../types";
-import {calcMinutesAfterDate, calcMinutesToDate} from "../utils/calcMinutesToDate";
+import {calcMinutesAfterDate, calcMinutesToDate} from "../utils/calcMinutesHelper";
 
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
