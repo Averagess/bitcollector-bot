@@ -10,9 +10,11 @@ import intToString from "../utils/intToString";
 const statsCommand = {
   data: new SlashCommandBuilder()
     .setName("stats")
-    .setDescription("Replies with your stats"),
+    .setDescription("Replies with your current stats"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
+      await interaction.deferReply();
+      
       const player = await axios.post<Player>(
         "http://localhost:3000/updatePlayer",
         { discordId: interaction.user.id }
@@ -29,11 +31,13 @@ const statsCommand = {
         .setColor("#ebc034")
         .setFooter({ text: `Requested by ${interaction.user.tag}` })
         .setTimestamp();
-      await interaction.reply({ embeds: [statsEmbed] })
+      
+      await interaction.editReply({ embeds: [statsEmbed] })
     } catch (error) {
       if(error instanceof AxiosError) {
         if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) return await interaction.reply({ content: "You don't have an account yet! Use /start to create one", ephemeral: true });
+        else if(error.response.status === 404) return await interaction.editReply({ content: "You don't have an account yet! Use /start to create one" });
+        else throw new Error(`Unknown axios error raised when trying to fetch stats.. error: ${error}`);
       }
       else {
         throw new Error(`Unknown error raised when trying to fetch stats.. error: ${error}`);
