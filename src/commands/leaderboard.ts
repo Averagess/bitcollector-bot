@@ -13,6 +13,8 @@ const leaderboardCommand = {
 
   async execute(interaction: ChatInputCommandInteraction) {
     try {
+      await interaction.deferReply();
+      
       const leaderboard = await axios.get<LeaderboardItem[]>(
         "http://localhost:3000/leaderboard"
       );
@@ -34,7 +36,7 @@ const leaderboardCommand = {
         .setFooter({ text: `Requested by ${interaction.user.tag}` })
         .setTimestamp();
 
-      await interaction.reply({ embeds: [leaderboardEmbed] });
+      await interaction.editReply({ embeds: [leaderboardEmbed] });
     } catch (error) {
       if(error instanceof AxiosError && !error.response) throw new Error("No response from server")
       else throw new Error(`There was an unknown error while getting the leaderboard, error: ${error}`)
