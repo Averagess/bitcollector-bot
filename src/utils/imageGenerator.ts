@@ -3,14 +3,20 @@ import { createCanvas, loadImage } from "canvas";
 const canvas = createCanvas(400, 400);
 const ctx = canvas.getContext("2d");
 
+interface generateBalanceParams {
+  balance: string;
+  cps: string;
+  username: string;
+  avatarURL: string;
+}
 
-const generateBalance = async (balance: number | string, cps: number | string, username: string, profileURL: string): Promise<Buffer> => {
-  const balanceReadable = balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const generateBalance = async ({balance, cps, username, avatarURL}: generateBalanceParams): Promise<Buffer> => {
+  const balanceReadable = balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   const bg = await loadImage("./src/utils/backdrop-scaled.jpg")
   ctx.drawImage(bg, 0, 0, 400, 400);
 
-  const profile = await loadImage(profileURL);
+  const profile = await loadImage(avatarURL);
   ctx.drawImage(profile, 140, 50, 125, 125);
 
   ctx.fillStyle = "#FFFFFF";
@@ -23,7 +29,7 @@ const generateBalance = async (balance: number | string, cps: number | string, u
   ctx.textAlign = "center";
   ctx.fillText(`${balanceReadable} bits`, 200, 275);
 
-  if(balance.toString().length > 1) {
+  if(balance.length > 1) {
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
