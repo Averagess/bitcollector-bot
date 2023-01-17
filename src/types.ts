@@ -21,7 +21,14 @@ export interface InventoryItem {
   amount: number
 }
 
-export interface LeaderboardItem {
+export interface Leaderboard {
+  players: PlayerInLeaderboard[] | null
+  createdAt: string | null
+  nextUpdate: string | null
+}
+
+export interface PlayerInLeaderboard {
+  discordId: String
   discordDisplayName: string;
   cps: number;
   balance: string;
