@@ -8,7 +8,6 @@ import {
 import { Player } from "../types";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
-import logger from "../utils/logger";
 
 const buyCommand = {
   data: new SlashCommandBuilder()
@@ -27,8 +26,11 @@ const buyCommand = {
     ),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
+      await interaction.deferReply();
+
       const item = interaction.options.getString("item");
       const amount = interaction.options.getInteger("amount");
+
 
       const { data } = await axios.post<Player>(
         "http://localhost:3000/buyItem",
@@ -44,7 +46,6 @@ const buyCommand = {
           inventoryItem.name.toLowerCase() === item?.toLowerCase()
       );
 
-
       const resultEmbed = new EmbedBuilder()
         .setTitle("Purchase successful!")
         .setColor("#a1fc03")
@@ -55,23 +56,20 @@ const buyCommand = {
         resultEmbed.setDescription(
           `You bought ${amount} ${findMatchingItem.name}'s, you now have ${findMatchingItem.amount} of them`
         );
-        await interaction.reply({ embeds: [resultEmbed] });
+        await interaction.editReply({ embeds: [resultEmbed] });
       } else if (findMatchingItem) {
         resultEmbed.setDescription(
           `You bought an ${findMatchingItem.name}, you now have ${findMatchingItem.amount} of them`
         );
-        await interaction.reply({ embeds: [resultEmbed] });
+        await interaction.editReply({ embeds: [resultEmbed] });
       } else {
         resultEmbed.setDescription(`You bought an ${item}`);
-        await interaction.reply({ embeds: [resultEmbed] });
+        await interaction.editReply({ embeds: [resultEmbed] });
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        if(!error.response) throw new Error("No response from server");
-        if (
-          error.response.status === 404 &&
-          error.response.data === "No such player"
-        ) {
+        if (!error.response) throw new Error("No response from server");
+        if (error.response.data === "No such player") {
           await interaction.reply({
             content: "You don't have an account! Use /create to make one",
             ephemeral: true,
@@ -79,7 +77,9 @@ const buyCommand = {
         } else if (error.response.data === "No such item in the shop") {
           const errorEmbed = ErrorEmbed({
             title: "Purchase failed!",
-            description: `There is no item called ${interaction.options.getString("item")} in the shop`,
+            description: `There is no item called ""${interaction.options.getString(
+              "item"
+            )}" in the shop`,
             interaction,
           });
           await interaction.reply({
@@ -87,24 +87,19 @@ const buyCommand = {
           });
         } else if (error.response.data.error === "not enough money") {
           const errorEmbed = ErrorEmbed({
-            title:"Purchase failed!",
-            description:`You dont have enough bits!\nYou need ${intToString(
+            title: "Purchase failed!",
+            description: `You dont have enough bits!\nYou need ${intToString(
               error.response?.data.itemPrice
             )} bits to purchase\n${intToString(error.response?.data.amount)} ${
               error.response.data.itemName
             }`,
-            interaction}
-          );
+            interaction,
+          });
 
           await interaction.reply({ embeds: [errorEmbed] });
         }
       } else {
-        logger.error(`unknown error happened buying item: ${error}`);
-        await interaction.reply({
-          content:
-            "There was an error while buying the item... please try again later",
-          ephemeral: true,
-        });
+        throw new Error(`unknown error happened buying item: ${error}`);
       }
     }
   },
