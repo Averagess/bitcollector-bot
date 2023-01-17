@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import { readdirSync } from "fs";
 import path from "path";
+
 import { extendedClient } from "./types";
 
 
