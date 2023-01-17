@@ -5,7 +5,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
-import { Player } from "../types";
+import { PurchaseResponse } from "../types";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
 
@@ -16,7 +16,7 @@ const buyCommand = {
     .addStringOption((option: any) =>
       option
         .setName("item")
-        .setDescription("The item you want to buy")
+        .setDescription("The item you want to buy (Name or ID)")
         .setRequired(true)
     )
     .addIntegerOption((option: any) =>
@@ -32,7 +32,7 @@ const buyCommand = {
       const amount = interaction.options.getInteger("amount");
 
 
-      const { data } = await axios.post<Player>(
+      const { data } = await axios.post<PurchaseResponse>(
         "http://localhost:3000/buyItem",
         {
           discordId: interaction.user.id,
@@ -41,10 +41,7 @@ const buyCommand = {
         }
       );
 
-      const findMatchingItem = data.inventory.find(
-        (inventoryItem) =>
-          inventoryItem.name.toLowerCase() === item?.toLowerCase()
-      );
+      const PurchasedItem = data.purchasedItem;
 
       const resultEmbed = new EmbedBuilder()
         .setTitle("Purchase successful!")
@@ -52,14 +49,14 @@ const buyCommand = {
         .setFooter({ text: `Requested by ${interaction.user.tag}` })
         .setTimestamp();
 
-      if (amount && amount > 1 && findMatchingItem) {
+      if (amount && amount > 1 && PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought ${amount} ${findMatchingItem.name}'s, you now have ${findMatchingItem.amount} of them`
+          `You bought ${amount} ${PurchasedItem.name}'s, you now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
-      } else if (findMatchingItem) {
+      } else if (PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought an ${findMatchingItem.name}, you now have ${findMatchingItem.amount} of them`
+          `You bought an ${PurchasedItem.name}, you now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
       } else {
