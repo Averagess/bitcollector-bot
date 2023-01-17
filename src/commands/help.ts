@@ -12,7 +12,7 @@ const helpCommand = {
     const cmds = client.commands.map(cmd => ({ name: cmd.default.data.name, description: cmd.default.data.description}))
 
     const helpEmbed = new EmbedBuilder()
-      .setTitle("Help")
+      .setTitle("All usable commands")
       .addFields(
         cmds.map((cmd) => {
           return {
