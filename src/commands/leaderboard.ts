@@ -6,7 +6,10 @@ import {
 import axios, { AxiosError } from "axios";
 
 import { Leaderboard } from "../types";
-import {calcMinutesAfterDate, calcMinutesToDate} from "../utils/calcMinutesHelper";
+import {
+  calcMinutesAfterDate,
+  calcMinutesToDate,
+} from "../utils/calcMinutesHelper";
 
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
@@ -16,12 +19,13 @@ const leaderboardCommand = {
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply();
-      
+
       const { data } = await axios.get<Leaderboard>(
         "http://localhost:3000/leaderboard"
       );
-      
-      if (!data.players || !data.createdAt || !data.nextUpdate) throw new Error("No players in leaderboard");
+
+      if (!data.players || !data.createdAt || !data.nextUpdate)
+        throw new Error("No players in leaderboard");
 
       const leaderboardEmbed = new EmbedBuilder()
         .setTitle("Global Leaderboard")
@@ -35,15 +39,25 @@ const leaderboardCommand = {
               name: `${index + 1}. ${item.discordDisplayName}`,
               value: `💰**Balance:** ${balanceReadable} bits\n🕓**CPS:** ${item.cps} bits/s`,
             };
-          }, )
+          })
         )
         .setColor("#ebc034")
-        .setFooter({ text: `Leaderboard updated: ${calcMinutesAfterDate(new Date(data.createdAt))} minutes ago, next update in: ${calcMinutesToDate(new Date(data.nextUpdate))} minutes` })
+        .setFooter({
+          text: `Leaderboard updated: ${calcMinutesAfterDate(
+            new Date(data.createdAt)
+          )} minutes ago, next update in: ${calcMinutesToDate(
+            new Date(data.nextUpdate)
+          )} minutes`,
+        });
 
       await interaction.editReply({ embeds: [leaderboardEmbed] });
     } catch (error) {
-      if(error instanceof AxiosError && !error.response) throw new Error("No response from server")
-      else throw new Error(`There was an unknown error while getting the leaderboard, error: ${error}`)
+      if (error instanceof AxiosError && !error.response)
+        throw new Error("No response from server");
+      else
+        throw new Error(
+          `There was an unknown error while getting the leaderboard, error: ${error}`
+        );
     }
   },
 };
