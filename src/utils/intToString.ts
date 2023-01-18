@@ -5,7 +5,7 @@ function intToString(num : string) {
     if (bignum < 1000) {
         return num;
     }
-    let si = [
+    const si = [
       {v: 1E3, s: "K"},
       {v: 1E6, s: "M"},
       {v: 1E9, s: "B"},
