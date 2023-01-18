@@ -1,7 +1,8 @@
 {
-  "name": "BitCollector-Bot",
+  "name": "bitcollector-bot",
   "packageManager": "yarn@3.3.1",
   "scripts": {
+    "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
     "lint": "eslint . --ext .js,.ts",
     "prettier": "prettier --write ."
@@ -20,7 +21,9 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/node-cron": "^3.0.7",
-    "eslint": "^8.31.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "eslint": "^8.32.0",
     "prettier": "^2.8.2",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
