@@ -13,13 +13,13 @@ const buyCommand = {
   data: new SlashCommandBuilder()
     .setName("buy")
     .setDescription("Buy an item from the shop")
-    .addStringOption((option: any) =>
+    .addStringOption((option) =>
       option
         .setName("item")
         .setDescription("The item you want to buy (Name or ID)")
         .setRequired(true)
     )
-    .addIntegerOption((option: any) =>
+    .addIntegerOption((option) =>
       option
         .setName("amount")
         .setDescription("The amount of items you want to buy, defaults to 1")
@@ -30,7 +30,6 @@ const buyCommand = {
 
       const item = interaction.options.getString("item");
       const amount = interaction.options.getInteger("amount");
-
 
       const { data } = await axios.post<PurchaseResponse>(
         "http://localhost:3000/buyItem",
@@ -67,25 +66,25 @@ const buyCommand = {
       if (error instanceof AxiosError) {
         if (!error.response) throw new Error("No response from server");
         if (error.response.data === "No such player") {
-          await interaction.reply({
+          await interaction.editReply({
             content: "You don't have an account! Use /create to make one",
-            ephemeral: true,
           });
         } else if (error.response.data === "No such item in the shop") {
           const errorEmbed = ErrorEmbed({
             title: "Purchase failed!",
-            description: `There is no item called ""${interaction.options.getString(
-              "item"
-            )}" in the shop`,
+            description: `There is no item called "${interaction.options.getString("item")}" in the shop`,
             interaction,
           });
-          await interaction.reply({
+          await interaction.editReply({
             embeds: [errorEmbed],
           });
         } else if (error.response.data.error === "not enough money") {
           const errorEmbed = ErrorEmbed({
             title: "Purchase failed!",
-            description: `You dont have enough bits!\nYou need ${intToString(
+            description: `You dont have enough bits!
+            \nYou currently have: ${
+              error.response.data.balance
+            } bits but,\nYou need ${intToString(
               error.response?.data.itemPrice
             )} bits to purchase\n${intToString(error.response?.data.amount)} ${
               error.response.data.itemName
@@ -93,7 +92,7 @@ const buyCommand = {
             interaction,
           });
 
-          await interaction.reply({ embeds: [errorEmbed] });
+          await interaction.editReply({ embeds: [errorEmbed] });
         }
       } else {
         throw new Error(`unknown error happened buying item: ${error}`);
