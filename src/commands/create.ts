@@ -34,7 +34,7 @@ const createCommand = {
           const errorEmbed = ErrorEmbed({ title: "Account creation cancelled!", description: "You already have an account!", interaction: interaction })
           await interaction.editReply({ embeds: [errorEmbed] });
         }
-        else throw new Error(`Uknown axios error happened creating an account.. Reason: ${error}`)
+        else throw new Error(`Unknown AxiosError raised creating an account.. Reason: ${error}`)
       }
       else {
         throw new Error(`Unknown error happened creating an account.. Reason: ${error}`)
