@@ -1,6 +1,7 @@
 import { Client, Collection } from "discord.js";
 
 export interface extendedClient extends Client {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   commands?: Collection<string, any>;
 }
 
@@ -33,7 +34,7 @@ export interface Leaderboard {
 }
 
 export interface PlayerInLeaderboard {
-  discordId: String
+  discordId: string
   discordDisplayName: string;
   cps: number;
   balance: string;
