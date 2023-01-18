@@ -14,6 +14,7 @@ const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith(".ts
 
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const command = require(filePath);
 	// Set a new item in the Collection with the key as the command name and the value as the exported module
   if(process.argv[1] !== "./src/main.ts") continue
