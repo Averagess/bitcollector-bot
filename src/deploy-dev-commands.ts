@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import config from "./utils/config";
 import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
@@ -22,6 +23,7 @@ const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const data: any = await rest.put(
 			Routes.applicationGuildCommands(config.CLIENT_ID, config.GUILD_ID),
 			{ body: commands },
