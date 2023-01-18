@@ -17,7 +17,7 @@ const balanceCommand = {
         discordId: interaction.user.id,
       })
 
-      let { balance, cps} = data
+      const { balance, cps} = data
       const username = interaction.user.username
       const avatarURL = interaction.user.displayAvatarURL({extension: "png", size: 128})
       const cpsString = cps.toString()
