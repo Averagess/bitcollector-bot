@@ -5,7 +5,7 @@ import { Player } from "../types";
 const inventoryCommand = {
   data: new SlashCommandBuilder()
     .setName("inventory")
-    .setDescription("Replies with your inventory"),
+    .setDescription("Shows your inventory"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply()

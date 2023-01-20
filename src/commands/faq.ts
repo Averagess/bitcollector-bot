@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "
 const pingCommand = {
   data: new SlashCommandBuilder()
     .setName("faq")
-    .setDescription("Replies with an list of Frequently Asked Questions"),
+    .setDescription("Replies with an list of frequently asked questions"),
   async execute(interaction: ChatInputCommandInteraction) {
     const faqEmbed = new EmbedBuilder()
       .setTitle("Frequently Asked Questions")

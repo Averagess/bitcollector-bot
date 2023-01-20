@@ -5,7 +5,7 @@ import { InventoryItem } from "../types";
 const storeCommand = {
   data: new SlashCommandBuilder()
     .setName("store")
-    .setDescription("Replies with the store page"),
+    .setDescription("Shows you the store"),
     
   async execute(interaction: ChatInputCommandInteraction) {
     try {

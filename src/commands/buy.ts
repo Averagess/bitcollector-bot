@@ -12,7 +12,7 @@ import intToString from "../utils/intToString";
 const buyCommand = {
   data: new SlashCommandBuilder()
     .setName("buy")
-    .setDescription("Buy an item from the shop")
+    .setDescription("Buys an item from the shop")
     .addStringOption((option) =>
       option
         .setName("item")
