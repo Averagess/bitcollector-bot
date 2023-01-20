@@ -38,7 +38,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
     ctx.fillText(`CPS: ${cps} bits/s`, 200, 325);
   }
 
-  ctx.fillStyle = "#C5C5C5";
+  ctx.fillStyle = "#808080";
   ctx.font = "10px Arial";
   ctx.textAlign = "center";
 
