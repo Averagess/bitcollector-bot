@@ -1,4 +1,6 @@
 import { createCanvas, loadImage } from "canvas";
+// import { writeFileSync } from "node:fs";
+import config from "./config";
 
 const canvas = createCanvas(400, 400);
 const ctx = canvas.getContext("2d");
@@ -36,18 +38,25 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
     ctx.fillText(`CPS: ${cps} bits/s`, 200, 325);
   }
 
+  ctx.fillStyle = "#C5C5C5";
+  ctx.font = "10px Arial";
+  ctx.textAlign = "center";
+
+  const stamp = `| ${new Date().toLocaleString("fi-FI")} | ${config.NODE_ENV} | ${config.VERSION} |`;
+
+  ctx.fillText(stamp, 200, 395);
+
 
   const buffer = canvas.toBuffer("image/png");
   return buffer;
 };
 
-// const save = async (balance: number | string, cps: number | string, username: string, profileURL: string): Promise<void> => {
-//   const buffer = await generateBalance(balance, cps, username, profileURL);
-//   const fs = require("fs");
-//   fs.writeFileSync("balance.png", buffer);
-// };
+// const save = async (balance: number, cps: number, username: string, avatarURL: string) => {
+//   const buffer = await generateBalance({balance: balance.toString(), cps: cps.toString(), username, avatarURL});
+//   writeFileSync("test.png", buffer)
+// }
 
-// save(1000, 1, "test", "https://cdn.discordapp.com/avatars/184366854674972672/7b008cc762b02513f16a0012a7529de5.png?size=128")
+// save(1000, 1, "Average", "https://cdn.discordapp.com/avatars/184366854674972672/7b008cc762b02513f16a0012a7529de5.png?size=128")
 
 
 export {
