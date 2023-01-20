@@ -21,7 +21,7 @@ const createCommand = {
       if (status === 200) {
         const successEmbed = new EmbedBuilder()
           .setTitle("Account created successfully!")
-          .setDescription("Next step is to use /buy to buy your first item!")
+          .setDescription("Next step is to use check out /store and then /buy to buy your first item!")
           .setColor("#a1fc03")
           .setFooter({ text: `Requested by ${interaction.user.tag}` })
           .setTimestamp();
