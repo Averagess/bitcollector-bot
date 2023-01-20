@@ -10,15 +10,23 @@ const pingCommand = {
       .addFields(
         {
           name: "What is this bot?",
-          value: "Bit Collector is a bot that allows you to collect an currency called bits, you can use these bits to buy upgrades that will increase your bits per second (CPS), with these bits you can compete with other players across the world.",
+          value: `Bit Collector is a bot that allows you to collect an currency called bits,
+                  you can use these bits to buy upgrades that will increase your bits per second (CPS),
+                  with these bits you can compete with other players across the world.`,
         },
         {
           name: "How do I get started?",
-          value: "To get started, send messages in chats on servers that the bot is in. when your balance hits 50 you can buy your first upgrade, you can buy upgrades by using the `/buy` command.",
+          value: `To get started, send messages in chats on servers that the bot is in.
+                  You will get bits for every message you send, and you can view
+                  how many bits you have by using \`/balance\`,
+                  when your balance hits 50 you can buy your first upgrade,
+                  you can check out the upgrades by using the \`/store\` command and then,
+                  you can buy upgrades by using the \`/buy\` command.`,
         },
         {
           name: "How do I get more bits?",
-          value: "You can get more bits by sending messages in chats on servers that the bot is in, you can also buy upgrades that will increase your bits per second (CPS).",
+          value: `You can get more bits by sending messages in chats on servers that the bot is in,
+                  and you can also buy upgrades from the store with bits that will increase your bits per second (CPS) that increase your balance in the background.`,
         },
         {
           name: "I believe I have found a bug, what do I do?",
@@ -26,7 +34,7 @@ const pingCommand = {
         },
         {
           name: "I have an feature suggestion, what do I do?",
-          value: "I'd love to hear your suggestions, you can send them in the support server, you can join the support server by using the `/support` command.",
+          value: "I'd love to hear your suggestions, you can send them in the support server, you can join the server by using the `/support` command.",
         }
       )
       .setColor("#ebc034")
