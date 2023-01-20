@@ -10,6 +10,7 @@ import {
   calcMinutesAfterDate,
   calcMinutesToDate,
 } from "../utils/calcMinutesHelper";
+import config from "../utils/config";
 
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
@@ -21,7 +22,7 @@ const leaderboardCommand = {
       await interaction.deferReply();
 
       const { data } = await axios.get<Leaderboard>(
-        "http://localhost:3000/leaderboard"
+        `${config.BACKEND_URL}/leaderboard`
       );
 
       if (!data.players || !data.createdAt || !data.nextUpdate)

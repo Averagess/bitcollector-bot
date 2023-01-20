@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { Player } from "../types";
+import config from "../utils/config";
 import { generateBalance } from "../utils/imageGenerator";
 
 const balanceCommand = {
@@ -13,7 +14,7 @@ const balanceCommand = {
     try {
       await interaction.deferReply();
       
-      const { data } = await axios.post<Player>("http://localhost:3000/updatePlayer", {
+      const { data } = await axios.post<Player>(`${config.BACKEND_URL}/updatePlayer`, {
         discordId: interaction.user.id,
       })
 

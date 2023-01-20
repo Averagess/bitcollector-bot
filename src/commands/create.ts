@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import axios, { AxiosError } from "axios";
 import ErrorEmbed from "../utils/ErrorEmbed";
+import config from "../utils/config";
 
 const createCommand = {
   data: new SlashCommandBuilder()
@@ -12,7 +13,7 @@ const createCommand = {
       await interaction.deferReply();
 
       const { status } = await axios.post(
-        "http://localhost:3000/initPlayer",
+        `${config.BACKEND_URL}/initPlayer`,
         {
           discordId: interaction.user.id,
           discordDisplayName: interaction.user.tag,

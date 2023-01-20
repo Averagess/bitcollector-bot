@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { InventoryItem } from "../types";
+import config from "../utils/config";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -11,7 +12,7 @@ const storeCommand = {
     try {
       await interaction.deferReply();
 
-      const { data } = await axios.post<InventoryItem[]>("http://localhost:3000/getShopForPlayer", {
+      const { data } = await axios.post<InventoryItem[]>(`${config.BACKEND_URL}/getShopForPlayer`, {
         discordId: interaction.user.id,
       });
 
