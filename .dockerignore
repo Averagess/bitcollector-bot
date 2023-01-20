@@ -1,0 +1,15 @@
+.vscode/
+
+logs/
+
+.env
+
+build/
+
+.gitignore
+
+balance.png
+
+example.png
+
+README.md
