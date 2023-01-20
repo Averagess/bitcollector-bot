@@ -12,12 +12,13 @@ const helpCommand = {
     const cmds = client.commands.map(cmd => ({ name: cmd.default.data.name, description: cmd.default.data.description}))
 
     const helpEmbed = new EmbedBuilder()
-      .setTitle("All usable commands")
+      .setTitle("Commands")
+      .setDescription("The commands you can use")
       .addFields(
         cmds.map((cmd) => {
           return {
-            name: `/${cmd.name} - ${cmd.description}`,
-            value: " ",
+            name: `\`/${cmd.name}\``,
+            value: cmd.description,
           };
         }))
       .setColor("#ebc034")
