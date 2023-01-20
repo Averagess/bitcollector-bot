@@ -5,6 +5,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import { Player } from "../types";
+import config from "../utils/config";
 import intToString from "../utils/intToString";
 
 const statsCommand = {
@@ -16,7 +17,7 @@ const statsCommand = {
       await interaction.deferReply();
       
       const player = await axios.post<Player>(
-        "http://localhost:3000/updatePlayer",
+        `${config.BACKEND_URL}/updatePlayer`,
         { discordId: interaction.user.id }
       );
 

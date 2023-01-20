@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { Player } from "../types";
+import config from "../utils/config";
 
 const inventoryCommand = {
   data: new SlashCommandBuilder()
@@ -10,7 +11,7 @@ const inventoryCommand = {
     try {
       await interaction.deferReply()
       
-      const { data }  = await axios.post<Player>("http://localhost:3000/updatePlayer", {
+      const { data }  = await axios.post<Player>(`${config.BACKEND_URL}/updatePlayer`, {
         discordId: interaction.user.id,
       })
 

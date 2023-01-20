@@ -44,7 +44,7 @@ client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
 
   try {
-    await axios.post("http://localhost:3000/addBitToPlayer", { discordId: message.author.id })
+    await axios.post(`${config.BACKEND_URL}/addBitToPlayer`, { discordId: message.author.id })
     logger.info(`Succesfully added bit to ${message.author.tag}`)
   } catch (error) {
     if(error instanceof AxiosError){

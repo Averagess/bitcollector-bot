@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 
 import { PurchaseResponse } from "../types";
+import config from "../utils/config";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
 
@@ -32,7 +33,7 @@ const buyCommand = {
       const amount = interaction.options.getInteger("amount");
 
       const { data } = await axios.post<PurchaseResponse>(
-        "http://localhost:3000/buyItem",
+        `${config.BACKEND_URL}/buyItem`,
         {
           discordId: interaction.user.id,
           itemName: item,
@@ -50,16 +51,16 @@ const buyCommand = {
 
       if (amount && amount > 1 && PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought ${amount} ${PurchasedItem.name}'s, you now have ${PurchasedItem.amount} of them`
+          `You bought ${amount} \`${PurchasedItem.name}\`'s, now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
       } else if (PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought an ${PurchasedItem.name}, you now have ${PurchasedItem.amount} of them`
+          `You bought an \`${PurchasedItem.name}\`, now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
       } else {
-        resultEmbed.setDescription(`You bought an ${item}`);
+        resultEmbed.setDescription(`You bought an \`${item}\``);
         await interaction.editReply({ embeds: [resultEmbed] });
       }
     } catch (error) {
@@ -86,9 +87,9 @@ const buyCommand = {
               error.response.data.balance
             } bits but,\nYou need ${intToString(
               error.response?.data.itemPrice
-            )} bits to purchase\n${intToString(error.response?.data.amount)} ${
+            )} bits to purchase\n\`${intToString(error.response?.data.amount)} ${
               error.response.data.itemName
-            }`,
+            }\``,
             interaction,
           });
 
