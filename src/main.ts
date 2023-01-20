@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { Events } from "discord.js";
+import { ActivityType, Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
@@ -9,10 +9,11 @@ import clientActivities from "./clientActivities";
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
-  logger.info("Setting client activity")
+  logger.info("Setting initial client activity")
   const randomActivity = clientActivities[Math.floor(Math.random() * clientActivities.length)]
   client.user?.setActivity(randomActivity.name, { type: randomActivity.type })
-  logger.info(`Set client activity to ${randomActivity.name} (${randomActivity.type})`)
+
+  logger.info(`Set client activity to "${randomActivity.name}" (${Object.values(ActivityType)[randomActivity.type]})`)
 })
 
 client.on(Events.InteractionCreate, async interaction => {
@@ -55,12 +56,12 @@ client.on(Events.MessageCreate, async message => {
   }
 })
 
-cron.schedule('*/30 * * * *', () => {
+cron.schedule('*/15 * * * *', () => {
   logger.info("Switching client activity...")
   const {name, type} = clientActivities[Math.floor(Math.random() * clientActivities.length)]
   try {
     client.user?.setActivity(name, { type })
-    logger.info(`Succesfully switched client activity to ${name} (${type})`)
+    logger.info(`Set client activity to "${name}" (${Object.values(ActivityType)[type]})`)
   } catch (error) {
     logger.error("Error when switching client activity!", error)
   }
