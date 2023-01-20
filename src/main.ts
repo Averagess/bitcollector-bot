@@ -17,6 +17,7 @@ client.once(Events.ClientReady, (c) => {
 
 client.on(Events.InteractionCreate, async interaction => {
   if(!interaction.isChatInputCommand()) return;
+
   const command = client.commands?.get(interaction.commandName);
 
   if(!command) return;
@@ -53,7 +54,6 @@ client.on(Events.MessageCreate, async message => {
     else logger.error("Unknown Error when adding bit to user!", error)
   }
 })
-
 
 cron.schedule('*/30 * * * *', () => {
   logger.info("Switching client activity...")
