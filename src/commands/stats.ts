@@ -10,7 +10,7 @@ import intToString from "../utils/intToString";
 const statsCommand = {
   data: new SlashCommandBuilder()
     .setName("stats")
-    .setDescription("Replies with your current stats"),
+    .setDescription("Tells your stats"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply();

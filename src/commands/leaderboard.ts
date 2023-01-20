@@ -14,7 +14,7 @@ import {
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
     .setName("leaderboard")
-    .setDescription("Replies with the global leaderboard"),
+    .setDescription("Shows the current global leaderboard"),
 
   async execute(interaction: ChatInputCommandInteraction) {
     try {

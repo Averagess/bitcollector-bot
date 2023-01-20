@@ -5,7 +5,7 @@ import ErrorEmbed from "../utils/ErrorEmbed";
 const createCommand = {
   data: new SlashCommandBuilder()
     .setName("create")
-    .setDescription("Creates an BitCollector account"),
+    .setDescription("Creates an account for you"),
 
   async execute(interaction: ChatInputCommandInteraction) {
     try {
