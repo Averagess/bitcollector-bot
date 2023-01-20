@@ -46,6 +46,7 @@ const leaderboardCommand = {
           text: `Leaderboard updated: ${calcMinutesAfterDate(
             new Date(data.createdAt)
           )} minutes ago, next update in: ${calcMinutesToDate(
+            new Date(),
             new Date(data.nextUpdate)
           )} minutes`,
         });
