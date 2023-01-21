@@ -6,16 +6,13 @@ import pkg from "../../package.json"
 if(!process.env.DISCORD_TOKEN) throw new Error("DISCORD_TOKEN is not set in .env")
 if(!process.env.GUILD_ID) throw new Error("GUILD_ID is not set in .env")
 if(!process.env.CLIENT_ID) throw new Error("CLIENT_ID is not set in .env")
-if(!process.env.BACKEND_URL) console.warn("BACKEND_URL is not set in .env, using localhost")
+
+if(!process.env.BACKEND_URL) console.warn("BACKEND_URL is not set in .env, using http://localhost:3000")
 if(!process.env.NODE_ENV) console.warn("NODE_ENV is not set in .env, using development")
 
-const config = {
-  DISCORD_TOKEN: process.env.DISCORD_TOKEN,
-  GUILD_ID: process.env.GUILD_ID,
-  CLIENT_ID: process.env.CLIENT_ID,
-  BACKEND_URL: process.env.BACKEND_URL || "http://localhost:3000",
-  NODE_ENV: process.env.NODE_ENV || "development",
-  VERSION: process.env.npm_package_version || pkg.version,
-}
-
-export default config;
+export const DISCORD_TOKEN = process.env.DISCORD_TOKEN
+export const GUILD_ID = process.env.GUILD_ID
+export const CLIENT_ID = process.env.CLIENT_ID
+export const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000"
+export const NODE_ENV = process.env.NODE_ENV || "development"
+export const VERSION = process.env.npm_package_version || pkg.version
