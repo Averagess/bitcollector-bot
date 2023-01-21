@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import config from "./utils/config";
+import {DISCORD_TOKEN, CLIENT_ID, GUILD_ID} from "./utils/config";
 import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
 
@@ -15,7 +15,7 @@ for (const file of commandFiles) {
 
 console.log(commands)
 
-const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN);
+const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
 
 
 (async () => {
@@ -25,7 +25,7 @@ const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN);
 		// The put method is used to fully refresh all commands in the guild with the current set
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const data: any = await rest.put(
-			Routes.applicationGuildCommands(config.CLIENT_ID, config.GUILD_ID),
+			Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
 			{ body: commands },
 		);
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
