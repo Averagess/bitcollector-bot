@@ -5,8 +5,10 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import { Player } from "../types";
-import config from "../utils/config";
+import { calcMinutesAfterDate } from "../utils/calcMinutesHelper";
+import {BACKEND_URL} from "../utils/config";
 import intToString from "../utils/intToString";
+import nextDailyStringGenerator from "../utils/nextDailyGenerator";
 
 const statsCommand = {
   data: new SlashCommandBuilder()
@@ -17,9 +19,15 @@ const statsCommand = {
       await interaction.deferReply();
       
       const player = await axios.post<Player>(
-        `${config.BACKEND_URL}/updatePlayer`,
+        `${BACKEND_URL}/updatePlayer`,
         { discordId: interaction.user.id }
       );
+      
+      const hoursSinceDailyRedeem = Math.floor(calcMinutesAfterDate(new Date(player.data.lastDaily)) / 60)
+      
+      const dailyRedeemed = hoursSinceDailyRedeem < 24 ? "yes" : "no";
+
+      const nextDailyString = nextDailyStringGenerator(new Date(player.data.lastDaily))
 
       const statsEmbed = new EmbedBuilder()
         .setTitle(`${interaction.user.tag}'s stats`)
@@ -27,6 +35,9 @@ const statsCommand = {
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
           { name: "🕓CPS", value: `${player.data.cps.toString()} bits/s`, inline: true },
           { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleString("fi-FI"), inline: true },
+          { name: "📅Daily redeemed", value: dailyRedeemed, inline: true },
+          { name: "Next daily", value: nextDailyString, inline: true },
+          { name: "Daily count", value: player.data.dailyCount.toString(), inline: true}
         )
         .setThumbnail(interaction.user.displayAvatarURL())
         .setColor("#ebc034")
