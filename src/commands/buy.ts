@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 
 import { PurchaseResponse } from "../types";
-import config from "../utils/config";
+import { BACKEND_URL } from "../utils/config";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
 
@@ -33,7 +33,7 @@ const buyCommand = {
       const amount = interaction.options.getInteger("amount");
 
       const { data } = await axios.post<PurchaseResponse>(
-        `${config.BACKEND_URL}/buyItem`,
+        `${BACKEND_URL}/buyItem`,
         {
           discordId: interaction.user.id,
           itemName: item,
