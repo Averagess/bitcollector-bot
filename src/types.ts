@@ -11,6 +11,8 @@ export interface Player {
   balance: string
   cps: number
   inventory: InventoryItem[]
+  lastDaily: string
+  dailyCount: number
   blacklisted: null | { reason: string, started : string}
   blacklistedHistory : { reason: string, started : string, ended: string}[]
   createdAt: string
@@ -40,4 +42,13 @@ export interface PlayerInLeaderboard {
   discordDisplayName: string;
   cps: number;
   balance: string;
+}
+
+export interface RedeemDailyResponse {
+  balanceReward: number
+  itemReward: {
+    name: string | null
+    amount: number | null
+    cps: number | null
+  }
 }
