@@ -66,7 +66,7 @@ const buyCommand = {
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) throw new Error("No response from server");
-        if (error.response.data === "No such player") {
+        if (error.response.data.error === "Player not found") {
           await interaction.editReply({
             content: "You don't have an account! Use /create to make one",
           });
