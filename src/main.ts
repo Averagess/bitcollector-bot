@@ -22,19 +22,22 @@ client.on(Events.InteractionCreate, async interaction => {
   const command = client.commands?.get(interaction.commandName);
 
   if(!command) return;
+  const start = Date.now();
 
   try {
     await command.default.execute(interaction);
-    logger.info(`Succesfully executed command [${interaction.commandName}] by ${interaction.user.tag}`)
+    const end = Date.now();
+    logger.info(`Succesfully executed command [${interaction.commandName}] by ${interaction.user.tag}, took ${end - start}ms`)
   } catch (error) {
+    const end = Date.now();
     if(error instanceof Error) {
       if(error.message === "No response from server") {
-        logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. Reason:`, error)
+        logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason:`, error)
         await interaction.reply({ content: 'Oops. Something went wrong. Try again later..', ephemeral: true });
       }
     }
     else {
-      logger.error(`UNKNOWN ERROR raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. Reason:`, error)
+      logger.error(`UNKNOWN ERROR raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason:`, error)
       await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
   }
