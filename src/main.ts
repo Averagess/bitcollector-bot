@@ -4,8 +4,9 @@ import cron from "node-cron";
 
 import { client } from "./client";
 import logger from "./utils/logger";
-import config from "./utils/config";
+import { BACKEND_URL, DISCORD_TOKEN } from "./utils/config";
 import clientActivities from "./clientActivities";
+
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
@@ -33,12 +34,12 @@ client.on(Events.InteractionCreate, async interaction => {
     if(error instanceof Error) {
       if(error.message === "No response from server") {
         logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason:`, error)
-        await interaction.reply({ content: 'Oops. Something went wrong. Try again later..', ephemeral: true });
+        await interaction.editReply({ content: 'Oops. Something went wrong. Try again later..' });
       }
     }
     else {
       logger.error(`UNKNOWN ERROR raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason:`, error)
-      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+      await interaction.editReply({ content: 'There was an error while executing this command!' });
     }
   }
 })
@@ -47,7 +48,7 @@ client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
 
   try {
-    await axios.post(`${config.BACKEND_URL}/addBitToPlayer`, { discordId: message.author.id })
+    await axios.post(`${BACKEND_URL}/addBitToPlayer`, { discordId: message.author.id })
     logger.info(`Succesfully added bit to ${message.author.tag}`)
   } catch (error) {
     if(error instanceof AxiosError){
@@ -70,7 +71,7 @@ cron.schedule('*/15 * * * *', () => {
   }
 });
 
-client.login(config.DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);
 
 process.on("SIGTERM", () => {
   logger.info("SIGTERM received. Exiting...")
