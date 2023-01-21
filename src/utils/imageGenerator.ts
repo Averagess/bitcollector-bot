@@ -1,7 +1,7 @@
 import { createCanvas, loadImage } from "canvas";
 import { PlayerInLeaderboard } from "../types";
 import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
-import config from "./config";
+import {NODE_ENV, VERSION} from "./config";
 
 interface generateBalanceParams {
   balance: string;
@@ -53,7 +53,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   ctx.font = "10px Arial";
   ctx.textAlign = "center";
 
-  const stamp = `| ${new Date().toLocaleString("fi-FI")} | ${config.NODE_ENV} | ${config.VERSION} |`;
+  const stamp = `| ${new Date().toLocaleString("fi-FI")} | ${NODE_ENV} | ${VERSION} |`;
 
   ctx.fillText(stamp, 200, 375);
 
