@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 
 import { Leaderboard } from "../types";
 
-import config from "../utils/config";
+import { BACKEND_URL } from "../utils/config";
 import { generateLeaderboard } from "../utils/imageGenerator";
 
 const leaderboardCommand = {
@@ -19,7 +19,7 @@ const leaderboardCommand = {
       await interaction.deferReply();
 
       const { data } = await axios.get<Leaderboard>(
-        `${config.BACKEND_URL}/leaderboard`
+        `${BACKEND_URL}/leaderboard`
       );
 
       if (!data.players || !data.createdAt || !data.nextUpdate)
