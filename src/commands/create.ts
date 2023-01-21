@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import axios, { AxiosError } from "axios";
+
 import ErrorEmbed from "../utils/ErrorEmbed";
 import config from "../utils/config";
 
