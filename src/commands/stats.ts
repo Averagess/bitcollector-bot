@@ -26,7 +26,7 @@ const statsCommand = {
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
           { name: "🕓CPS", value: `${player.data.cps.toString()} bits/s`, inline: true },
-          { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleDateString(), inline: true },
+          { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleString("fi-FI"), inline: true },
         )
         .setThumbnail(interaction.user.displayAvatarURL())
         .setColor("#ebc034")
