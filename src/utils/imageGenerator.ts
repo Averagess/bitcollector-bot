@@ -1,4 +1,6 @@
 import { createCanvas, loadImage } from "canvas";
+import { PlayerInLeaderboard } from "../types";
+import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
 import config from "./config";
 
 interface generateBalanceParams {
@@ -21,7 +23,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   const balanceReadable = balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const cpsReadable = cps.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const bg = await loadImage("./src/utils/backdrop-scaled.png")
+  const bg = await loadImage("./src/utils/backdrop.png")
   ctx.drawImage(bg, 0, 0, 400, 400);
 
   const profile = await loadImage(avatarURL);
@@ -53,13 +55,101 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
 
   const stamp = `| ${new Date().toLocaleString("fi-FI")} | ${config.NODE_ENV} | ${config.VERSION} |`;
 
-  ctx.fillText(stamp, 200, 395);
+  ctx.fillText(stamp, 200, 375);
 
 
   const buffer = canvas.toBuffer("image/png");
   return buffer;
 };
 
+const alphabet = "abcdefghijklmnopqrstuvwxyzöäåABCDEFGHIJKLMNOPQRSTUVWXYZöäå".split("");
+
+const generateLeaderboard = async (players: PlayerInLeaderboard[], createdAt: Date, nextUpdate: Date): Promise<Buffer> => {
+  const canvas = createCanvas(800, 500);
+  const ctx = canvas.getContext("2d");
+
+  const bg = await loadImage("./src/utils/leaderboard.png")
+  ctx.drawImage(bg, 0, 0, 800, 500);
+
+  players.forEach((player, index) => {
+    if (alphabet.includes(player.discordDisplayName[0])){
+      player.discordDisplayName = player.discordDisplayName[0].toUpperCase() + player.discordDisplayName.slice(1);
+    }
+    const scaledName = scaleName(player.discordDisplayName);
+    const balanceReadable = player.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const smartUsernamesize = scaledName.length > 15 ? Math.round(400 / scaledName.length) + "px" : "20px"
+    // const smartBalanceSize = balanceReadable.length > 10 ? "15px" : "15px";
+    
+    if (index < 5) {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = `${36}px Arial`;
+      ctx.textAlign = "center";
+      ctx.fillText(`${index + 1}.`, 50, 70 + (index * 80));
+
+      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.textAlign = "left";
+      ctx.fillText(`${scaledName}`, 90, 70 + (index * 80));
+
+      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.textAlign = "center";
+
+      ctx.font = `${15}px Arial`;
+      
+      ctx.fillText("Balance", 50, 90 + (index * 80))
+      ctx.textAlign = "left";
+      ctx.fillText(`${balanceReadable} Bits`, 90, 90 + (index * 80));
+      ctx.textAlign = "center";
+      ctx.fillText("CPS", 50, 110 + (index * 80))
+      ctx.textAlign = "left";
+      ctx.fillText(`${player.cps} Bits/s`, 90, 110 + (index * 80));
+
+    } else {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = `${36}px Arial`;
+      ctx.textAlign = "center";
+      ctx.fillText(`${index + 1}.`, 500, 70 + ((index - 5) * 80));
+
+      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.textAlign = "left";
+      ctx.fillText(`${scaledName}`, 540, 70 + ((index - 5) * 80));
+      
+      ctx.font = `${15}px Arial`;
+      ctx.textAlign = "center";
+
+      ctx.fillText("Balance", 500, 90 + ((index - 5) * 80))
+      ctx.textAlign = "left";
+      ctx.fillText(`${balanceReadable} Bits`, 540, 90 + ((index - 5) * 80));
+      ctx.textAlign = "center";
+      ctx.fillText("CPS", 500, 110 + ((index - 5) * 80))
+      ctx.textAlign = "left";
+      ctx.fillText(`${player.cps} Bits/s`, 540, 110 + ((index - 5) * 80));
+    }
+  })
+  ctx.fillStyle = "#808080";
+  ctx.font = `${15}px Arial`;
+  ctx.textAlign = "center";
+
+  const prettyCreatedAt = calcMinutesAfterDate(createdAt) + " minutes ago"
+  const prettyUpdate = calcMinutesToDate(createdAt, nextUpdate)
+  
+  ctx.fillText(`Leaderboard updated ${prettyCreatedAt}, next update in ${prettyUpdate}`, 400, 470) + " minutes"
+
+  return canvas.toBuffer("image/png");
+}
+
+// const save = async () => {
+//   const fakeData = new Array(10).fill(0).map(() => ({
+//     discordDisplayName: "test",
+//     discordId: "o",
+//     balance: Math.floor((Math.random() * 1000)).toString(),
+//     cps: Math.floor((Math.random() * 1000))
+//   }))
+//   const buffer = await generateLeaderboard(fakeData, new Date(), new Date())
+//   // eslint-disable-next-line @typescript-eslint/no-var-requires
+//   require("fs").writeFileSync("test.png", buffer)
+// }
+// save()
 export {
-  generateBalance
+  generateBalance,
+  generateLeaderboard
 };
