@@ -132,7 +132,7 @@ const generateLeaderboard = async (players: PlayerInLeaderboard[], createdAt: Da
   const prettyCreatedAt = calcMinutesAfterDate(createdAt) + " minutes ago"
   const prettyUpdate = calcMinutesToDate(createdAt, nextUpdate)
   
-  ctx.fillText(`Leaderboard updated ${prettyCreatedAt}, next update in ${prettyUpdate}`, 400, 470) + " minutes"
+  ctx.fillText(`Leaderboard updated ${prettyCreatedAt}, next update in ${prettyUpdate} minutes`, 400, 470) + " minutes"
 
   return canvas.toBuffer("image/png");
 }
