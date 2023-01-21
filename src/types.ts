@@ -11,6 +11,8 @@ export interface Player {
   balance: string
   cps: number
   inventory: InventoryItem[]
+  blacklisted: null | { reason: string, started : string}
+  blacklistedHistory : { reason: string, started : string, ended: string}[]
   createdAt: string
   updatedAt: string
 }
