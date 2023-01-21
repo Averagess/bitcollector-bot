@@ -20,7 +20,11 @@ const clientActivities: ClientActivity[] = [
   {
     name: "your commands",
     type: ActivityType.Listening
-  }
+  },
+  {
+    name: "with the Discord API",
+    type: ActivityType.Playing
+  },
 ]
 
 export default clientActivities;
