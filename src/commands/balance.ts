@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { Player } from "../types";
-import config from "../utils/config";
+import {BACKEND_URL} from "../utils/config";
 import { generateBalance } from "../utils/imageGenerator";
 
 const balanceCommand = {
@@ -14,7 +14,7 @@ const balanceCommand = {
     try {
       await interaction.deferReply();
       
-      const { data } = await axios.post<Player>(`${config.BACKEND_URL}/updatePlayer`, {
+      const { data } = await axios.post<Player>(`${BACKEND_URL}/updatePlayer`, {
         discordId: interaction.user.id,
       })
 
@@ -37,6 +37,7 @@ const balanceCommand = {
         else if(error.response.status === 404) {
           await interaction.editReply({ content: "You don't have an account! Use /create to create one"  });
         }
+        else throw new Error("Unknown error raised when trying to fetch balance. Error: ${error}");
 
       }
       else {
