@@ -33,10 +33,6 @@ client.on(Events.InteractionCreate, async interaction => {
   } catch (error) {
     const end = Date.now();
     if(error instanceof Error) {
-      // if(error.message === "No response from server") {
-      //   logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason:`, error)
-      //   await interaction.editReply({ content: 'Oops. Something went wrong. Try again later..' });
-      // }
       logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason: ${error.message}`)
       await interaction.editReply({ content: 'Oops. Something went wrong. Please try again later..' });
     }
