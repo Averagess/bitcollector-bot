@@ -72,12 +72,6 @@ cron.schedule('*/15 * * * *', () => {
 
 client.login(DISCORD_TOKEN);
 
-process.on("SIGTERM", () => {
-  logger.info("SIGTERM received. Exiting...")
-  client.destroy()
-  process.exit(0)
-})
-
 process.on("SIGINT", () => {
   logger.info("SIGINT received. Exiting...")
   client.destroy()
