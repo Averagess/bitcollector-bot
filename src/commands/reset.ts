@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder,  ButtonStyle, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 import logger from "../utils/logger";
-import {BACKEND_URL} from "../utils/config";
+import { resetPlayer } from "../services/posters";
 
 const resetCommand = {
   data: new SlashCommandBuilder()
@@ -30,7 +30,7 @@ const resetCommand = {
       msg.awaitMessageComponent( { filter, time: 20000 } )
         .then(buttonInteraction => {
           if(buttonInteraction.customId === "resetConfirm") {
-            axios.post(`${BACKEND_URL}/resetPlayer`, { discordId: interaction.user.id } )
+            resetPlayer(interaction.user.id)
               .then(() => {
               interaction.editReply({content: "Account has been reset successfully. You are back to square one.", components: [] })
               })

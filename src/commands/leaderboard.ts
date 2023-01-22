@@ -2,12 +2,11 @@ import {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
 } from "discord.js";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 
-import { Leaderboard } from "../types";
 
-import { BACKEND_URL } from "../utils/config";
 import { generateLeaderboard } from "../utils/imageGenerator";
+import { getLeaderboard } from "../services/getters";
 
 const leaderboardCommand = {
   data: new SlashCommandBuilder()
@@ -18,9 +17,7 @@ const leaderboardCommand = {
     try {
       await interaction.deferReply();
 
-      const { data } = await axios.get<Leaderboard>(
-        `${BACKEND_URL}/leaderboard`
-      );
+      const { data } = await getLeaderboard()
 
       if (!data.players || !data.createdAt || !data.nextUpdate)
         throw new Error("No players in leaderboard");
