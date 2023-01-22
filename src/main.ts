@@ -3,10 +3,10 @@ import { ActivityType, Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
-import logger from "./utils/logger";
-import { DISCORD_TOKEN } from "./utils/config";
 import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
+import { DISCORD_TOKEN } from "./utils/config";
+import logger from "./utils/logger";
 
 
 client.once(Events.ClientReady, (c) => {
