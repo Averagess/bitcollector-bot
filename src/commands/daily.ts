@@ -1,8 +1,7 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 
-import { RedeemDailyResponse } from "../types";
-import { BACKEND_URL } from "../utils/config";
+import { redeemDaily } from "../services/posters";
 import ErrorEmbed from "../utils/ErrorEmbed";
 
 const dailyCommand = {
@@ -12,9 +11,7 @@ const dailyCommand = {
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply()
-      const { data } = await axios.post<RedeemDailyResponse>(`${BACKEND_URL}/redeemDaily`,{
-        discordId: interaction.user.id
-      })
+      const { data } = await redeemDaily(interaction.user.id)
 
       const { balanceReward, itemReward } = data
       const dailyEmbed = new EmbedBuilder()

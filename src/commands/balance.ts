@@ -1,8 +1,7 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { fetchPlayerProfile } from "../services/posters";
 
-import { Player } from "../types";
-import {BACKEND_URL} from "../utils/config";
 import { generateBalance } from "../utils/imageGenerator";
 
 const balanceCommand = {
@@ -14,9 +13,7 @@ const balanceCommand = {
     try {
       await interaction.deferReply();
       
-      const { data } = await axios.post<Player>(`${BACKEND_URL}/updatePlayer`, {
-        discordId: interaction.user.id,
-      })
+      const { data } = await fetchPlayerProfile(interaction.user.id)
 
       const { balance, cps} = data
       const username = interaction.user.username
@@ -37,11 +34,11 @@ const balanceCommand = {
         else if(error.response.status === 404) {
           await interaction.editReply({ content: "You don't have an account! Use /create to create one"  });
         }
-        else throw new Error("Unknown error raised when trying to fetch balance. Error: ${error}");
+        else throw new Error(`Unknown error raised when trying to fetch balance. Error: ${error}`);
 
       }
       else {
-        throw new Error("Unknown error raised when trying to fetch balance. Error: ${error}");
+        throw new Error(`Unknown error raised when trying to fetch balance. Error: ${error}`);
       }
     }
   }

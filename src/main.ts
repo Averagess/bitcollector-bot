@@ -1,11 +1,12 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { ActivityType, Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
 import logger from "./utils/logger";
-import { BACKEND_URL, DISCORD_TOKEN } from "./utils/config";
+import { DISCORD_TOKEN } from "./utils/config";
 import clientActivities from "./clientActivities";
+import { addBitToPlayer } from "./services/posters";
 
 
 client.once(Events.ClientReady, (c) => {
@@ -32,10 +33,12 @@ client.on(Events.InteractionCreate, async interaction => {
   } catch (error) {
     const end = Date.now();
     if(error instanceof Error) {
-      if(error.message === "No response from server") {
-        logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason:`, error)
-        await interaction.editReply({ content: 'Oops. Something went wrong. Try again later..' });
-      }
+      // if(error.message === "No response from server") {
+      //   logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason:`, error)
+      //   await interaction.editReply({ content: 'Oops. Something went wrong. Try again later..' });
+      // }
+      logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason: ${error.message}`)
+      await interaction.editReply({ content: 'Oops. Something went wrong. Please try again later..' });
     }
     else {
       logger.error(`UNKNOWN ERROR raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason:`, error)
@@ -48,7 +51,7 @@ client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
 
   try {
-    await axios.post(`${BACKEND_URL}/addBitToPlayer`, { discordId: message.author.id })
+    await addBitToPlayer(message.author.id)
     logger.info(`Succesfully added bit to ${message.author.tag}`)
   } catch (error) {
     if(error instanceof AxiosError){

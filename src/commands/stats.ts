@@ -1,12 +1,11 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
-import { Player } from "../types";
+import { fetchPlayerProfile } from "../services/posters";
 import { calcMinutesAfterDate } from "../utils/calcMinutesHelper";
-import {BACKEND_URL} from "../utils/config";
 import intToString from "../utils/intToString";
 import nextDailyStringGenerator from "../utils/nextDailyGenerator";
 
@@ -18,10 +17,7 @@ const statsCommand = {
     try {
       await interaction.deferReply();
       
-      const player = await axios.post<Player>(
-        `${BACKEND_URL}/updatePlayer`,
-        { discordId: interaction.user.id }
-      );
+      const player = await fetchPlayerProfile(interaction.user.id)
       
       const hoursSinceDailyRedeem = Math.floor(calcMinutesAfterDate(new Date(player.data.lastDaily)) / 60)
       

@@ -1,12 +1,11 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
 
-import { PurchaseResponse } from "../types";
-import { BACKEND_URL } from "../utils/config";
+import { buyItem } from "../services/posters";
 import ErrorEmbed from "../utils/ErrorEmbed";
 import intToString from "../utils/intToString";
 
@@ -32,14 +31,11 @@ const buyCommand = {
       const item = interaction.options.getString("item");
       const amount = interaction.options.getInteger("amount");
 
-      const { data } = await axios.post<PurchaseResponse>(
-        `${BACKEND_URL}/buyItem`,
-        {
-          discordId: interaction.user.id,
-          itemName: item,
-          amount: amount ? amount : 1,
-        }
-      );
+      const itemAmountValid = amount && amount > 0 ? amount : 1;
+      
+      if(!item) throw new Error("No item provided");
+
+      const { data } = await buyItem(interaction.user.id, item, itemAmountValid)
 
       const PurchasedItem = data.purchasedItem;
 

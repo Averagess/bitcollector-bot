@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 
 import ErrorEmbed from "../utils/ErrorEmbed";
-import { BACKEND_URL } from "../utils/config";
+import { createAccount } from "../services/posters";
 
 const createCommand = {
   data: new SlashCommandBuilder()
@@ -13,13 +13,8 @@ const createCommand = {
     try {
       await interaction.deferReply();
 
-      const { status } = await axios.post(
-        `${BACKEND_URL}/initPlayer`,
-        {
-          discordId: interaction.user.id,
-          discordDisplayName: interaction.user.tag,
-        }
-      );
+      const { status } = await createAccount(interaction.user.id, interaction.user.tag);
+      
       if (status === 200) {
         const successEmbed = new EmbedBuilder()
           .setTitle("Account created successfully!")
