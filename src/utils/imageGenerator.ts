@@ -23,7 +23,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   const balanceReadable = balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const cpsReadable = cps.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const bg = await loadImage("./src/utils/backdrop.png")
+  const bg = await loadImage("./src/resources/backdrop.png")
   ctx.drawImage(bg, 0, 0, 400, 400);
 
   const profile = await loadImage(avatarURL);
@@ -68,7 +68,7 @@ const generateLeaderboard = async (players: PlayerInLeaderboard[], createdAt: Da
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
 
-  const bg = await loadImage("./src/utils/leaderboard.png")
+  const bg = await loadImage("./src/resources/leaderboard.png")
   ctx.drawImage(bg, 0, 0, 800, 500);
 
   players.forEach((player, index) => {
