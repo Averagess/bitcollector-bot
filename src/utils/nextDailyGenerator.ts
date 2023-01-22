@@ -7,9 +7,6 @@ const nextDailyStringGenerator = (lastDailyRedeem: Date): string => {
   const hours = 24 - Math.round((now - lastDailyRedeem.getTime()) / 1000 / 60 / 60)
   const minutes = (24*60) - Math.round((now - lastDailyRedeem.getTime()) / 1000 / 60)
 
-  console.log(hours)
-  console.log(minutes)
-
   if(hours <= 0 && minutes <= 0) return "now"
   else if(minutes === 1) return `in ${minutes} minute`
   else if(hours <= 0 && minutes > 0) return `in ${minutes} minutes`
