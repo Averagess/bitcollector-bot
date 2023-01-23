@@ -10,6 +10,12 @@ interface generateBalanceParams {
   avatarURL: string;
 }
 
+interface generateLeaderboardParams {
+  players: PlayerInLeaderboard[];
+  createdAt: Date;
+  nextUpdate: Date;
+}
+
 const scaleName = (text: string): string => {
   if(text.length > 20) return text.slice(0, 20) + "...";
   return text;
@@ -64,7 +70,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
 
 const alphabet = "abcdefghijklmnopqrstuvwxyzöäåABCDEFGHIJKLMNOPQRSTUVWXYZöäå".split("");
 
-const generateLeaderboard = async (players: PlayerInLeaderboard[], createdAt: Date, nextUpdate: Date): Promise<Buffer> => {
+const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLeaderboardParams): Promise<Buffer> => {
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
 
