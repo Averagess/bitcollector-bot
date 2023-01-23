@@ -1,7 +1,7 @@
 import  { AxiosError } from "axios";
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 
-import { fetchPlayerStore } from "../services/posters";
+import { fetchPlayerShop } from "../services/posters";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ const storeCommand = {
     try {
       await interaction.deferReply();
 
-      const { data } = await fetchPlayerStore(interaction.user.id);
+      const { data } = await fetchPlayerShop(interaction.user.id);
 
       const shopEmbed = new EmbedBuilder()
         .setTitle("Store")
