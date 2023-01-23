@@ -1,6 +1,3 @@
-
-
-
 const nextDailyStringGenerator = (lastDailyRedeem: Date): string => {
   const now = Date.now()
 
