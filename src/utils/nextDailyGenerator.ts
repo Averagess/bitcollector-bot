@@ -10,8 +10,7 @@ const nextDailyStringGenerator = (lastDailyRedeem: Date): string => {
   else if (minutes === 1) return `in ${minutes} minute`;
   else if (hours <= 0 && minutes > 0) return `in ${minutes} minutes`;
   else if (hours === 1 && minutes <= 60) return `in ${hours} hour`;
-  else if (hours > 1) return `in ${hours} hours`;
-  else return "now";
+  else return `in ${hours} hours`;
 };
 
 export default nextDailyStringGenerator;
