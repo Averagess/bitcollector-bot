@@ -55,12 +55,12 @@ export const resetPlayer = async (discordId: string) => {
   return { data, status };
 }
 
-export const fetchPlayerStore = async (discordId: string) => {
+export const fetchPlayerShop = async (discordId: string) => {
   const body = {
     discordId,
   }
 
-  const { data, status } = await axios.post<InventoryItem[]>(`${BACKEND_URL}/getStoreForPlayer`, body, { headers });
+  const { data, status } = await axios.post<InventoryItem[]>(`${BACKEND_URL}/getShopForPlayer`, body, { headers });
   return { data, status };
 }
 
