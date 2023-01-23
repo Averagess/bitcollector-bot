@@ -44,7 +44,7 @@ const statsCommand = {
     } catch (error) {
       if(error instanceof AxiosError) {
         if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) return await interaction.editReply({ content: "You don't have an account yet! Use /start to create one" });
+        else if(error.response.status === 404) return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
         else throw new Error(`Unknown axios error raised when trying to fetch stats.. error: ${error}`);
       }
       else {
