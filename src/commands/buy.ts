@@ -47,12 +47,12 @@ const buyCommand = {
 
       if (amount && amount > 1 && PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought ${amount} \`${PurchasedItem.name}\`'s, now have ${PurchasedItem.amount} of them`
+          `You bought ${amount} \`${PurchasedItem.name}\`'s, and now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
       } else if (PurchasedItem) {
         resultEmbed.setDescription(
-          `You bought an \`${PurchasedItem.name}\`, now have ${PurchasedItem.amount} of them`
+          `You bought an \`${PurchasedItem.name}\`, and now have ${PurchasedItem.amount} of them`
         );
         await interaction.editReply({ embeds: [resultEmbed] });
       } else {

@@ -4,7 +4,6 @@ import {
 } from "discord.js";
 import  { AxiosError } from "axios";
 
-
 import { generateLeaderboard } from "../utils/imageGenerator";
 import { getLeaderboard } from "../services/getters";
 
@@ -21,8 +20,14 @@ const leaderboardCommand = {
 
       if (!data.players || !data.createdAt || !data.nextUpdate)
         throw new Error("No players in leaderboard");
+
+      const Params = {
+        players: data.players,
+        createdAt: new Date(data.createdAt),
+        nextUpdate: new Date(data.nextUpdate),
+      }
       
-      const LeaderboardImage = await generateLeaderboard(data.players, new Date(data.createdAt), new Date(data.nextUpdate));
+      const LeaderboardImage = await generateLeaderboard(Params);
 
       await interaction.editReply({ files: [LeaderboardImage] });
     } catch (error) {

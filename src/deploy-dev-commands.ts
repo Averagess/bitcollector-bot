@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {DISCORD_TOKEN, CLIENT_ID, GUILD_ID} from "./utils/config";
-import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
+import { REST, Routes } from 'discord.js';
+
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from "./utils/config";
 
 
 const commands = [];

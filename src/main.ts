@@ -3,10 +3,10 @@ import { ActivityType, Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
-import logger from "./utils/logger";
-import { DISCORD_TOKEN } from "./utils/config";
 import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
+import { DISCORD_TOKEN } from "./utils/config";
+import logger from "./utils/logger";
 
 
 client.once(Events.ClientReady, (c) => {
@@ -71,12 +71,6 @@ cron.schedule('*/15 * * * *', () => {
 });
 
 client.login(DISCORD_TOKEN);
-
-process.on("SIGTERM", () => {
-  logger.info("SIGTERM received. Exiting...")
-  client.destroy()
-  process.exit(0)
-})
 
 process.on("SIGINT", () => {
   logger.info("SIGINT received. Exiting...")
