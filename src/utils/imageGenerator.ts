@@ -135,10 +135,10 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
   ctx.font = `${15}px Arial`;
   ctx.textAlign = "center";
 
-  const prettyCreatedAt = calcMinutesAfterDate(createdAt) + " minutes ago"
-  const prettyUpdate = calcMinutesToDate(createdAt, nextUpdate)
+  const prettyCreatedAt = calcMinutesAfterDate(createdAt)
+  const prettyUpdate = calcMinutesToDate(new Date(), nextUpdate)
   
-  ctx.fillText(`Leaderboard updated ${prettyCreatedAt}, next update in ${prettyUpdate} minutes`, 400, 470) + " minutes"
+  ctx.fillText(`Leaderboard updated ${prettyCreatedAt} minutes ago, next update in ${prettyUpdate} minutes`, 400, 470) + " minutes"
 
   return canvas.toBuffer("image/png");
 }
