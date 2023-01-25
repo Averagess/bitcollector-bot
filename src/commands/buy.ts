@@ -1,12 +1,12 @@
 import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
-  EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
 
 import { buyItem } from "../services/posters";
 import ErrorEmbed from "../utils/ErrorEmbed";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
 
 const buyCommand = {
@@ -39,11 +39,8 @@ const buyCommand = {
 
       const PurchasedItem = data.purchasedItem;
 
-      const resultEmbed = new EmbedBuilder()
-        .setTitle("Purchase successful!")
-        .setColor("#a1fc03")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
+      const resultEmbed = GenericSuccessEmbed({ title: "Purchase successful!", interaction })
+        
 
       if (amount && amount > 1 && PurchasedItem) {
         resultEmbed.setDescription(
