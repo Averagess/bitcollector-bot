@@ -59,7 +59,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   ctx.font = "10px Arial";
   ctx.textAlign = "center";
 
-  const stamp = `| ${new Date().toLocaleString("fi-FI")} | ${NODE_ENV} | ${VERSION} |`;
+  const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
 
   ctx.fillText(stamp, 200, 375);
 
