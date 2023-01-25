@@ -1,7 +1,8 @@
 import  { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { fetchPlayerShop } from "../services/posters";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -14,8 +15,7 @@ const storeCommand = {
 
       const { data } = await fetchPlayerShop(interaction.user.id);
 
-      const shopEmbed = new EmbedBuilder()
-        .setTitle("Store")
+      const shopEmbed = GenericSuccessEmbed({ title: "Store", interaction })
         .addFields(
           data.map((item, index) => {
             const priceReadable = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -26,9 +26,6 @@ const storeCommand = {
             };
           })
         )
-        .setColor("#ebc034")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
 
       await interaction.editReply({ embeds: [shopEmbed] });
     } catch (error) {
