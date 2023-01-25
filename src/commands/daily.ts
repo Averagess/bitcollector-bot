@@ -1,8 +1,9 @@
 import { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { redeemDaily } from "../services/posters";
 import ErrorEmbed from "../utils/ErrorEmbed";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 
 const dailyCommand = {
   data: new SlashCommandBuilder()
@@ -14,11 +15,7 @@ const dailyCommand = {
       const { data } = await redeemDaily(interaction.user.id)
 
       const { balanceReward, itemReward } = data
-      const dailyEmbed = new EmbedBuilder()
-        .setTitle("Your daily rewards")
-        .setColor("#a1fc03")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp()
+      const dailyEmbed = GenericSuccessEmbed({ title: "Your daily rewards", interaction})
         .addFields({
           name: "Balance rewards",
           value: `${balanceReward} bits`,
