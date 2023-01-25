@@ -7,6 +7,7 @@ import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
+import pickNewActivity from "./utils/pickNewActivity";
 
 
 client.once(Events.ClientReady, (c) => {
@@ -61,7 +62,8 @@ client.on(Events.MessageCreate, async message => {
 
 cron.schedule('*/15 * * * *', () => {
   logger.info("Switching client activity...")
-  const {name, type} = clientActivities[Math.floor(Math.random() * clientActivities.length)]
+  const currentActivity = { name: client.user?.presence.activities[0].name, type: client.user?.presence.activities[0].type }
+  const {name, type} = pickNewActivity(clientActivities, currentActivity)
   try {
     client.user?.setActivity(name, { type })
     logger.info(`Set client activity to "${name}" (${Object.values(ActivityType)[type]})`)
