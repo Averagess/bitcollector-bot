@@ -52,3 +52,8 @@ export interface RedeemDailyResponse {
     cps: number | null
   }
 }
+
+export interface ClientActivity {
+  name: string;
+  type: number
+}
