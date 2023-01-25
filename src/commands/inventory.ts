@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 
 const inventoryCommand = {
   data: new SlashCommandBuilder()
@@ -12,8 +13,7 @@ const inventoryCommand = {
       
       const { data }  = await fetchPlayerProfile(interaction.user.id)
 
-      const inventoryEmbed = new EmbedBuilder()
-        .setTitle(`${interaction.user.tag}'s inventory`)
+      const inventoryEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s inventory`, interaction })
         .addFields(
           data.inventory.map((item, index) => {
             return {
@@ -23,9 +23,6 @@ const inventoryCommand = {
             };
           }
         ))
-        .setColor("#a1fc03")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
 
       await interaction.editReply({ embeds: [inventoryEmbed]  });
     } catch (error) {
