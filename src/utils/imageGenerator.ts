@@ -84,7 +84,6 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
     const scaledName = scaleName(player.discordDisplayName);
     const balanceReadable = player.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const smartUsernamesize = scaledName.length > 15 ? Math.round(400 / scaledName.length) + "px" : "20px"
-    // const smartBalanceSize = balanceReadable.length > 10 ? "15px" : "15px";
     
     if (index < 5) {
       ctx.fillStyle = "#FFFFFF";
