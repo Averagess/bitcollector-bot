@@ -1,13 +1,7 @@
 import { ActivityType } from "discord.js"
-
+import { ClientActivity } from "./types"
 
 // Playing Streaming Listening Watching Competing
-
-interface ClientActivity {
-  name: string;
-  type: number
-}
-
 const clientActivities: ClientActivity[] = [
   {
     name: "with bits",
