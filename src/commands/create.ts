@@ -1,7 +1,8 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import  { AxiosError } from "axios";
 
 import ErrorEmbed from "../utils/ErrorEmbed";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 import { createAccount } from "../services/posters";
 
 const createCommand = {
@@ -16,12 +17,9 @@ const createCommand = {
       const { status } = await createAccount(interaction.user.id, interaction.user.tag);
       
       if (status === 200) {
-        const successEmbed = new EmbedBuilder()
-          .setTitle("Account created successfully!")
-          .setDescription("Next step is to use check out /store and then /buy to buy your first item!")
-          .setColor("#a1fc03")
-          .setFooter({ text: `Requested by ${interaction.user.tag}` })
-          .setTimestamp();
+        const successEmbed = GenericSuccessEmbed({ title: "Account created successfully!", interaction })
+          .setDescription("Next step is to use check out /store and then /buy to buy your first item!");
+        
         await interaction.editReply({ embeds: [successEmbed] });
       }
     } catch (error) {
