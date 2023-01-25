@@ -1,11 +1,11 @@
 import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
-  EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
 import { calcMinutesAfterDate } from "../utils/calcMinutesHelper";
+import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
 import nextDailyStringGenerator from "../utils/nextDailyGenerator";
 
@@ -25,8 +25,7 @@ const statsCommand = {
 
       const nextDailyString = nextDailyStringGenerator(new Date(player.data.lastDaily))
 
-      const statsEmbed = new EmbedBuilder()
-        .setTitle(`${interaction.user.tag}'s stats`)
+      const statsEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s stats`, interaction })
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
           { name: "🕓CPS", value: `${player.data.cps.toString()} bits/s`, inline: true },
@@ -36,9 +35,6 @@ const statsCommand = {
           { name: "Daily count", value: player.data.dailyCount.toString(), inline: true}
         )
         .setThumbnail(interaction.user.displayAvatarURL())
-        .setColor("#ebc034")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
       
       await interaction.editReply({ embeds: [statsEmbed] })
     } catch (error) {
