@@ -18,7 +18,7 @@ const dailyCommand = {
       const dailyEmbed = GenericSuccessEmbed({ title: "Your daily rewards", interaction})
         .addFields({
           name: "Balance rewards",
-          value: `${balanceReward} bits`,
+          value: `+${balanceReward} bits!`,
         })
 
       if(itemReward.amount && itemReward.cps && itemReward.name) dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
