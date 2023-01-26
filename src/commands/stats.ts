@@ -24,7 +24,6 @@ const statsCommand = {
       const dailyRedeemed = hoursSinceDailyRedeem < 24 ? "yes" : "no";
 
       const nextDailyString = nextDailyStringGenerator(new Date(player.data.lastDaily))
-
       const statsEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s stats`, interaction })
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
@@ -32,7 +31,9 @@ const statsCommand = {
           { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleString("fi-FI"), inline: true },
           { name: "📅Daily redeemed", value: dailyRedeemed, inline: true },
           { name: "Next daily", value: nextDailyString, inline: true },
-          { name: "Daily count", value: player.data.dailyCount.toString(), inline: true}
+          { name: "Daily count", value: player.data.dailyCount.toString(), inline: true},
+          { name: "📦Unopened crates", value: `${player.data.unopenedCrates} crates`, inline: true},
+          { name: "Crates opened", value: `${player.data.openedCrates} crates`, inline: true},
         )
         .setThumbnail(interaction.user.displayAvatarURL())
       
