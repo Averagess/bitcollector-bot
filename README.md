@@ -1,6 +1,6 @@
 # BitCollector-Bot
 
-Responsible for interacting with Discord API and our backdoor.
+Responsible for interacting with Discord API and our express backend.
 Updates player data and provides players with information about their account statistics.
 
 
