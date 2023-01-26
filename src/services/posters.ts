@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { InventoryItem, Player, PurchaseResponse, RedeemDailyResponse } from "../types";
+import { InventoryItem, Player, PurchaseResponse, RedeemCrateResponse, RedeemDailyResponse } from "../types";
 import { APIKEY, BACKEND_URL } from "../utils/config";
 
 const headers = {
@@ -72,4 +72,14 @@ export const addBitToPlayer = async (discordId: string) => {
 
   const { data, status } = await axios.post<Player>(`${BACKEND_URL}/addBitToPlayer`, body, { headers });
   return { data, status };
+}
+
+export const openCrate = async (discordId: string) => {
+  const body = {
+    discordId
+  }
+
+  const { data } = await axios.post<RedeemCrateResponse>(`${BACKEND_URL}/openCrate`, body, { headers });
+
+  return { data };
 }
