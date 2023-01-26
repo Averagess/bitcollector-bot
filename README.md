@@ -14,7 +14,7 @@ How the directory should look:
 * bitcollector-server (backend directory)
 * docker-compose.yaml
 
-docker-compose.yml contents:
+docker-compose.yml contents (remember to replace values surrounded with <> to correct values):
 ```Dockerfile
 services:
   bot:
@@ -22,7 +22,7 @@ services:
     depends_on:
       [ backend ]
     build:
-      context: ./BitCollector-Bot
+      context: ./bitcollector-bot
       dockerfile: Dockerfile
     environment:
       [ 
@@ -39,7 +39,7 @@ services:
   backend:
     image: bitcollector-server
     build:
-      context: ./BitCollector-Server
+      context: ./bitcollector-server
       dockerfile: Dockerfile
     environment:
       - PORT=3000
