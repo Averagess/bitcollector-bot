@@ -13,6 +13,8 @@ export interface Player {
   inventory: InventoryItem[]
   lastDaily: string
   dailyCount: number
+  openedCrates: number
+  unopenedCrates: number
   blacklisted: null | { reason: string, started : string}
   blacklistedHistory : { reason: string, started : string, ended: string}[]
   createdAt: string
@@ -50,6 +52,15 @@ export interface RedeemDailyResponse {
     name: string | null
     amount: number | null
     cps: number | null
+  }
+}
+
+export interface RedeemCrateResponse {
+  balanceReward: number
+  itemReward: {
+    name: string,
+    amount: number,
+    cps: number
   }
 }
 
