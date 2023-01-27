@@ -47,7 +47,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   ctx.textAlign = "center";
   ctx.fillText(`${balanceReadable} Bits`, 200, 275);
 
-  if(balance.length > 1) {
+  if(balance.length >= 1) {
     const smartCpsSize = cpsReadable.length > 10 ? "20px" : "24px";
     ctx.fillStyle = "#FFFFFF";
     ctx.font = `${smartCpsSize} Arial`;
