@@ -27,19 +27,10 @@ const balanceCommand = {
       await interaction.editReply({ files: [img] });
       
     } catch (error) {
-      if(error instanceof AxiosError) {
-        if(!error.response) {
-          throw new Error("No response from server");
-        }
-        else if(error.response.status === 404) {
-          await interaction.editReply({ content: "You don't have an account! Use /create to create one"  });
-        }
-        else throw new Error(`Unknown error raised when trying to fetch balance. Error: ${error}`);
-
+      if(error instanceof AxiosError && error.response?.status === 404) {
+        await interaction.editReply({ content: "You don't have an account yet! Create one with `/create`" });
       }
-      else {
-        throw new Error(`Unknown error raised when trying to fetch balance. Error: ${error}`);
-      }
+      else throw error;
     }
   }
 }

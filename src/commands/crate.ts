@@ -24,15 +24,11 @@ const crateCommand = {
 
       await interaction.editReply({embeds: [embed]})
     } catch (error) {
-      if(error instanceof AxiosError){
-        if(!error.response) throw new Error("No response from backend")
-        else if(error.response.status === 409){
+      if(error instanceof AxiosError && error.response && error.response.status === 409){
           const embed = ErrorEmbed({title: "Opening crate failed :(", description: "You dont have any crates to open, you can get crates by voting the bot! check out `/vote`", interaction})
           return interaction.editReply({embeds: [embed]})
-        }
-        else throw new Error(`Unexpected error happened when trying to open a crate, error: ${error}`)
       }
-      else throw new Error(`Unknown error happened creating an account.. Reason: ${error}`)
+      else throw error
     }
   }
 }

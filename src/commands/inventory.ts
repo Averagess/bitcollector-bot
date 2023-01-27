@@ -26,14 +26,10 @@ const inventoryCommand = {
 
       await interaction.editReply({ embeds: [inventoryEmbed]  });
     } catch (error) {
-      if(error instanceof AxiosError){
-        if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
-        else throw new Error(("Unknown axios error raised when trying to fetch inventory. Error: ${error}"))
+      if(error instanceof AxiosError && error.response?.status === 404){
+        return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
       }
-      else {
-        throw new Error("Unknown error raised when trying to fetch inventory. Error: ${error}");
-      }
+      else throw error
     }
   }
 }

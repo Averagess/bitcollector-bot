@@ -57,11 +57,10 @@ const buyCommand = {
         await interaction.editReply({ embeds: [resultEmbed] });
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (!error.response) throw new Error("No response from server");
+      if (error instanceof AxiosError && error.response) {
         if (error.response.data.error === "Player not found") {
           await interaction.editReply({
-            content: "You don't have an account! Use /create to make one",
+            content: "You don't have an account yet! Create one with `/create`",
           });
         } else if (error.response.data === "No such item in the shop") {
           const errorEmbed = ErrorEmbed({
@@ -88,9 +87,7 @@ const buyCommand = {
 
           await interaction.editReply({ embeds: [errorEmbed] });
         }
-      } else {
-        throw new Error(`unknown error happened buying item: ${error}`);
-      }
+      } else throw error
     }
   },
 };

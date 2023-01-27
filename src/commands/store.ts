@@ -29,12 +29,10 @@ const storeCommand = {
 
       await interaction.editReply({ embeds: [shopEmbed] });
     } catch (error) {
-      if(error instanceof AxiosError) {
-        if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" })
-        else throw new Error(`There was an unknown AxiosError error while getting the store, error: ${error}`)
+      if(error instanceof AxiosError && error.response?.status === 404) {
+      await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" })
       }
-      else throw new Error(`There was an unknown error while getting the store, error: ${error}`)
+      else throw error
     }
   }
 }
