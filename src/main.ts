@@ -33,7 +33,17 @@ client.on(Events.InteractionCreate, async interaction => {
     logger.info(`Succesfully executed command [${interaction.commandName}] by ${interaction.user.tag}, took ${end - start}ms`)
   } catch (error) {
     const end = Date.now();
-    if(error instanceof Error) {
+    if(error instanceof AxiosError) {
+      if(!error.response) {
+        logger.error(`No response from server when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms, error:${error}`)
+        await interaction.editReply({ content: 'Oops. Something went wrong, seems like our servers are down! try again later..' });
+      }
+      else if(error.response.data.error === "Player is blacklisted") {
+        logger.warn(`Player ${interaction.user.tag} is blacklisted!, command blocked!`)
+        await interaction.editReply({ content: "You are blacklisted from using this bot! Please contact the bot owner for more information." });
+      }
+    }
+    else if(error instanceof Error) {
       logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason: ${error.message}`)
       await interaction.editReply({ content: 'Oops. Something went wrong. Please try again later..' });
     }
