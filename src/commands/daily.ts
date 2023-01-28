@@ -2,8 +2,8 @@ import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { redeemDaily } from "../services/posters";
-import ErrorEmbed from "../utils/ErrorEmbed";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import ErrorEmbed from "../embeds/GenericErrorEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const dailyCommand = {
   data: new SlashCommandBuilder()

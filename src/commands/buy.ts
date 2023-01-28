@@ -5,8 +5,8 @@ import {
 } from "discord.js";
 
 import { buyItem } from "../services/posters";
-import ErrorEmbed from "../utils/ErrorEmbed";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import ErrorEmbed from "../embeds/GenericErrorEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
 
 const buyCommand = {

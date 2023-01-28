@@ -2,8 +2,8 @@ import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { openCrate } from "../services/posters";
-import ErrorEmbed from "../utils/ErrorEmbed";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import ErrorEmbed from "../embeds/GenericErrorEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const crateCommand = {
   data: new SlashCommandBuilder()

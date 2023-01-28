@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const inventoryCommand = {
   data: new SlashCommandBuilder()

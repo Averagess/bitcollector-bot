@@ -2,7 +2,7 @@ import  { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { fetchPlayerShop } from "../services/posters";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const storeCommand = {
   data: new SlashCommandBuilder()

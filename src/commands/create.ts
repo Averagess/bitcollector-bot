@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { AxiosError } from "axios";
 
-import ErrorEmbed from "../utils/ErrorEmbed";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import ErrorEmbed from "../embeds/GenericErrorEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import { createAccount } from "../services/posters";
 
 const createCommand = {

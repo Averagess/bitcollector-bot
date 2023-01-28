@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
 import { calcMinutesAfterDate } from "../utils/calcMinutesHelper";
-import GenericSuccessEmbed from "../utils/GenericSuccessEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
 import nextDailyStringGenerator from "../utils/nextDailyGenerator";
 
