@@ -19,11 +19,11 @@ const statsCommand = {
       
       const player = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
       
-      const hoursSinceDailyRedeem = Math.floor(calcMinutesAfterDate(new Date(player.data.lastDaily)) / 60)
+      const hoursSinceDailyRedeem = player.data.lastDaily ? Math.floor(calcMinutesAfterDate(new Date(player.data.lastDaily)) / 60) : 0;
       
       const dailyRedeemed = hoursSinceDailyRedeem < 24 ? "yes" : "no";
 
-      const nextDailyString = nextDailyStringGenerator(new Date(player.data.lastDaily))
+      const nextDailyString = hoursSinceDailyRedeem ? nextDailyStringGenerator(new Date(player.data.lastDaily)) : "now"
       const statsEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s stats`, interaction })
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
