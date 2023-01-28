@@ -78,7 +78,7 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
 
-  const bg = await loadImage("./src/resources/leaderboard.png")
+  const bg = await loadImage("./src/resources/backdrop-wide.png")
   ctx.drawImage(bg, 0, 0, 800, 500);
 
   players.forEach((player, index) => {
@@ -158,7 +158,7 @@ export const generateCompare = async ({client, target, targetAvatarURL, clientAv
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
 
-  const bg = await loadImage("./src/resources/leaderboard.png")
+  const bg = await loadImage("./src/resources/backdrop-wide.png")
   ctx.drawImage(bg, 0, 0, 800, 500);
 
   const clientAvatar = await loadImage(clientAvatarURL);
