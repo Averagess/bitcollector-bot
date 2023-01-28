@@ -1,6 +1,6 @@
 # bitcollector-server
 
-Response for creating, reading, updating, deleting player data from database and delivering it to our Discord bot
+Responsible for creating, reading, updating, deleting player data from database and delivering it to our Discord bot that interacts with these players.
 
 # How to run
 Clone both the server and bot from github, after that build both Dockerfiles from the bot and this directory.
