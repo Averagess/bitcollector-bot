@@ -83,6 +83,7 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
     }
     const scaledName = scaleName(player.discordDisplayName);
     const balanceReadable = player.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const cpsReadable = player.cps.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const smartUsernamesize = scaledName.length > 15 ? Math.round(400 / scaledName.length) + "px" : "20px"
     
     if (index < 5) {
@@ -106,7 +107,7 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
       ctx.textAlign = "center";
       ctx.fillText("CPS", 50, 110 + (index * 80))
       ctx.textAlign = "left";
-      ctx.fillText(`${player.cps} Bits/s`, 90, 110 + (index * 80));
+      ctx.fillText(`${cpsReadable} Bits/s`, 90, 110 + (index * 80));
 
     } else {
       ctx.fillStyle = "#FFFFFF";
@@ -127,7 +128,7 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
       ctx.textAlign = "center";
       ctx.fillText("CPS", 500, 110 + ((index - 5) * 80))
       ctx.textAlign = "left";
-      ctx.fillText(`${player.cps} Bits/s`, 540, 110 + ((index - 5) * 80));
+      ctx.fillText(`${cpsReadable} Bits/s`, 540, 110 + ((index - 5) * 80));
     }
   })
   ctx.fillStyle = "#808080";
