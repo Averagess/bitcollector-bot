@@ -16,7 +16,7 @@ export interface Player {
   openedCrates: number
   unopenedCrates: number
   blacklisted: null | { reason: string, started : string}
-  blacklistedHistory : { reason: string, started : string, ended: string}[]
+  blacklistHistory : { reason: string, started : string, ended: string}[]
   createdAt: string
   updatedAt: string
 }
@@ -67,4 +67,9 @@ export interface RedeemCrateResponse {
 export interface ClientActivity {
   name: string;
   type: number
+}
+
+export interface fetchTwoPlayersResponse {
+  client: Player;
+  target: Player;
 }
