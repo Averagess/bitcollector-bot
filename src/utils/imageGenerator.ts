@@ -1,5 +1,5 @@
 import { createCanvas, loadImage } from "canvas";
-import { PlayerInLeaderboard } from "../types";
+import { Player, PlayerInLeaderboard } from "../types";
 import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
 import {NODE_ENV, VERSION} from "./config";
 
@@ -21,13 +21,17 @@ const scaleName = (text: string): string => {
   return text;
 }
 
+const readableNumber = (value: string): string => {
+  return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+
 const generateBalance = async ({balance, cps, username, avatarURL}: generateBalanceParams): Promise<Buffer> => {
   const canvas = createCanvas(400, 400);
   const ctx = canvas.getContext("2d");
   
   const scaledName = scaleName(username);
-  const balanceReadable = balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const cpsReadable = cps.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const balanceReadable = readableNumber(balance);
+  const cpsReadable = readableNumber(cps)
 
   const bg = await loadImage("./src/resources/backdrop.png")
   ctx.drawImage(bg, 0, 0, 400, 400);
@@ -82,8 +86,8 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
       player.discordDisplayName = player.discordDisplayName[0].toUpperCase() + player.discordDisplayName.slice(1);
     }
     const scaledName = scaleName(player.discordDisplayName);
-    const balanceReadable = player.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const cpsReadable = player.cps.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const balanceReadable = readableNumber(player.balance)
+    const cpsReadable = readableNumber(player.cps.toString())
     const smartUsernamesize = scaledName.length > 15 ? Math.round(400 / scaledName.length) + "px" : "20px"
     
     if (index < 5) {
@@ -143,18 +147,105 @@ const generateLeaderboard = async ({players, createdAt, nextUpdate}: generateLea
   return canvas.toBuffer("image/png");
 }
 
-// const save = async () => {
-//   const fakeData = new Array(10).fill(0).map(() => ({
-//     discordDisplayName: "test",
-//     discordId: "o",
-//     balance: Math.floor((Math.random() * 1000)).toString(),
-//     cps: Math.floor((Math.random() * 1000))
-//   }))
-//   const buffer = await generateLeaderboard(fakeData, new Date(), new Date())
-//   // eslint-disable-next-line @typescript-eslint/no-var-requires
-//   require("fs").writeFileSync("test.png", buffer)
-// }
-// save()
+interface Args {
+  client: Player,
+  target: Player,
+  targetAvatarURL: string,
+  clientAvatarURL: string
+}
+
+export const generateCompare = async ({client, target, targetAvatarURL, clientAvatarURL}: Args): Promise<Buffer> => {
+  const canvas = createCanvas(800, 500);
+  const ctx = canvas.getContext("2d");
+
+  const bg = await loadImage("./src/resources/leaderboard.png")
+  ctx.drawImage(bg, 0, 0, 800, 500);
+
+  const clientAvatar = await loadImage(clientAvatarURL);
+  const targetAvatar = await loadImage(targetAvatarURL);
+
+  ctx.drawImage(clientAvatar, 50, 50, 100, 100);
+  ctx.drawImage(targetAvatar, 650, 50, 100, 100);
+
+  const clientBalanceReadable = readableNumber(client.balance)
+  const targetBalanceReadable = readableNumber(target.balance)
+  const clientCPSReadable = readableNumber(client.cps.toString())
+  const targetCPSReadable = readableNumber(target.cps.toString())
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.textAlign = "left";
+
+  const scaledClient = scaleName(client.discordDisplayName);
+  const scaledTarget = scaleName(target.discordDisplayName);
+
+
+  const clientSize = scaledClient.length > 15 ? Math.round(400 / scaledClient.length) + "px" : "34px"
+  const targetSize = scaledTarget.length > 15 ? Math.round(400 / scaledTarget.length) + "px" : "34px"
+
+  ctx.font = `${clientSize} Arial`;
+  ctx.fillText(`${client.discordDisplayName}`, 50, 200);
+
+  ctx.font = `${targetSize} Arial`;
+  ctx.textAlign = "right";
+  ctx.fillText(`${target.discordDisplayName}`, 750, 200);
+
+  
+  ctx.textAlign = "center"
+  ctx.font = `${100}px Arial`;
+  if(BigInt(client.balance) > BigInt(target.balance)) {
+    ctx.fillText( ">", 400, 125)
+  } else if(BigInt(client.balance) < BigInt(target.balance)) {
+    ctx.fillText( "<", 400, 125)
+  } else {
+    ctx.fillText( "=", 400, 125)
+  }
+
+  
+  ctx.font = `${16}px Arial`;
+  ctx.fillText("Balance", 400, 240)
+  ctx.fillText("CPS", 400, 260)
+
+  ctx.strokeStyle = "rgba(242,243,244,0.5)"
+  ctx.lineWidth = 1
+  ctx.beginPath()
+
+  ctx.lineTo(50, 245)
+  ctx.lineTo(750, 245)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.beginPath()
+  ctx.lineTo(50, 265)
+  ctx.lineTo(750, 265)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.beginPath()
+  ctx.lineTo(50, 305)
+  ctx.lineTo(750, 305)
+  ctx.stroke()
+  ctx.closePath()
+
+
+  ctx.textAlign = "left"
+  ctx.fillText(`${clientBalanceReadable} Bits`, 50, 240);
+  ctx.fillText(`${clientCPSReadable} Bits/s`, 50, 260);
+
+
+  ctx.textAlign = "right";
+  ctx.fillText(`${targetBalanceReadable} Bits`, 750, 240);
+  ctx.fillText(`${targetCPSReadable} Bits/s`, 750, 260);
+
+  ctx.textAlign = "left"
+  ctx.fillText(`${new Date(client.createdAt).toUTCString()}`, 50, 300);
+  ctx.textAlign = "center"
+  ctx.fillText(`Joined`, 400, 300);
+  ctx.textAlign = "right"
+  ctx.fillText(`${new Date(target.createdAt).toUTCString()}`, 750, 300);
+
+  return canvas.toBuffer("image/png");
+}
+
 export {
   generateBalance,
   generateLeaderboard
