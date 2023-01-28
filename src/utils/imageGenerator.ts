@@ -25,6 +25,8 @@ const readableNumber = (value: string): string => {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
+const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
+
 const generateBalance = async ({balance, cps, username, avatarURL}: generateBalanceParams): Promise<Buffer> => {
   const canvas = createCanvas(400, 400);
   const ctx = canvas.getContext("2d");
@@ -63,10 +65,7 @@ const generateBalance = async ({balance, cps, username, avatarURL}: generateBala
   ctx.font = "10px Arial";
   ctx.textAlign = "center";
 
-  const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
-
   ctx.fillText(stamp, 200, 375);
-
 
   const buffer = canvas.toBuffer("image/png");
   return buffer;
@@ -242,6 +241,11 @@ export const generateCompare = async ({client, target, targetAvatarURL, clientAv
   ctx.fillText(`Joined`, 400, 300);
   ctx.textAlign = "right"
   ctx.fillText(`${new Date(target.createdAt).toUTCString()}`, 750, 300);
+
+  ctx.fillStyle = "#808080";
+  ctx.font = `${15}px Arial`;
+  ctx.textAlign = "center";
+  ctx.fillText(stamp, 400, 470);
 
   return canvas.toBuffer("image/png");
 }
