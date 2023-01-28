@@ -7,6 +7,7 @@ import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
+import pickNewActivity from "./utils/pickNewActivity";
 
 
 client.once(Events.ClientReady, (c) => {
@@ -32,7 +33,17 @@ client.on(Events.InteractionCreate, async interaction => {
     logger.info(`Succesfully executed command [${interaction.commandName}] by ${interaction.user.tag}, took ${end - start}ms`)
   } catch (error) {
     const end = Date.now();
-    if(error instanceof Error) {
+    if(error instanceof AxiosError) {
+      if(!error.response) {
+        logger.error(`No response from server when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms, error:${error}`)
+        await interaction.editReply({ content: 'Oops. Something went wrong, seems like our servers are down! try again later..' });
+      }
+      else if(error.response.data.error === "Player is blacklisted") {
+        logger.warn(`Player ${interaction.user.tag} is blacklisted!, command blocked!`)
+        await interaction.editReply({ content: "You are blacklisted from using this bot! Please contact the bot owner for more information." });
+      }
+    }
+    else if(error instanceof Error) {
       logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason: ${error.message}`)
       await interaction.editReply({ content: 'Oops. Something went wrong. Please try again later..' });
     }
@@ -61,7 +72,8 @@ client.on(Events.MessageCreate, async message => {
 
 cron.schedule('*/15 * * * *', () => {
   logger.info("Switching client activity...")
-  const {name, type} = clientActivities[Math.floor(Math.random() * clientActivities.length)]
+  const currentActivity = { name: client.user?.presence.activities[0].name, type: client.user?.presence.activities[0].type }
+  const {name, type} = pickNewActivity(clientActivities, currentActivity)
   try {
     client.user?.setActivity(name, { type })
     logger.info(`Set client activity to "${name}" (${Object.values(ActivityType)[type]})`)

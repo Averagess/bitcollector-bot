@@ -1,6 +1,7 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { client } from "../client";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 
 const helpCommand = {
@@ -11,8 +12,7 @@ const helpCommand = {
     if(!client.commands) return await interaction.reply("There are no commands to show")
     const cmds = client.commands.map(cmd => ({ name: cmd.default.data.name, description: cmd.default.data.description}))
 
-    const helpEmbed = new EmbedBuilder()
-      .setTitle("Commands")
+    const helpEmbed = GenericSuccessEmbed({ title: "Commands", interaction })
       .setDescription("The commands you can use")
       .addFields(
         cmds.map((cmd) => {
@@ -21,9 +21,6 @@ const helpCommand = {
             value: cmd.description,
           };
         }))
-      .setColor("#ebc034")
-      .setFooter({ text: `Requested by ${interaction.user.tag}` })
-      .setTimestamp();
     
       return await interaction.reply({ embeds: [helpEmbed] });
   }

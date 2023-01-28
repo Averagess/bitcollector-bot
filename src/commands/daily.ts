@@ -1,8 +1,9 @@
 import { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { redeemDaily } from "../services/posters";
-import ErrorEmbed from "../utils/ErrorEmbed";
+import ErrorEmbed from "../embeds/GenericErrorEmbed";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const dailyCommand = {
   data: new SlashCommandBuilder()
@@ -14,23 +15,22 @@ const dailyCommand = {
       const { data } = await redeemDaily(interaction.user.id)
 
       const { balanceReward, itemReward } = data
-      const dailyEmbed = new EmbedBuilder()
-        .setTitle("Your daily rewards")
-        .setColor("#a1fc03")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp()
+      const dailyEmbed = GenericSuccessEmbed({ title: "Your daily rewards", interaction})
         .addFields({
           name: "Balance rewards",
-          value: `${balanceReward} bits`,
+          value: `+${balanceReward} bits!`,
         })
 
-      if(itemReward.amount && itemReward.cps && itemReward.name) dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
-      else dailyEmbed.addFields({ name: "Item rewards", value: "none :(" })
+      const gotItems = itemReward.amount && itemReward.cps && itemReward.name
+
+      gotItems ? 
+        dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
+      : dailyEmbed.addFields({ name: "Item rewards", value: "none :(" })
+
       await interaction.editReply({ embeds: [dailyEmbed] })
     } catch (error) {
-      if(error instanceof AxiosError) {
-        if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) {
+      if(error instanceof AxiosError && error.response?.status) {
+        if(error.response.status === 404) {
           const errorEmbed = ErrorEmbed({title: "Daily reward not claimed", description: "You don't have an account yet, use /create to create one", interaction})
           await interaction.editReply({ embeds: [errorEmbed] })
         }
@@ -38,9 +38,8 @@ const dailyCommand = {
           const errorEmbed = ErrorEmbed({title: "Couldn't redeem daily reward", description: "You have already claimed your daily reward today", interaction})
           await interaction.editReply({embeds: [errorEmbed]})
         }
-        else throw new Error(error.response.data.error)
       }
-      else throw new Error(`Unknown Error, when redeeming daily rewards, error: ${error}`)
+      else throw error
     }
   }
 }

@@ -1,15 +1,16 @@
 import axios from "axios";
 
-import { InventoryItem, Player, PurchaseResponse, RedeemDailyResponse } from "../types";
+import { fetchTwoPlayersResponse, InventoryItem, Player, PurchaseResponse, RedeemCrateResponse, RedeemDailyResponse } from "../types";
 import { APIKEY, BACKEND_URL } from "../utils/config";
 
 const headers = {
   authorization: `Bearer ${APIKEY}`,
 }
 
-export const fetchPlayerProfile = async (discordId: string) => {
+export const fetchPlayerProfile = async (discordId: string, discordDisplayName: string) => {
   const body = {
     discordId,
+    discordDisplayName,
   }
 
   const { data, status } = await axios.post<Player>(`${BACKEND_URL}/updatePlayer`, body, { headers });
@@ -71,5 +72,25 @@ export const addBitToPlayer = async (discordId: string) => {
   }
 
   const { data, status } = await axios.post<Player>(`${BACKEND_URL}/addBitToPlayer`, body, { headers });
+  return { data, status };
+}
+
+export const openCrate = async (discordId: string) => {
+  const body = {
+    discordId
+  }
+
+  const { data } = await axios.post<RedeemCrateResponse>(`${BACKEND_URL}/openCrate`, body, { headers });
+
+  return { data };
+}
+
+export const fetchTwoPlayers = async (clientId: string, targetId: string) => {
+  const body = {
+    clientId,
+    targetId,
+  }
+
+  const { data, status } = await axios.post<fetchTwoPlayersResponse>(`${BACKEND_URL}/updateTwoPlayers`, body, { headers });
   return { data, status };
 }

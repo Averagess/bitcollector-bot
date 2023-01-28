@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const inventoryCommand = {
   data: new SlashCommandBuilder()
@@ -10,10 +11,9 @@ const inventoryCommand = {
     try {
       await interaction.deferReply()
       
-      const { data }  = await fetchPlayerProfile(interaction.user.id)
+      const { data }  = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
 
-      const inventoryEmbed = new EmbedBuilder()
-        .setTitle(`${interaction.user.tag}'s inventory`)
+      const inventoryEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s inventory`, interaction })
         .addFields(
           data.inventory.map((item, index) => {
             return {
@@ -23,20 +23,13 @@ const inventoryCommand = {
             };
           }
         ))
-        .setColor("#a1fc03")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
 
       await interaction.editReply({ embeds: [inventoryEmbed]  });
     } catch (error) {
-      if(error instanceof AxiosError){
-        if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
-        else throw new Error(("Unknown axios error raised when trying to fetch inventory. Error: ${error}"))
+      if(error instanceof AxiosError && error.response?.status === 404){
+        return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
       }
-      else {
-        throw new Error("Unknown error raised when trying to fetch inventory. Error: ${error}");
-      }
+      else throw error
     }
   }
 }

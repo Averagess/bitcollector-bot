@@ -1,7 +1,8 @@
 import  { AxiosError } from "axios";
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { fetchPlayerShop } from "../services/posters";
+import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -14,8 +15,7 @@ const storeCommand = {
 
       const { data } = await fetchPlayerShop(interaction.user.id);
 
-      const shopEmbed = new EmbedBuilder()
-        .setTitle("Store")
+      const shopEmbed = GenericSuccessEmbed({ title: "Store", interaction })
         .addFields(
           data.map((item, index) => {
             const priceReadable = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -26,18 +26,13 @@ const storeCommand = {
             };
           })
         )
-        .setColor("#ebc034")
-        .setFooter({ text: `Requested by ${interaction.user.tag}` })
-        .setTimestamp();
 
       await interaction.editReply({ embeds: [shopEmbed] });
     } catch (error) {
-      if(error instanceof AxiosError) {
-        if(!error.response) throw new Error("No response from server")
-        else if(error.response.status === 404) await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" })
-        else throw new Error(`There was an unknown AxiosError error while getting the store, error: ${error}`)
+      if(error instanceof AxiosError && error.response?.status === 404) {
+      await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" })
       }
-      else throw new Error(`There was an unknown error while getting the store, error: ${error}`)
+      else throw error
     }
   }
 }

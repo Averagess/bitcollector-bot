@@ -13,8 +13,10 @@ export interface Player {
   inventory: InventoryItem[]
   lastDaily: string
   dailyCount: number
+  openedCrates: number
+  unopenedCrates: number
   blacklisted: null | { reason: string, started : string}
-  blacklistedHistory : { reason: string, started : string, ended: string}[]
+  blacklistHistory : { reason: string, started : string, ended: string}[]
   createdAt: string
   updatedAt: string
 }
@@ -51,4 +53,43 @@ export interface RedeemDailyResponse {
     amount: number | null
     cps: number | null
   }
+}
+
+export interface RedeemCrateResponse {
+  balanceReward: number
+  itemReward: {
+    name: string,
+    amount: number,
+    cps: number
+  }
+}
+
+export interface ClientActivity {
+  name: string;
+  type: number
+}
+
+export interface fetchTwoPlayersResponse {
+  client: Player;
+  target: Player;
+}
+
+export interface generateBalanceParams {
+  balance: string;
+  cps: string;
+  username: string;
+  avatarURL: string;
+}
+
+export interface generateLeaderboardParams {
+  players: PlayerInLeaderboard[];
+  createdAt: Date;
+  nextUpdate: Date;
+}
+
+export interface generateCompareParams {
+  client: Player,
+  target: Player,
+  targetAvatarURL: string,
+  clientAvatarURL: string
 }

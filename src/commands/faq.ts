@@ -1,6 +1,10 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  SlashCommandBuilder,
+} from "discord.js";
 
-const pingCommand = {
+const faqCommand = {
   data: new SlashCommandBuilder()
     .setName("faq")
     .setDescription("Replies with an list of frequently asked questions"),
@@ -17,10 +21,11 @@ const pingCommand = {
         {
           name: "How do I get started?",
           value: `To get started, send messages in chats on servers that the bot is in.
+                  You can also get bits by using the \`/daily\` command and by voting the bot.
                   You will get bits for every message you send, and you can view
-                  how many bits you have by using \`/balance\`,
-                  when your balance hits 50 you can buy your first upgrade,
-                  you can check out the upgrades by using the \`/store\` command and then,
+                  how many bits you have by using \`/balance\`.
+                  When your balance hits 50 bits, you can buy your first upgrade.
+                  You can check out the upgrades by using the \`/store\` command and then,
                   you can buy upgrades by using the \`/buy\` command.`,
         },
         {
@@ -30,11 +35,13 @@ const pingCommand = {
         },
         {
           name: "I believe I have found a bug, what do I do?",
-          value: "If you believe you have found a bug, please report it in the support server, depending on the severity of the bug you might get an reward. You can join the support server by using the `/support` command.",
+          value:
+            "If you believe you have found a bug, please report it in the support server, depending on the severity of the bug you might get an reward. You can join the support server by using the `/support` command.",
         },
         {
           name: "I have an feature suggestion, what do I do?",
-          value: "I'd love to hear your suggestions, you can send them in the support server, you can join the server by using the `/support` command.",
+          value:
+            "I'd love to hear your suggestions, you can send them in the support server, you can join the server by using the `/support` command.",
         }
       )
       .setColor("#ebc034")
@@ -42,7 +49,7 @@ const pingCommand = {
       .setTimestamp();
 
     await interaction.reply({ embeds: [faqEmbed] });
-  }
-}
+  },
+};
 
-export default pingCommand;
+export default faqCommand;
