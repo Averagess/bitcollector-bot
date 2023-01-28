@@ -73,3 +73,23 @@ export interface fetchTwoPlayersResponse {
   client: Player;
   target: Player;
 }
+
+export interface generateBalanceParams {
+  balance: string;
+  cps: string;
+  username: string;
+  avatarURL: string;
+}
+
+export interface generateLeaderboardParams {
+  players: PlayerInLeaderboard[];
+  createdAt: Date;
+  nextUpdate: Date;
+}
+
+export interface generateCompareParams {
+  client: Player,
+  target: Player,
+  targetAvatarURL: string,
+  clientAvatarURL: string
+}
