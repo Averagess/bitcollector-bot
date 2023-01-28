@@ -7,9 +7,10 @@ const headers = {
   authorization: `Bearer ${APIKEY}`,
 }
 
-export const fetchPlayerProfile = async (discordId: string) => {
+export const fetchPlayerProfile = async (discordId: string, discordDisplayName: string) => {
   const body = {
     discordId,
+    discordDisplayName,
   }
 
   const { data, status } = await axios.post<Player>(`${BACKEND_URL}/updatePlayer`, body, { headers });

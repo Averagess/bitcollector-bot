@@ -11,7 +11,7 @@ const inventoryCommand = {
     try {
       await interaction.deferReply()
       
-      const { data }  = await fetchPlayerProfile(interaction.user.id)
+      const { data }  = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
 
       const inventoryEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s inventory`, interaction })
         .addFields(

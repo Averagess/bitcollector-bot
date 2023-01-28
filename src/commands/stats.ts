@@ -17,7 +17,7 @@ const statsCommand = {
     try {
       await interaction.deferReply();
       
-      const player = await fetchPlayerProfile(interaction.user.id)
+      const player = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
       
       const hoursSinceDailyRedeem = Math.floor(calcMinutesAfterDate(new Date(player.data.lastDaily)) / 60)
       

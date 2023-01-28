@@ -13,7 +13,7 @@ const balanceCommand = {
     try {
       await interaction.deferReply();
       
-      const { data } = await fetchPlayerProfile(interaction.user.id)
+      const { data } = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
 
       const { balance, cps} = data
       const username = interaction.user.username
