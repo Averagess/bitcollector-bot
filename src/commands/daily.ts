@@ -21,8 +21,11 @@ const dailyCommand = {
           value: `+${balanceReward} bits!`,
         })
 
-      if(itemReward.amount && itemReward.cps && itemReward.name) dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
-      else dailyEmbed.addFields({ name: "Item rewards", value: "none :(" })
+      const gotItems = itemReward.amount && itemReward.cps && itemReward.name
+
+      gotItems ? 
+        dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
+      : dailyEmbed.addFields({ name: "Item rewards", value: "none :(" })
 
       await interaction.editReply({ embeds: [dailyEmbed] })
     } catch (error) {
