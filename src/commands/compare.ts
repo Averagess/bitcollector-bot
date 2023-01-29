@@ -40,7 +40,6 @@ const compareCommand = {
         });
         await interaction.editReply({ files: [img] });
       } catch (error) {
-        console.log(error);
         if (error instanceof AxiosError && error.response?.status === 404) {
           if (error.response.data.error === "target not found") {
             return await interaction.editReply({
