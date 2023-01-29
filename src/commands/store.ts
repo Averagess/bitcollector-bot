@@ -23,6 +23,7 @@ const storeCommand = {
             return {
               name: `${index + 1}. ${item.name}`,
               value: `**Price:** ${priceReadable} bits\n**CPS:** ${cpsReadable} bits/s\n**You own:** ${item.amount}`,
+              inline: true,
             };
           })
         )
