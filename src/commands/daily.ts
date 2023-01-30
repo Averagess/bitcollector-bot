@@ -25,7 +25,7 @@ const dailyCommand = {
 
       gotItems ? 
         dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
-      : dailyEmbed.addFields({ name: "Item rewards", value: "none :(" })
+      : dailyEmbed.addFields({ name: "Item rewards", value: "None :(\n Better luck next time!" })
 
       await interaction.editReply({ embeds: [dailyEmbed] })
     } catch (error) {
