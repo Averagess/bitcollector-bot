@@ -198,11 +198,11 @@ export const generateCompare = async ({
       : "34px";
 
   ctx.font = `${clientSize} Arial`;
-  ctx.fillText(`${client.discordDisplayName}`, 50, 200);
+  ctx.fillText(`${scaledClient}`, 50, 200);
 
   ctx.font = `${targetSize} Arial`;
   ctx.textAlign = "right";
-  ctx.fillText(`${target.discordDisplayName}`, 750, 200);
+  ctx.fillText(`${scaledTarget}`, 750, 200);
 
   ctx.textAlign = "center";
   ctx.font = `${100}px Arial`;
