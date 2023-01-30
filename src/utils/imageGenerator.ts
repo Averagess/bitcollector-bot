@@ -195,40 +195,34 @@ export const generateCompare = async ({
 
   const clientBalanceReadable = readableNumber(client.balance);
   const targetBalanceReadable = readableNumber(target.balance);
+
   const clientCPSReadable = readableNumber(client.cps.toString());
   const targetCPSReadable = readableNumber(target.cps.toString());
 
+  const croppedClient = autoCropName(client.discordDisplayName);
+  const croppedTarget = autoCropName(target.discordDisplayName);
+  
+  const clientFontsize = autoFontSize(croppedClient, 34);
+  const targetFontsize = autoFontSize(croppedTarget, 34);
+
   ctx.fillStyle = "#FFFFFF";
+  
   ctx.textAlign = "left";
+  ctx.font = `${clientFontsize} Arial`;
+  ctx.fillText(`${croppedClient}`, 50, 200);
 
-  const scaledClient = scaleName(client.discordDisplayName);
-  const scaledTarget = scaleName(target.discordDisplayName);
-
-  const clientSize =
-    scaledClient.length > 15
-      ? Math.round(400 / scaledClient.length) + "px"
-      : "34px";
-  const targetSize =
-    scaledTarget.length > 15
-      ? Math.round(400 / scaledTarget.length) + "px"
-      : "34px";
-
-  ctx.font = `${clientSize} Arial`;
-  ctx.fillText(`${scaledClient}`, 50, 200);
-
-  ctx.font = `${targetSize} Arial`;
   ctx.textAlign = "right";
-  ctx.fillText(`${scaledTarget}`, 750, 200);
+  ctx.font = `${targetFontsize} Arial`;
+  ctx.fillText(`${croppedTarget}`, 750, 200);
 
   ctx.textAlign = "center";
   ctx.font = `${100}px Arial`;
-  if (BigInt(client.balance) > BigInt(target.balance)) {
-    ctx.fillText(">", 400, 125);
-  } else if (BigInt(client.balance) < BigInt(target.balance)) {
-    ctx.fillText("<", 400, 125);
-  } else {
-    ctx.fillText("=", 400, 125);
-  }
+
+  let symbol;
+  if (BigInt(client.balance) > BigInt(target.balance)) symbol = ">"
+  else if (BigInt(client.balance) < BigInt(target.balance)) symbol = "<"
+  else symbol = "=";
+  ctx.fillText(`${symbol}`, 400, 125);
 
   ctx.font = `${16}px Arial`;
   ctx.fillText("Balance", 400, 240);
