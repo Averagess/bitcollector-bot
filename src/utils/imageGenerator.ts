@@ -88,9 +88,6 @@ const generateBalance = async ({
   return buffer;
 };
 
-const alphabet =
-  "abcdefghijklmnopqrstuvwxyzöäåABCDEFGHIJKLMNOPQRSTUVWXYZöäå".split("");
-
 const generateLeaderboard = async ({
   players,
   createdAt,
