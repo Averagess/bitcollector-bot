@@ -16,7 +16,7 @@ const buyCommand = {
     .addStringOption((option) =>
       option
         .setName("item")
-        .setDescription("The item you want to buy (Name or ID)")
+        .setDescription("The item you want to buy (name or number in the shop)")
         .setRequired(true)
     )
     .addIntegerOption((option) =>
