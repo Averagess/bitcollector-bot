@@ -13,6 +13,10 @@ const autoCropName = (text: string): string => {
   return text;
 };
 
+const autoFontSize = (text: string, normalSize: number): string => {
+  if (text.length > 15) return Math.round(400 / text.length) + "px";
+  return normalSize + "px";
+}
 const readableNumber = (value: string): string => {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
