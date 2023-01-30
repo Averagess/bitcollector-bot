@@ -6,8 +6,8 @@ const calcMinutesToDate = (from: Date, to: Date) => {
 }
 
 const calcMinutesAfterDate = (date: Date) => {
-  const now = new Date().getTime()
-  const diff = now - date.getTime()
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
   const minutes = Math.round(diff / 1000 / 60)
   return minutes
 }
