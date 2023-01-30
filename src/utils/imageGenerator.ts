@@ -9,7 +9,7 @@ import {
 } from "../types";
 
 const scaleName = (text: string): string => {
-  if (text.length > 20) return text.slice(0, 20) + "...";
+  if (text.length > 20) return text.slice(0, 20) + "..." + text.slice(-5);
   return text;
 };
 
