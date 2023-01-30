@@ -15,11 +15,11 @@ const crateCommand = {
       const { data } = await openCrate(interaction.user.id)
 
       const { balanceReward, itemReward } = data
-      const embed = GenericSuccessEmbed({title: "Crate opened!", interaction})
+      const embed = GenericSuccessEmbed({title: "✨ Crate opened! 🎇", interaction})
 
       embed.addFields(
-        {name: "Balance rewards", value: `+${balanceReward} bits!`},
-        {name: "Item rewards", value: `${itemReward.amount}x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!`}
+        {name: "💰 Balance rewards", value: `+${balanceReward} bits!`},
+        {name: "💻 Item rewards", value: `${itemReward.amount}x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!`}
       )
 
       await interaction.editReply({embeds: [embed]})
