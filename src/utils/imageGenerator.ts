@@ -47,7 +47,7 @@ const generateBalance = async ({
   const ctx = canvas.getContext("2d");
   ctx.save()
 
-  const scaledName = scaleName(username);
+  const croppedUsername = autoCropName(username);
   const balanceReadable = readableNumber(balance);
   const cpsReadable = readableNumber(cps);
 
@@ -61,15 +61,11 @@ const generateBalance = async ({
   ctx.restore()
 
   ctx.fillStyle = "#FFFFFF";
-  const smartUsernamesize =
-    scaledName.length > 15
-      ? Math.round(400 / scaledName.length) + "px"
-      : "34px";
-  ctx.font = `${smartUsernamesize} Arial`;
+  const usernameFontSize = autoFontSize(croppedUsername, 34); 
+  ctx.font = `${usernameFontSize} Arial`;
   ctx.textAlign = "center";
-  ctx.fillText(`${scaledName}'s balance`, 200, 225);
+  ctx.fillText(`${croppedUsername}'s balance`, 200, 225);
 
-  ctx.fillStyle = "#FFFFFF";
   const smartBalanceSize = balanceReadable.length > 10 ? "24px" : "28px";
   ctx.font = `${smartBalanceSize} Arial`;
   ctx.textAlign = "center";
@@ -77,7 +73,6 @@ const generateBalance = async ({
 
   if (balance.length >= 1) {
     const smartCpsSize = cpsReadable.length > 10 ? "20px" : "24px";
-    ctx.fillStyle = "#FFFFFF";
     ctx.font = `${smartCpsSize} Arial`;
     ctx.textAlign = "center";
     ctx.fillText(`CPS: ${cpsReadable} bits/s`, 200, 325);
