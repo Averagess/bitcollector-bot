@@ -100,18 +100,12 @@ const generateLeaderboard = async ({
   ctx.drawImage(bg, 0, 0, 800, 500);
 
   players.forEach((player, index) => {
-    if (alphabet.includes(player.discordDisplayName[0])) {
-      player.discordDisplayName =
-        player.discordDisplayName[0].toUpperCase() +
-        player.discordDisplayName.slice(1);
-    }
-    const scaledName = scaleName(player.discordDisplayName);
+    const capitalizedUsername = (player.discordDisplayName.split(""))[0].toUpperCase() + player.discordDisplayName.slice(1);
+    const croppedUsername = autoCropName(capitalizedUsername);
+
     const balanceReadable = readableNumber(player.balance);
     const cpsReadable = readableNumber(player.cps.toString());
-    const smartUsernamesize =
-      scaledName.length > 15
-        ? Math.round(400 / scaledName.length) + "px"
-        : "20px";
+    const usernameFontSize = autoFontSize(croppedUsername, 20);
 
     if (index < 5) {
       ctx.fillStyle = "#FFFFFF";
@@ -119,13 +113,11 @@ const generateLeaderboard = async ({
       ctx.textAlign = "center";
       ctx.fillText(`${index + 1}.`, 50, 70 + index * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.font = `${usernameFontSize} Arial`;
       ctx.textAlign = "left";
-      ctx.fillText(`${scaledName}`, 90, 70 + index * 80);
+      ctx.fillText(`${croppedUsername}`, 90, 70 + index * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
       ctx.textAlign = "center";
-
       ctx.font = `${15}px Arial`;
 
       ctx.fillText("Balance", 50, 90 + index * 80);
@@ -141,9 +133,9 @@ const generateLeaderboard = async ({
       ctx.textAlign = "center";
       ctx.fillText(`${index + 1}.`, 500, 70 + (index - 5) * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.font = `${usernameFontSize} Arial`;
       ctx.textAlign = "left";
-      ctx.fillText(`${scaledName}`, 540, 70 + (index - 5) * 80);
+      ctx.fillText(`${croppedUsername}`, 540, 70 + (index - 5) * 80);
 
       ctx.font = `${15}px Arial`;
       ctx.textAlign = "center";
@@ -161,14 +153,15 @@ const generateLeaderboard = async ({
   ctx.font = `${15}px Arial`;
   ctx.textAlign = "center";
 
-  const prettyCreatedAt = calcMinutesAfterDate(createdAt);
-  const prettyUpdate = calcMinutesToDate(new Date(), nextUpdate);
+  const now = new Date();
+  const minutesSinceCreation = calcMinutesAfterDate(createdAt);
+  const minutesToUpdate = calcMinutesToDate(now, nextUpdate);
 
   ctx.fillText(
-    `Leaderboard updated ${prettyCreatedAt} minutes ago, next update in ${prettyUpdate} minutes`,
+    `Leaderboard updated ${minutesSinceCreation} minutes ago, next update in ${minutesToUpdate} minutes`,
     400,
     470
-  ) + " minutes";
+  );
 
   return canvas.toBuffer("image/png");
 };
