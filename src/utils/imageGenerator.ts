@@ -1,4 +1,4 @@
-import { createCanvas, loadImage } from "canvas";
+import { CanvasRenderingContext2D, createCanvas, loadImage } from "canvas";
 import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
 import { NODE_ENV, VERSION } from "./config";
 
@@ -19,6 +19,20 @@ const readableNumber = (value: string): string => {
 
 const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
 
+const roundedImage = (x: number,y: number,width: number,height: number,radius: number, ctx: CanvasRenderingContext2D) => {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
 const generateBalance = async ({
   balance,
   cps,
@@ -27,6 +41,7 @@ const generateBalance = async ({
 }: generateBalanceParams): Promise<Buffer> => {
   const canvas = createCanvas(400, 400);
   const ctx = canvas.getContext("2d");
+  ctx.save()
 
   const scaledName = scaleName(username);
   const balanceReadable = readableNumber(balance);
@@ -35,8 +50,11 @@ const generateBalance = async ({
   const bg = await loadImage("./src/resources/backdrop.png");
   ctx.drawImage(bg, 0, 0, 400, 400);
 
+  roundedImage(140, 50, 125, 125, 20, ctx);
   const profile = await loadImage(avatarURL);
+  ctx.clip();
   ctx.drawImage(profile, 140, 50, 125, 125);
+  ctx.restore()
 
   ctx.fillStyle = "#FFFFFF";
   const smartUsernamesize =
@@ -167,6 +185,7 @@ export const generateCompare = async ({
 }: generateCompareParams): Promise<Buffer> => {
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
+  ctx.save()
 
   const bg = await loadImage("./src/resources/backdrop-wide.png");
   ctx.drawImage(bg, 0, 0, 800, 500);
@@ -174,8 +193,16 @@ export const generateCompare = async ({
   const clientAvatar = await loadImage(clientAvatarURL);
   const targetAvatar = await loadImage(targetAvatarURL);
 
+  roundedImage(50, 50, 100, 100, 20, ctx)
+  ctx.clip()
   ctx.drawImage(clientAvatar, 50, 50, 100, 100);
+  ctx.restore()
+  ctx.save()
+
+  roundedImage(650, 50, 100, 100, 20, ctx)
+  ctx.clip()
   ctx.drawImage(targetAvatar, 650, 50, 100, 100);
+  ctx.restore()
 
   const clientBalanceReadable = readableNumber(client.balance);
   const targetBalanceReadable = readableNumber(target.balance);
