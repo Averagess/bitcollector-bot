@@ -3,6 +3,7 @@ import {
   ChatInputCommandInteraction,
   GuildMember,
   SlashCommandBuilder,
+  User,
 } from "discord.js";
 import { fetchTwoPlayers } from "../services/posters";
 import { generateCompare } from "../utils/imageGenerator";
@@ -21,7 +22,8 @@ const compareCommand = {
     await interaction.deferReply();
     const target = interaction.options.getMentionable("player");
 
-    if (target instanceof GuildMember) {
+
+    if (target instanceof GuildMember || target instanceof User) {
       const targetID = target.id;
       const clientID = interaction.user.id;
       try {
