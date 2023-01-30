@@ -34,9 +34,9 @@ export interface InventoryItem {
 }
 
 export interface Leaderboard {
-  players: PlayerInLeaderboard[] | null
-  createdAt: string | null
-  nextUpdate: string | null
+  players: PlayerInLeaderboard[]
+  createdAt: string
+  nextUpdate: string
 }
 
 export interface PlayerInLeaderboard {
