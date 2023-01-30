@@ -28,7 +28,7 @@ const statsCommand = {
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
           { name: "🕓CPS", value: `${player.data.cps.toString()} bits/s`, inline: true },
-          { name: "📆Account created", value: new Date(player.data.createdAt).toLocaleString("fi-FI"), inline: true },
+          { name: "📆Account created", value: new Date(player.data.createdAt).toUTCString(), inline: true },
           { name: "📅Daily redeemed", value: dailyRedeemed, inline: true },
           { name: "Next daily", value: nextDailyString, inline: true },
           { name: "Daily count", value: player.data.dailyCount.toString(), inline: true},
