@@ -11,7 +11,7 @@ export interface Player {
   balance: string
   cps: number
   inventory: InventoryItem[]
-  lastDaily: string
+  lastDaily: string | null
   dailyCount: number
   openedCrates: number
   unopenedCrates: number
