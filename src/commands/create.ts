@@ -30,11 +30,7 @@ const createCommand = {
         await interaction.editReply({ embeds: [successEmbed] });
       }
     } catch (error) {
-      if (
-        error instanceof AxiosError &&
-        error.response &&
-        error.response.status === 409
-      ) {
+      if (error instanceof AxiosError && error.response?.status === 409) {
         const errorEmbed = ErrorEmbed({
           title: "Account creation cancelled!",
           description: "You already have an account!",
