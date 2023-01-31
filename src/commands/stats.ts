@@ -23,7 +23,7 @@ const statsCommand = {
       
       const dailyRedeemed = hoursSinceDailyRedeem < 24 ? "yes" : "no";
 
-      const nextDailyString = hoursSinceDailyRedeem ? nextDailyStringGenerator(new Date(player.data.lastDaily)) : "now"
+      const nextDailyString = hoursSinceDailyRedeem ? nextDailyStringGenerator(new Date(player.data.lastDaily as string)) : "now"
       const statsEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s stats`, interaction })
         .addFields(
           { name: "💰Balance", value: intToString(player.data.balance), inline: true },
