@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
@@ -32,15 +33,15 @@ const buyCommand = {
       const amount = interaction.options.getInteger("amount");
 
       const itemAmountValid = amount && amount > 0 ? amount : 1;
-      
+
       if(!item) throw new Error("No item provided");
 
-      const { data } = await buyItem(interaction.user.id, item, itemAmountValid)
+      const { data } = await buyItem(interaction.user.id, item, itemAmountValid);
 
       const PurchasedItem = data.purchasedItem;
 
-      const resultEmbed = GenericSuccessEmbed({ title: "Purchase successful!", interaction })
-        
+      const resultEmbed = GenericSuccessEmbed({ title: "Purchase successful!", interaction });
+
 
       if (amount && amount > 1 && PurchasedItem) {
         resultEmbed.setDescription(
@@ -87,7 +88,7 @@ const buyCommand = {
 
           await interaction.editReply({ embeds: [errorEmbed] });
         }
-      } else throw error
+      } else throw error;
     }
   },
 };

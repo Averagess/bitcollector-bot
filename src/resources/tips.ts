@@ -11,6 +11,6 @@ const tips: string[] = [
   "You can use `/create` to create an account!",
   "You can use `/store` to see all the items you can buy!",
   "You can use `/inventory` to see all the items you currently own!",
-]
+];
 
-export default tips
+export default tips;
