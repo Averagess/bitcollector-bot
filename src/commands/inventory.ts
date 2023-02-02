@@ -9,9 +9,9 @@ const inventoryCommand = {
     .setDescription("Shows your inventory"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
-      await interaction.deferReply()
-      
-      const { data }  = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
+      await interaction.deferReply();
+
+      const { data }  = await fetchPlayerProfile(interaction.user.id, interaction.user.tag);
 
       const inventoryEmbed = GenericSuccessEmbed({ title: `${interaction.user.tag}'s inventory`, interaction })
         .addFields(
@@ -22,16 +22,16 @@ const inventoryCommand = {
               inline: true,
             };
           }
-        ))
+          ));
 
       await interaction.editReply({ embeds: [inventoryEmbed]  });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404){
         return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
       }
-      else throw error
+      else throw error;
     }
   }
-}
+};
 
 export default inventoryCommand;

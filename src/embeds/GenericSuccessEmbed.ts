@@ -26,16 +26,16 @@ const GenericSuccessEmbed = ({
   const shouldShowTip = Math.round(Math.random()) === 1;
 
   if (shouldShowTip) {
-    const randomTip = tips[Math.floor(Math.random() * tips.length)]
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
     embed.setFooter({
       text: `TIP: ${randomTip}`,
     });
   } else if (footer) {
     embed.setFooter({ text: footer });
-    if(footer.length <= 15) embed.setTimestamp()
+    if(footer.length <= 15) embed.setTimestamp();
   } else {
     embed.setFooter({ text: `Requested by ${interaction.user.tag}` });
-    embed.setTimestamp()
+    embed.setTimestamp();
   }
 
   return embed;

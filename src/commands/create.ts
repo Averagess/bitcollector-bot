@@ -24,17 +24,13 @@ const createCommand = {
           title: "Account created successfully!",
           interaction,
         }).setDescription(
-          "Next step is to use check out /store and then /buy to buy your first item!"
+          "Next step is to check out /store and then /buy to buy your first item!"
         );
 
         await interaction.editReply({ embeds: [successEmbed] });
       }
     } catch (error) {
-      if (
-        error instanceof AxiosError &&
-        error.response &&
-        error.response.status === 409
-      ) {
+      if (error instanceof AxiosError && error.response?.status === 409) {
         const errorEmbed = ErrorEmbed({
           title: "Account creation cancelled!",
           description: "You already have an account!",

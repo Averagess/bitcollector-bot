@@ -1,5 +1,5 @@
-import { ActivityType } from "discord.js"
-import { ClientActivity } from "./types"
+import { ActivityType } from "discord.js";
+import { ClientActivity } from "./types";
 
 // Playing Streaming Listening Watching Competing
 const clientActivities: ClientActivity[] = [
@@ -19,6 +19,6 @@ const clientActivities: ClientActivity[] = [
     name: "with the Discord API",
     type: ActivityType.Playing
   },
-]
+];
 
 export default clientActivities;

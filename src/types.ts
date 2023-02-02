@@ -11,7 +11,7 @@ export interface Player {
   balance: string
   cps: number
   inventory: InventoryItem[]
-  lastDaily: string
+  lastDaily: string | null
   dailyCount: number
   openedCrates: number
   unopenedCrates: number
@@ -34,9 +34,9 @@ export interface InventoryItem {
 }
 
 export interface Leaderboard {
-  players: PlayerInLeaderboard[] | null
-  createdAt: string | null
-  nextUpdate: string | null
+  players: PlayerInLeaderboard[]
+  createdAt: string
+  nextUpdate: string
 }
 
 export interface PlayerInLeaderboard {
@@ -48,11 +48,6 @@ export interface PlayerInLeaderboard {
 
 export interface RedeemDailyResponse {
   balanceReward: number
-  itemReward: {
-    name: string | null
-    amount: number | null
-    cps: number | null
-  }
 }
 
 export interface RedeemCrateResponse {

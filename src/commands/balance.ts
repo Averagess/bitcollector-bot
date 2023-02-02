@@ -12,20 +12,20 @@ const balanceCommand = {
 
     try {
       await interaction.deferReply();
-      
-      const { data } = await fetchPlayerProfile(interaction.user.id, interaction.user.tag)
 
-      const { balance, cps} = data
-      const username = interaction.user.username
-      const avatarURL = interaction.user.displayAvatarURL({extension: "png", size: 128})
-      const cpsString = cps.toString()
+      const { data } = await fetchPlayerProfile(interaction.user.id, interaction.user.tag);
 
-      const params = { balance, cps: cpsString, username, avatarURL}
+      const { balance, cps } = data;
+      const username = interaction.user.username;
+      const avatarURL = interaction.user.displayAvatarURL({ extension: "png", size: 128 });
+      const cpsString = cps.toString();
 
-      const img = await generateBalance(params)
+      const params = { balance, cps: cpsString, username, avatarURL };
+
+      const img = await generateBalance(params);
 
       await interaction.editReply({ files: [img] });
-      
+
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
         await interaction.editReply({ content: "You don't have an account yet! Create one with `/create`" });
@@ -33,6 +33,6 @@ const balanceCommand = {
       else throw error;
     }
   }
-}
+};
 
 export default balanceCommand;

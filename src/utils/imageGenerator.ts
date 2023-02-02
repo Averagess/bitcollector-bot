@@ -1,4 +1,4 @@
-import { createCanvas, loadImage } from "canvas";
+import { CanvasRenderingContext2D, createCanvas, loadImage } from "canvas";
 import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
 import { NODE_ENV, VERSION } from "./config";
 
@@ -8,16 +8,34 @@ import {
   generateCompareParams,
 } from "../types";
 
-const scaleName = (text: string): string => {
-  if (text.length > 20) return text.slice(0, 20) + "...";
+const autoCropName = (text: string): string => {
+  if (text.length > 20) return text.slice(0, 20) + "..." + text.slice(-5);
   return text;
 };
 
+const autoFontSize = (text: string, normalSize: number): string => {
+  if (text.length > 15) return Math.round(400 / text.length) + "px";
+  return normalSize + "px";
+};
 const readableNumber = (value: string): string => {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
+
+const roundedImage = (x: number,y: number,width: number,height: number,radius: number, ctx: CanvasRenderingContext2D) => {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+};
 
 const generateBalance = async ({
   balance,
@@ -27,27 +45,27 @@ const generateBalance = async ({
 }: generateBalanceParams): Promise<Buffer> => {
   const canvas = createCanvas(400, 400);
   const ctx = canvas.getContext("2d");
+  ctx.save();
 
-  const scaledName = scaleName(username);
+  const croppedUsername = autoCropName(username);
   const balanceReadable = readableNumber(balance);
   const cpsReadable = readableNumber(cps);
 
   const bg = await loadImage("./src/resources/backdrop.png");
   ctx.drawImage(bg, 0, 0, 400, 400);
 
+  roundedImage(140, 50, 125, 125, 20, ctx);
   const profile = await loadImage(avatarURL);
+  ctx.clip();
   ctx.drawImage(profile, 140, 50, 125, 125);
+  ctx.restore();
 
   ctx.fillStyle = "#FFFFFF";
-  const smartUsernamesize =
-    scaledName.length > 15
-      ? Math.round(400 / scaledName.length) + "px"
-      : "34px";
-  ctx.font = `${smartUsernamesize} Arial`;
+  const usernameFontSize = autoFontSize(croppedUsername, 34);
+  ctx.font = `${usernameFontSize} Arial`;
   ctx.textAlign = "center";
-  ctx.fillText(`${scaledName}'s balance`, 200, 225);
+  ctx.fillText(`${croppedUsername}'s balance`, 200, 225);
 
-  ctx.fillStyle = "#FFFFFF";
   const smartBalanceSize = balanceReadable.length > 10 ? "24px" : "28px";
   ctx.font = `${smartBalanceSize} Arial`;
   ctx.textAlign = "center";
@@ -55,7 +73,6 @@ const generateBalance = async ({
 
   if (balance.length >= 1) {
     const smartCpsSize = cpsReadable.length > 10 ? "20px" : "24px";
-    ctx.fillStyle = "#FFFFFF";
     ctx.font = `${smartCpsSize} Arial`;
     ctx.textAlign = "center";
     ctx.fillText(`CPS: ${cpsReadable} bits/s`, 200, 325);
@@ -71,9 +88,6 @@ const generateBalance = async ({
   return buffer;
 };
 
-const alphabet =
-  "abcdefghijklmnopqrstuvwxyzöäåABCDEFGHIJKLMNOPQRSTUVWXYZöäå".split("");
-
 const generateLeaderboard = async ({
   players,
   createdAt,
@@ -86,18 +100,12 @@ const generateLeaderboard = async ({
   ctx.drawImage(bg, 0, 0, 800, 500);
 
   players.forEach((player, index) => {
-    if (alphabet.includes(player.discordDisplayName[0])) {
-      player.discordDisplayName =
-        player.discordDisplayName[0].toUpperCase() +
-        player.discordDisplayName.slice(1);
-    }
-    const scaledName = scaleName(player.discordDisplayName);
+    const capitalizedUsername = (player.discordDisplayName.split(""))[0].toUpperCase() + player.discordDisplayName.slice(1);
+    const croppedUsername = autoCropName(capitalizedUsername);
+
     const balanceReadable = readableNumber(player.balance);
     const cpsReadable = readableNumber(player.cps.toString());
-    const smartUsernamesize =
-      scaledName.length > 15
-        ? Math.round(400 / scaledName.length) + "px"
-        : "20px";
+    const usernameFontSize = autoFontSize(croppedUsername, 20);
 
     if (index < 5) {
       ctx.fillStyle = "#FFFFFF";
@@ -105,13 +113,11 @@ const generateLeaderboard = async ({
       ctx.textAlign = "center";
       ctx.fillText(`${index + 1}.`, 50, 70 + index * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.font = `${usernameFontSize} Arial`;
       ctx.textAlign = "left";
-      ctx.fillText(`${scaledName}`, 90, 70 + index * 80);
+      ctx.fillText(`${croppedUsername}`, 90, 70 + index * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
       ctx.textAlign = "center";
-
       ctx.font = `${15}px Arial`;
 
       ctx.fillText("Balance", 50, 90 + index * 80);
@@ -127,9 +133,9 @@ const generateLeaderboard = async ({
       ctx.textAlign = "center";
       ctx.fillText(`${index + 1}.`, 500, 70 + (index - 5) * 80);
 
-      ctx.font = `${smartUsernamesize} Arial`;
+      ctx.font = `${usernameFontSize} Arial`;
       ctx.textAlign = "left";
-      ctx.fillText(`${scaledName}`, 540, 70 + (index - 5) * 80);
+      ctx.fillText(`${croppedUsername}`, 540, 70 + (index - 5) * 80);
 
       ctx.font = `${15}px Arial`;
       ctx.textAlign = "center";
@@ -147,14 +153,15 @@ const generateLeaderboard = async ({
   ctx.font = `${15}px Arial`;
   ctx.textAlign = "center";
 
-  const prettyCreatedAt = calcMinutesAfterDate(createdAt);
-  const prettyUpdate = calcMinutesToDate(new Date(), nextUpdate);
+  const now = new Date();
+  const minutesSinceCreation = calcMinutesAfterDate(createdAt);
+  const minutesToUpdate = calcMinutesToDate(now, nextUpdate);
 
   ctx.fillText(
-    `Leaderboard updated ${prettyCreatedAt} minutes ago, next update in ${prettyUpdate} minutes`,
+    `Leaderboard updated ${minutesSinceCreation} minutes ago, next update in ${minutesToUpdate} minutes`,
     400,
     470
-  ) + " minutes";
+  );
 
   return canvas.toBuffer("image/png");
 };
@@ -167,6 +174,7 @@ export const generateCompare = async ({
 }: generateCompareParams): Promise<Buffer> => {
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
+  ctx.save();
 
   const bg = await loadImage("./src/resources/backdrop-wide.png");
   ctx.drawImage(bg, 0, 0, 800, 500);
@@ -174,45 +182,47 @@ export const generateCompare = async ({
   const clientAvatar = await loadImage(clientAvatarURL);
   const targetAvatar = await loadImage(targetAvatarURL);
 
+  roundedImage(50, 50, 100, 100, 20, ctx);
+  ctx.clip();
   ctx.drawImage(clientAvatar, 50, 50, 100, 100);
+  ctx.restore();
+  ctx.save();
+
+  roundedImage(650, 50, 100, 100, 20, ctx);
+  ctx.clip();
   ctx.drawImage(targetAvatar, 650, 50, 100, 100);
+  ctx.restore();
 
   const clientBalanceReadable = readableNumber(client.balance);
   const targetBalanceReadable = readableNumber(target.balance);
+
   const clientCPSReadable = readableNumber(client.cps.toString());
   const targetCPSReadable = readableNumber(target.cps.toString());
 
+  const croppedClient = autoCropName(client.discordDisplayName);
+  const croppedTarget = autoCropName(target.discordDisplayName);
+
+  const clientFontsize = autoFontSize(croppedClient, 34);
+  const targetFontsize = autoFontSize(croppedTarget, 34);
+
   ctx.fillStyle = "#FFFFFF";
+
   ctx.textAlign = "left";
+  ctx.font = `${clientFontsize} Arial`;
+  ctx.fillText(`${croppedClient}`, 50, 200);
 
-  const scaledClient = scaleName(client.discordDisplayName);
-  const scaledTarget = scaleName(target.discordDisplayName);
-
-  const clientSize =
-    scaledClient.length > 15
-      ? Math.round(400 / scaledClient.length) + "px"
-      : "34px";
-  const targetSize =
-    scaledTarget.length > 15
-      ? Math.round(400 / scaledTarget.length) + "px"
-      : "34px";
-
-  ctx.font = `${clientSize} Arial`;
-  ctx.fillText(`${client.discordDisplayName}`, 50, 200);
-
-  ctx.font = `${targetSize} Arial`;
   ctx.textAlign = "right";
-  ctx.fillText(`${target.discordDisplayName}`, 750, 200);
+  ctx.font = `${targetFontsize} Arial`;
+  ctx.fillText(`${croppedTarget}`, 750, 200);
 
   ctx.textAlign = "center";
   ctx.font = `${100}px Arial`;
-  if (BigInt(client.balance) > BigInt(target.balance)) {
-    ctx.fillText(">", 400, 125);
-  } else if (BigInt(client.balance) < BigInt(target.balance)) {
-    ctx.fillText("<", 400, 125);
-  } else {
-    ctx.fillText("=", 400, 125);
-  }
+
+  let symbol;
+  if (BigInt(client.balance) > BigInt(target.balance)) symbol = ">";
+  else if (BigInt(client.balance) < BigInt(target.balance)) symbol = "<";
+  else symbol = "=";
+  ctx.fillText(`${symbol}`, 400, 125);
 
   ctx.font = `${16}px Arial`;
   ctx.fillText("Balance", 400, 240);
@@ -250,7 +260,7 @@ export const generateCompare = async ({
   ctx.textAlign = "left";
   ctx.fillText(`${new Date(client.createdAt).toUTCString()}`, 50, 300);
   ctx.textAlign = "center";
-  ctx.fillText(`Joined`, 400, 300);
+  ctx.fillText("Joined", 400, 300);
   ctx.textAlign = "right";
   ctx.fillText(`${new Date(target.createdAt).toUTCString()}`, 750, 300);
 

@@ -13,9 +13,6 @@ const leaderboardCommand = {
 
     const { data } = await getLeaderboard();
 
-    if (!data.players || !data.createdAt || !data.nextUpdate)
-      throw new Error("No players in leaderboard");
-
     const Params = {
       players: data.players,
       createdAt: new Date(data.createdAt),

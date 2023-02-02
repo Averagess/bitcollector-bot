@@ -8,7 +8,7 @@ const storeCommand = {
   data: new SlashCommandBuilder()
     .setName("store")
     .setDescription("Shows you the store"),
-    
+
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply();
@@ -23,18 +23,19 @@ const storeCommand = {
             return {
               name: `${index + 1}. ${item.name}`,
               value: `**Price:** ${priceReadable} bits\n**CPS:** ${cpsReadable} bits/s\n**You own:** ${item.amount}`,
+              inline: true,
             };
           })
-        )
+        );
 
       await interaction.editReply({ embeds: [shopEmbed] });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
-      await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" })
+        await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" });
       }
-      else throw error
+      else throw error;
     }
   }
-}
+};
 
 export default storeCommand;
