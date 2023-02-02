@@ -14,18 +14,12 @@ const dailyCommand = {
       await interaction.deferReply()
       const { data } = await redeemDaily(interaction.user.id)
 
-      const { balanceReward, itemReward } = data
+      const { balanceReward } = data
       const dailyEmbed = GenericSuccessEmbed({ title: "Your daily rewards", interaction})
         .addFields({
           name: "Balance rewards",
           value: `+${balanceReward} bits!`,
         })
-
-      const gotItems = itemReward.amount && itemReward.cps && itemReward.name
-
-      gotItems ? 
-        dailyEmbed.addFields({ name: "Item rewards", value: `${itemReward.amount} x ${itemReward.name}\nwhich gave +${itemReward.cps} to your overall CPS!` })
-      : dailyEmbed.addFields({ name: "Item rewards", value: "None :(\n Better luck next time!" })
 
       await interaction.editReply({ embeds: [dailyEmbed] })
     } catch (error) {
