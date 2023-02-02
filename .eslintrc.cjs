@@ -5,6 +5,7 @@ module.exports = {
     es2020: true,
     node: true,
   },
+  ignorePatterns: ["node_modules", "build"],
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint"],
   root: true,

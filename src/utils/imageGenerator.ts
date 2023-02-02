@@ -16,7 +16,7 @@ const autoCropName = (text: string): string => {
 const autoFontSize = (text: string, normalSize: number): string => {
   if (text.length > 15) return Math.round(400 / text.length) + "px";
   return normalSize + "px";
-}
+};
 const readableNumber = (value: string): string => {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -35,7 +35,7 @@ const roundedImage = (x: number,y: number,width: number,height: number,radius: n
   ctx.lineTo(x, y + radius);
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
-}
+};
 
 const generateBalance = async ({
   balance,
@@ -45,7 +45,7 @@ const generateBalance = async ({
 }: generateBalanceParams): Promise<Buffer> => {
   const canvas = createCanvas(400, 400);
   const ctx = canvas.getContext("2d");
-  ctx.save()
+  ctx.save();
 
   const croppedUsername = autoCropName(username);
   const balanceReadable = readableNumber(balance);
@@ -58,10 +58,10 @@ const generateBalance = async ({
   const profile = await loadImage(avatarURL);
   ctx.clip();
   ctx.drawImage(profile, 140, 50, 125, 125);
-  ctx.restore()
+  ctx.restore();
 
   ctx.fillStyle = "#FFFFFF";
-  const usernameFontSize = autoFontSize(croppedUsername, 34); 
+  const usernameFontSize = autoFontSize(croppedUsername, 34);
   ctx.font = `${usernameFontSize} Arial`;
   ctx.textAlign = "center";
   ctx.fillText(`${croppedUsername}'s balance`, 200, 225);
@@ -174,7 +174,7 @@ export const generateCompare = async ({
 }: generateCompareParams): Promise<Buffer> => {
   const canvas = createCanvas(800, 500);
   const ctx = canvas.getContext("2d");
-  ctx.save()
+  ctx.save();
 
   const bg = await loadImage("./src/resources/backdrop-wide.png");
   ctx.drawImage(bg, 0, 0, 800, 500);
@@ -182,16 +182,16 @@ export const generateCompare = async ({
   const clientAvatar = await loadImage(clientAvatarURL);
   const targetAvatar = await loadImage(targetAvatarURL);
 
-  roundedImage(50, 50, 100, 100, 20, ctx)
-  ctx.clip()
+  roundedImage(50, 50, 100, 100, 20, ctx);
+  ctx.clip();
   ctx.drawImage(clientAvatar, 50, 50, 100, 100);
-  ctx.restore()
-  ctx.save()
+  ctx.restore();
+  ctx.save();
 
-  roundedImage(650, 50, 100, 100, 20, ctx)
-  ctx.clip()
+  roundedImage(650, 50, 100, 100, 20, ctx);
+  ctx.clip();
   ctx.drawImage(targetAvatar, 650, 50, 100, 100);
-  ctx.restore()
+  ctx.restore();
 
   const clientBalanceReadable = readableNumber(client.balance);
   const targetBalanceReadable = readableNumber(target.balance);
@@ -201,12 +201,12 @@ export const generateCompare = async ({
 
   const croppedClient = autoCropName(client.discordDisplayName);
   const croppedTarget = autoCropName(target.discordDisplayName);
-  
+
   const clientFontsize = autoFontSize(croppedClient, 34);
   const targetFontsize = autoFontSize(croppedTarget, 34);
 
   ctx.fillStyle = "#FFFFFF";
-  
+
   ctx.textAlign = "left";
   ctx.font = `${clientFontsize} Arial`;
   ctx.fillText(`${croppedClient}`, 50, 200);
@@ -219,8 +219,8 @@ export const generateCompare = async ({
   ctx.font = `${100}px Arial`;
 
   let symbol;
-  if (BigInt(client.balance) > BigInt(target.balance)) symbol = ">"
-  else if (BigInt(client.balance) < BigInt(target.balance)) symbol = "<"
+  if (BigInt(client.balance) > BigInt(target.balance)) symbol = ">";
+  else if (BigInt(client.balance) < BigInt(target.balance)) symbol = "<";
   else symbol = "=";
   ctx.fillText(`${symbol}`, 400, 125);
 
@@ -260,7 +260,7 @@ export const generateCompare = async ({
   ctx.textAlign = "left";
   ctx.fillText(`${new Date(client.createdAt).toUTCString()}`, 50, 300);
   ctx.textAlign = "center";
-  ctx.fillText(`Joined`, 400, 300);
+  ctx.fillText("Joined", 400, 300);
   ctx.textAlign = "right";
   ctx.fillText(`${new Date(target.createdAt).toUTCString()}`, 750, 300);
 
