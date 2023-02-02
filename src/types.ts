@@ -48,11 +48,6 @@ export interface PlayerInLeaderboard {
 
 export interface RedeemDailyResponse {
   balanceReward: number
-  itemReward: {
-    name: string | null
-    amount: number | null
-    cps: number | null
-  }
 }
 
 export interface RedeemCrateResponse {
