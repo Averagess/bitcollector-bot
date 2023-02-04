@@ -30,3 +30,33 @@ export const updateClientActivity = async (client: extendedClient) => {
     logger.error(`Error when trying to switch client activity!: error: ${error}`);
   }
 };
+
+import { REST, Routes } from "discord.js";
+import { readdirSync } from "fs";
+import { CLIENT_ID, DISCORD_TOKEN } from "./config";
+
+export const refreshCommands = async () => {
+  const commands = [];
+
+  const commandFiles = readdirSync(__dirname + "/../commands").filter((file: string) => (file.endsWith(".ts") || file.endsWith(".js")));
+
+  for (const file of commandFiles) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const command = require(`../commands/${file}`);
+    commands.push(command.default.data.toJSON());
+  }
+
+  const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
+  try {
+    logger.info(`Started refreshing ${commands.length} application (/) commands.`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = await rest.put(
+      Routes.applicationCommands(CLIENT_ID),
+      { body: commands }
+    );
+    logger.info(`Successfully reloaded ${data.length} application (/) commands.`);
+  } catch (error) {
+    logger.error("Error raised when refreshing application (/) commands");
+    logger.error(error);
+  }
+};
