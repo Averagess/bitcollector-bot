@@ -49,6 +49,28 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
+client.on(Events.InteractionCreate, async interaction => {
+  if(!interaction.isAutocomplete()) return;
+
+  const command = client.commands?.get(interaction.commandName);
+
+  if(!command) {
+    logger.warn(`Autocomplete interaction received for unknown command [${interaction.commandName}]`);
+    return;
+  }
+
+  const start = Date.now();
+
+  try {
+    await command.default.autocomplete(interaction);
+    const end = Date.now();
+    logger.info(`Succesfully executed autocomplete for command [${interaction.commandName}] by ${interaction.user.tag} took ${end - start}ms`);
+  } catch (error) {
+    const end = Date.now();
+    logger.error(`Error raised when trying to execute autocomplete for command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason: ${error}`);
+  }
+});
+
 client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
 
