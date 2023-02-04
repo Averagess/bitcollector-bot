@@ -5,12 +5,12 @@
   "scripts": {
     "start": "node ./build/src/main.js",
     "build": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch json ./src/main.ts",
     "lint": "eslint . --ext .js,.ts",
     "prettier": "prettier --write .",
     "dev:imagegen": "ts-node-dev --respawn --transpile-only ./src/utils/imageGenerator.ts",
-    "deploy:global": "node ./build/src/deploy-global-commands.js ",
-    "deploy:dev": "ts-node ./src/deploy-dev-commands.ts "
+    "deploy:global": "node ./build/src/scripts/deploy-global-commands.js ",
+    "deploy:dev": "ts-node ./src/scripts/deploy-dev-commands.ts "
   },
   "dependencies": {
     "axios": "^1.2.2",

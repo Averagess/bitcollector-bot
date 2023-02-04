@@ -1,22 +1,17 @@
 import { AxiosError } from "axios";
-import { ActivityType, Events } from "discord.js";
+import { Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
-import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
+import { updateClientActivity, updateItems } from "./utils/callbacks";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
-import pickNewActivity from "./utils/pickNewActivity";
 
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
-  logger.info("Setting initial client activity");
-  const randomActivity = clientActivities[Math.floor(Math.random() * clientActivities.length)];
-  client.user?.setActivity(randomActivity.name, { type: randomActivity.type });
-
-  logger.info(`Set client activity to "${randomActivity.name}" (${Object.values(ActivityType)[randomActivity.type]})`);
+  updateClientActivity(c);
 });
 
 client.on(Events.InteractionCreate, async interaction => {
@@ -54,6 +49,28 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
+client.on(Events.InteractionCreate, async interaction => {
+  if(!interaction.isAutocomplete()) return;
+
+  const command = client.commands?.get(interaction.commandName);
+
+  if(!command) {
+    logger.warn(`Autocomplete interaction received for unknown command [${interaction.commandName}]`);
+    return;
+  }
+
+  const start = Date.now();
+
+  try {
+    await command.default.autocomplete(interaction);
+    const end = Date.now();
+    logger.info(`Succesfully executed autocomplete for command [${interaction.commandName}] by ${interaction.user.tag} took ${end - start}ms`);
+  } catch (error) {
+    const end = Date.now();
+    logger.error(`Error raised when trying to execute autocomplete for command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason: ${error}`);
+  }
+});
+
 client.on(Events.MessageCreate, async message => {
   if(message.author.bot) return;
 
@@ -70,17 +87,10 @@ client.on(Events.MessageCreate, async message => {
   }
 });
 
-cron.schedule("*/15 * * * *", () => {
-  logger.info("Switching client activity...");
-  const currentActivity = { name: client.user?.presence.activities[0].name, type: client.user?.presence.activities[0].type };
-  const { name, type } = pickNewActivity(clientActivities, currentActivity);
-  try {
-    client.user?.setActivity(name, { type });
-    logger.info(`Set client activity to "${name}" (${Object.values(ActivityType)[type]})`);
-  } catch (error) {
-    logger.error("Error when switching client activity!", error);
-  }
-});
+cron.schedule("*/15 * * * *", () => updateClientActivity(client));
+
+updateItems();
+cron.schedule("*/30 * * * *", () => updateItems());
 
 client.login(DISCORD_TOKEN);
 
