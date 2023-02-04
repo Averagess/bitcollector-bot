@@ -1,13 +1,12 @@
 import { AxiosError } from "axios";
-import { ActivityType, Events } from "discord.js";
+import { Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
-import clientActivities from "./clientActivities";
 import { addBitToPlayer } from "./services/posters";
+import { updateClientActivity, updateItems } from "./utils/callbacks";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
-import pickNewActivity from "./utils/pickNewActivity";
 
 
 client.once(Events.ClientReady, (c) => {
