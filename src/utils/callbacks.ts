@@ -11,7 +11,6 @@ export const updateItems = async () => {
   try {
     const { data } = await getItems();
     const path = __dirname + "/../resources/items.json";
-    console.log(path);
     writeFileSync(path, JSON.stringify(data));
     logger.info("Successfully updated and saved stored items to /resources/items.json");
   } catch (error) {
