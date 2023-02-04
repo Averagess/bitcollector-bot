@@ -33,6 +33,8 @@ export interface InventoryItem {
   amount: number
 }
 
+export type Item = Omit<InventoryItem, "amount">
+
 export interface Leaderboard {
   players: PlayerInLeaderboard[]
   createdAt: string
