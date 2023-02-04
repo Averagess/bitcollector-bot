@@ -11,11 +11,7 @@ import logger from "./utils/logger";
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
-  logger.info("Setting initial client activity");
-  const randomActivity = clientActivities[Math.floor(Math.random() * clientActivities.length)];
-  client.user?.setActivity(randomActivity.name, { type: randomActivity.type });
-
-  logger.info(`Set client activity to "${randomActivity.name}" (${Object.values(ActivityType)[randomActivity.type]})`);
+  updateClientActivity(c);
 });
 
 client.on(Events.InteractionCreate, async interaction => {
