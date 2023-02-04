@@ -87,17 +87,10 @@ client.on(Events.MessageCreate, async message => {
   }
 });
 
-cron.schedule("*/15 * * * *", () => {
-  logger.info("Switching client activity...");
-  const currentActivity = { name: client.user?.presence.activities[0].name, type: client.user?.presence.activities[0].type };
-  const { name, type } = pickNewActivity(clientActivities, currentActivity);
-  try {
-    client.user?.setActivity(name, { type });
-    logger.info(`Set client activity to "${name}" (${Object.values(ActivityType)[type]})`);
-  } catch (error) {
-    logger.error("Error when switching client activity!", error);
-  }
-});
+cron.schedule("*/15 * * * *", () => updateClientActivity(client));
+
+updateItems();
+cron.schedule("*/30 * * * *", () => updateItems());
 
 client.login(DISCORD_TOKEN);
 
