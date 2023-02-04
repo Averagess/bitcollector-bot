@@ -4,7 +4,7 @@ import cron from "node-cron";
 
 import { client } from "./client";
 import { addBitToPlayer } from "./services/posters";
-import { updateClientActivity, updateItems } from "./utils/callbacks";
+import { refreshCommands, updateClientActivity, updateItems } from "./utils/callbacks";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
 
@@ -91,6 +91,8 @@ cron.schedule("*/15 * * * *", () => updateClientActivity(client));
 
 updateItems();
 cron.schedule("*/30 * * * *", () => updateItems());
+
+refreshCommands();
 
 client.login(DISCORD_TOKEN);
 
