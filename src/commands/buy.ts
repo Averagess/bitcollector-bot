@@ -1,6 +1,7 @@
-/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import { AxiosError } from "axios";
 import {
+  AutocompleteInteraction,
   ChatInputCommandInteraction,
   SlashCommandBuilder,
 } from "discord.js";
@@ -9,6 +10,8 @@ import { buyItem } from "../services/posters";
 import ErrorEmbed from "../embeds/GenericErrorEmbed";
 import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
+import items from "../resources/items.json";
+import { Item } from "../types";
 
 const buyCommand = {
   data: new SlashCommandBuilder()
@@ -19,12 +22,21 @@ const buyCommand = {
         .setName("item")
         .setDescription("The item you want to buy (name or number in the shop)")
         .setRequired(true)
+        .setAutocomplete(true)
     )
     .addIntegerOption((option) =>
       option
         .setName("amount")
         .setDescription("The amount of items you want to buy, defaults to 1")
     ),
+  async autocomplete(interaction: AutocompleteInteraction) {
+    console.log("received autocomplete interaciton");
+    const focusedValue = interaction.options.getFocused().toLowerCase();
+    const choices = items as Item[];
+    const filtered = choices.filter((choice) => choice.name.toLowerCase().startsWith(focusedValue));
+    await interaction.respond(filtered.map(choice => ({ name: `${choice.name}`, value: `${choice.name}` })));
+  },
+
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply();
@@ -73,16 +85,10 @@ const buyCommand = {
             embeds: [errorEmbed],
           });
         } else if (error.response.data.error === "not enough money") {
+          const description = `You dont have enough bits! \n\n You need ${intToString(error.response?.data.itemPrice - error.response?.data.balance + "")} more bits to purchase ${error.response?.data.amount} \`${error.response?.data.itemName}\``;
           const errorEmbed = ErrorEmbed({
             title: "Purchase failed!",
-            description: `You dont have enough bits!
-            \nYou currently have: ${
-              error.response.data.balance
-            } bits but,\nYou need ${intToString(
-              error.response?.data.itemPrice
-            )} bits to purchase\n\`${intToString(error.response?.data.amount)} ${
-              error.response.data.itemName
-            }\``,
+            description,
             interaction,
           });
 
