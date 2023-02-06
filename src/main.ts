@@ -90,7 +90,7 @@ client.on(Events.MessageCreate, async message => {
 cron.schedule("*/15 * * * *", () => updateClientActivity(client));
 
 updateItems();
-cron.schedule("*0 0 * * *", () => updateItems());
+cron.schedule("0 0 * * *", () => updateItems());
 
 refreshCommands();
 
