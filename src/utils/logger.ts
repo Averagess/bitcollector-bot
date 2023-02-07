@@ -5,7 +5,7 @@ const logFormat = format.printf(({ level, message, timestamp }) => `[${timestamp
 
 const logger = winston.createLogger({
   level: "info",
-  format: format.combine(format.timestamp({ format: "DD.MM.YYYY HH.mm.ss" }), logFormat),
+  format: format.combine(format.timestamp({ format: "D.M.YYYY HH.mm.ss" }), logFormat),
   defaultMeta: { service: "user-service" },
   transports: [
     new transports.Console(),
