@@ -89,8 +89,9 @@ client.on(Events.MessageCreate, async message => {
 
 cron.schedule("*/15 * * * *", () => updateClientActivity(client));
 
-updateItems();
-cron.schedule("*/30 * * * *", () => updateItems());
+
+setTimeout(() => updateItems(), 5000);
+cron.schedule("0 0 * * *", () => updateItems());
 
 refreshCommands();
 

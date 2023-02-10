@@ -9,7 +9,9 @@ import {
 } from "../types";
 
 const autoCropName = (text: string): string => {
-  if (text.length > 20) return text.slice(0, 20) + "..." + text.slice(-5);
+  const tag = text.slice(-5);
+  const nameWithoutTag = text.slice(0, -5);
+  if (nameWithoutTag.length >= 18) return nameWithoutTag + "..." + tag;
   return text;
 };
 
@@ -17,6 +19,7 @@ const autoFontSize = (text: string, normalSize: number): string => {
   if (text.length > 15) return Math.round(400 / text.length) + "px";
   return normalSize + "px";
 };
+
 const readableNumber = (value: string): string => {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -105,7 +108,7 @@ const generateLeaderboard = async ({
 
     const balanceReadable = readableNumber(player.balance);
     const cpsReadable = readableNumber(player.cps.toString());
-    const usernameFontSize = autoFontSize(croppedUsername, 20);
+    const usernameFontSize = autoFontSize(croppedUsername, 25);
 
     if (index < 5) {
       ctx.fillStyle = "#FFFFFF";

@@ -30,7 +30,6 @@ const buyCommand = {
         .setDescription("The amount of items you want to buy, defaults to 1")
     ),
   async autocomplete(interaction: AutocompleteInteraction) {
-    console.log("received autocomplete interaciton");
     const focusedValue = interaction.options.getFocused().toLowerCase();
     const choices = items as Item[];
     const filtered = choices.filter((choice) => choice.name.toLowerCase().startsWith(focusedValue));
