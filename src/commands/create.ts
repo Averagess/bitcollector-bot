@@ -1,9 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { AxiosError } from "axios";
 
-import ErrorEmbed from "../embeds/GenericErrorEmbed";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import { createAccount } from "../services/posters";
+import { GenericErrorEmbed, GenericSuccessEmbed } from "../embeds";
 
 const createCommand = {
   data: new SlashCommandBuilder()
@@ -31,7 +30,7 @@ const createCommand = {
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
-        const errorEmbed = ErrorEmbed({
+        const errorEmbed = GenericErrorEmbed({
           title: "Account creation cancelled!",
           description: "You already have an account!",
           interaction: interaction,
