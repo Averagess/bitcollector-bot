@@ -60,7 +60,7 @@ client.on(Events.InteractionCreate, async interaction => {
   const command = client.commands?.get(interaction.commandName);
 
   if(!command) {
-    logger.warn(`Autocomplete interaction received for unknown command [${interaction.commandName}]`);
+    logger.warn(`Autocomplete interaction received for an unknown command [${interaction.commandName}]`);
     return;
   }
 
@@ -69,10 +69,10 @@ client.on(Events.InteractionCreate, async interaction => {
   try {
     await command.default.autocomplete(interaction);
     const end = Date.now();
-    logger.info(`Succesfully executed autocomplete for command [${interaction.commandName}] by ${interaction.user.tag} took ${end - start}ms`);
+    logger.info(`Succesfully executed autocomplete interaction for command [${interaction.commandName}] by ${interaction.user.tag} took ${end - start}ms`);
   } catch (error) {
     const end = Date.now();
-    logger.error(`Error raised when trying to execute autocomplete for command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason: ${error}`);
+    logger.error(`Error was raised when trying to execute autocomplete interaction for command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason: ${error}`);
   }
 });
 
@@ -84,11 +84,10 @@ client.on(Events.MessageCreate, async message => {
     logger.info(`Succesfully added bit to ${message.author.tag}`);
   } catch (error) {
     if(error instanceof AxiosError){
-      if(!error.response) logger.error("No response from server when adding bit to user! Backend or DB Down?", error);
-      else if(error.response.status === 404) return;
+      if(error.response?.status === 404) return;
+      else if(!error.response) logger.error("No response from server when adding bit to user! Backend or DB Down?", error);
     }
-
-    else logger.error("Unknown Error when adding bit to user!", error);
+    else logger.error(`UNKNOWN Error raised when trying to add a bit to user: ${message.author.tag}. Error: ${error}`);
   }
 });
 
