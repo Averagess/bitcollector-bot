@@ -5,6 +5,7 @@ import {
   SlashCommandBuilder,
   User,
 } from "discord.js";
+import { GenericErrorEmbed, NoAccountEmbed } from "../embeds";
 import { fetchTwoPlayers } from "../services/posters";
 import { generateCompare } from "../utils/imageGenerator";
 
@@ -22,6 +23,10 @@ const compareCommand = {
     await interaction.deferReply();
     const target = interaction.options.getMentionable("player");
 
+    if((target instanceof GuildMember && target.user.bot) || (target instanceof User && target.bot)){
+      const errorEmbed = GenericErrorEmbed({ title: "Couldnt execute command", description: "You cant compare your account with bots..", interaction });
+      return await interaction.editReply({ embeds: [errorEmbed] });
+    }
 
     if (target instanceof GuildMember || target instanceof User) {
       const targetID = target.id;
@@ -44,13 +49,11 @@ const compareCommand = {
       } catch (error) {
         if (error instanceof AxiosError && error.response?.status === 404) {
           if (error.response.data.error === "target not found") {
-            return await interaction.editReply({
-              content: "The target doesn't have an account, cant compare :(",
-            });
+            const errorEmbed = GenericErrorEmbed({ title: "Couldnt execute command!", description: "The target doesn't have an account, cant compare :(", interaction });
+            return await interaction.editReply({ embeds: [errorEmbed] });
           } else if (error.response.data.error === "client not found") {
-            return await interaction.editReply({
-              content: "You don't have an account, create one with `/create`",
-            });
+            const errorEmbed = NoAccountEmbed(interaction);
+            return await interaction.editReply({ embeds: [errorEmbed] });
           }
         } else throw error;
       }

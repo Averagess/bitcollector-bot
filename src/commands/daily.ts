@@ -2,8 +2,7 @@ import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { redeemDaily } from "../services/posters";
-import ErrorEmbed from "../embeds/GenericErrorEmbed";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
+import { GenericErrorEmbed, GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
 
 const dailyCommand = {
   data: new SlashCommandBuilder()
@@ -25,11 +24,11 @@ const dailyCommand = {
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status) {
         if(error.response.status === 404) {
-          const errorEmbed = ErrorEmbed({ title: "Daily reward not claimed", description: "You don't have an account yet, use /create to create one", interaction });
+          const errorEmbed = NoAccountEmbed(interaction);
           await interaction.editReply({ embeds: [errorEmbed] });
         }
         else if(error.response.status === 409 && error.response.data.error === "daily already redeemed"){
-          const errorEmbed = ErrorEmbed({ title: "Couldn't redeem daily reward", description: "You have already claimed your daily reward today", interaction });
+          const errorEmbed = GenericErrorEmbed({ title: "Couldn't redeem daily reward", description: "You have already claimed your daily reward today", interaction });
           await interaction.editReply({ embeds: [errorEmbed] });
         }
       }

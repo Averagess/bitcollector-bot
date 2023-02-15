@@ -1,7 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { client } from "../client";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
+import { GenericSuccessEmbed } from "../embeds";
+
 
 const helpCommand = {
   data: new SlashCommandBuilder()

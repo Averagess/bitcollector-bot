@@ -2,7 +2,7 @@ import  { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { fetchPlayerShop } from "../services/posters";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
+import { GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -31,7 +31,8 @@ const storeCommand = {
       await interaction.editReply({ embeds: [shopEmbed] });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
-        await interaction.editReply({ content: "You don't have an account yet! Please create one with /create" });
+        const errorEmbed = NoAccountEmbed(interaction);
+        return await interaction.editReply({ embeds: [errorEmbed] });
       }
       else throw error;
     }

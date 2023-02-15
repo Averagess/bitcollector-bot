@@ -5,9 +5,9 @@ import {
 } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
 import { calcMinutesAfterDate } from "../utils/calcMinutesHelper";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
 import intToString from "../utils/intToString";
 import nextDailyStringGenerator from "../utils/nextDailyGenerator";
+import { GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
 
 const statsCommand = {
   data: new SlashCommandBuilder()
@@ -41,7 +41,8 @@ const statsCommand = {
       await interaction.editReply({ embeds: [statsEmbed] });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
-        return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
+        const errorEmbed = NoAccountEmbed(interaction);
+        return await interaction.editReply({ embeds: [errorEmbed] });
       }
       else throw error;
     }
