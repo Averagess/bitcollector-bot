@@ -7,8 +7,8 @@ import {
 } from "discord.js";
 
 import { buyItem } from "../services/posters";
-import ErrorEmbed from "../embeds/GenericErrorEmbed";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
+import { GenericErrorEmbed, GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
+
 import intToString from "../utils/intToString";
 import items from "../resources/items.json";
 import { Item } from "../types";
@@ -71,11 +71,10 @@ const buyCommand = {
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         if (error.response.data.error === "Player not found") {
-          await interaction.editReply({
-            content: "You don't have an account yet! Create one with `/create`",
-          });
+          const errorEmbed = NoAccountEmbed(interaction);
+          return await interaction.editReply({ embeds: [errorEmbed] });
         } else if (error.response.data === "No such item in the shop") {
-          const errorEmbed = ErrorEmbed({
+          const errorEmbed = GenericErrorEmbed({
             title: "Purchase failed!",
             description: `There is no item called "${interaction.options.getString("item")}" in the shop`,
             interaction,
@@ -85,7 +84,7 @@ const buyCommand = {
           });
         } else if (error.response.data.error === "not enough money") {
           const description = `You dont have enough bits! \n\n You need ${intToString(error.response?.data.itemPrice - error.response?.data.balance + "")} more bits to purchase ${error.response?.data.amount} \`${error.response?.data.itemName}\``;
-          const errorEmbed = ErrorEmbed({
+          const errorEmbed = GenericErrorEmbed({
             title: "Purchase failed!",
             description,
             interaction,
