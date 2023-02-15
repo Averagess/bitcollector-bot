@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import tips from "../resources/tips";
+import { VERSION } from "../utils/config";
 
 interface GenericSuccessEmbedParams {
   title: string;
@@ -34,7 +35,7 @@ const GenericSuccessEmbed = ({
     embed.setFooter({ text: footer });
     if(footer.length <= 15) embed.setTimestamp();
   } else {
-    embed.setFooter({ text: `Requested by ${interaction.user.tag}` });
+    embed.setFooter({ text: `Requested by ${interaction.user.tag} | Bit Collector v${VERSION} |` });
     embed.setTimestamp();
   }
 
