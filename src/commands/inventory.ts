@@ -1,7 +1,9 @@
 import { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { fetchPlayerProfile } from "../services/posters";
-import GenericSuccessEmbed from "../embeds/GenericSuccessEmbed";
+
+import { GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
+
 
 const inventoryCommand = {
   data: new SlashCommandBuilder()
@@ -27,7 +29,8 @@ const inventoryCommand = {
       await interaction.editReply({ embeds: [inventoryEmbed]  });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404){
-        return await interaction.editReply({ content: "You don't have an account yet! Use /create to create one" });
+        const errorEmbed = NoAccountEmbed(interaction);
+        return await interaction.editReply({ embeds: [errorEmbed] });
       }
       else throw error;
     }
