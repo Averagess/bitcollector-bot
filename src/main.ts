@@ -3,6 +3,7 @@ import { Events } from "discord.js";
 import cron from "node-cron";
 
 import { client } from "./client";
+import GenericErrorEmbed from "./embeds/GenericErrorEmbed";
 import { addBitToPlayer } from "./services/posters";
 import { refreshCommands, updateClientActivity, updateItems } from "./utils/callbacks";
 import { DISCORD_TOKEN } from "./utils/config";
@@ -31,20 +32,24 @@ client.on(Events.InteractionCreate, async interaction => {
     if(error instanceof AxiosError) {
       if(!error.response) {
         logger.error(`No response from server when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms, error:${error}`);
-        await interaction.editReply({ content: "Oops. Something went wrong, seems like our servers are down! try again later.." });
+        const errorEmbed = GenericErrorEmbed({ title: "Something went wrong.", description: "I am having connection issues.. Please try again later.", interaction });
+        await interaction.editReply({ embeds: [errorEmbed] });
       }
       else if(error.response.data.error === "Player is blacklisted") {
         logger.warn(`Player ${interaction.user.tag} is blacklisted!, command blocked!`);
-        await interaction.editReply({ content: "You are blacklisted from using this bot! Please contact the bot owner for more information." });
+        const errorEmbed = GenericErrorEmbed({ title: "Something went wrong.", description: "You are blacklisted from using this bot! Please contact the bot owner for more information.", interaction });
+        await interaction.editReply({ embeds: [errorEmbed] });
       }
     }
     else if(error instanceof Error) {
       logger.error(`Error raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start}ms Reason: ${error.message}`);
-      await interaction.editReply({ content: "Oops. Something went wrong. Please try again later.." });
+      const errorEmbed = GenericErrorEmbed({ title: "Something went wrong.", description: "Oops. Something went wrong. Please try again later..", interaction });
+      await interaction.editReply({ embeds: [errorEmbed] });
     }
     else {
       logger.error(`UNKNOWN ERROR raised when trying to execute command [${interaction.commandName}] by ${interaction.user.tag}. took ${end - start} Reason:`, error);
-      await interaction.editReply({ content: "There was an error while executing this command!" });
+      const errorEmbed = GenericErrorEmbed({ title: "Something went wrong.", description: "An error occured while running this command!", interaction });
+      await interaction.editReply({ embeds: [errorEmbed] });
     }
   }
 });
