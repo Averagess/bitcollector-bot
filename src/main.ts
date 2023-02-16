@@ -5,13 +5,16 @@ import cron from "node-cron";
 import { client } from "./client";
 import GenericErrorEmbed from "./embeds/GenericErrorEmbed";
 import { addBitToPlayer } from "./services/posters";
-import { refreshCommands, updateClientActivity, updateItems } from "./utils/callbacks";
+import { refreshCommands, updateAnalytics, updateClientActivity, updateItems } from "./utils/callbacks";
 import { DISCORD_TOKEN } from "./utils/config";
 import logger from "./utils/logger";
 
 
-client.once(Events.ClientReady, (c) => {
+client.once(Events.ClientReady, async (c) => {
   logger.info(`Logged in as ${c.user.tag} and ready to receive commands.`);
+
+  await updateAnalytics(c);
+
   updateClientActivity(c);
 });
 
@@ -96,6 +99,8 @@ cron.schedule("*/15 * * * *", () => updateClientActivity(client));
 
 setTimeout(() => updateItems(), 5000);
 cron.schedule("0 0 * * *", () => updateItems());
+
+cron.schedule("0 */6 * * *", () => updateAnalytics(client));
 
 refreshCommands();
 
