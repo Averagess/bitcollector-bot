@@ -59,3 +59,38 @@ export const refreshCommands = async () => {
     logger.error(error);
   }
 };
+
+import { sendAnalytics } from "../services/posters";
+
+export const updateAnalytics = async (client: extendedClient) => {
+  logger.info("Updating analytics...");
+
+  const guilds = await client.guilds.fetch();
+  const guildAmount = guilds.size;
+
+  let userAmount = 0;
+
+  logger.info("Looping through guilds to get member count...");
+  for(const guild of guilds.values()){
+    const fetchedGuild = await guild.fetch();
+    userAmount += fetchedGuild.memberCount;
+  }
+
+  logger.info("Looping through guilds to get member count... (done)");
+
+  const analytics = {
+    guildAmount,
+    userAmount
+  };
+
+  logger.info("Sending analytics to backend with following data:");
+  logger.info(`[guildAmount: ${guildAmount}] [userAmount: ${userAmount}]`);
+
+  try {
+    const { status } = await sendAnalytics(analytics);
+    logger.info(`Successfully sent analytics to backend with status code: [${status}]`);
+  } catch (error) {
+    logger.error("Unhandled error occured when sending analytics to backend! Error below.");
+    logger.error(error);
+  }
+};
