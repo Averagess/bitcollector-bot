@@ -94,3 +94,8 @@ export const fetchTwoPlayers = async (clientId: string, targetId: string) => {
   const { data, status } = await axios.post<fetchTwoPlayersResponse>(`${BACKEND_URL}/updateTwoPlayers`, body, { headers });
   return { data, status };
 };
+
+export const sendAnalytics = async (data: { guildAmount: number, userAmount: number }) => {
+  const { status } = await axios.post(`${BACKEND_URL}/analytics/update`, data, { headers });
+  return { status };
+};
