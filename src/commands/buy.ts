@@ -16,7 +16,7 @@ import { Item } from "../types";
 const buyCommand = {
   data: new SlashCommandBuilder()
     .setName("buy")
-    .setDescription("Buys an item from the shop")
+    .setDescription("Buys an item from the store")
     .addStringOption((option) =>
       option
         .setName("item")
