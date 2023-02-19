@@ -7,7 +7,7 @@ import { GenericErrorEmbed, GenericSuccessEmbed, NoAccountEmbed } from "../embed
 const crateCommand = {
   data: new SlashCommandBuilder()
     .setName("crate")
-    .setDescription("Open a crate"),
+    .setDescription("Opens a crate"),
   async execute(interaction: ChatInputCommandInteraction) {
     try {
       await interaction.deferReply();
