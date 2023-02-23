@@ -64,7 +64,7 @@ const generateBalance = async ({
   ctx.restore();
 
   ctx.fillStyle = "#FFFFFF";
-  const usernameFontSize = autoFontSize(croppedUsername, 34);
+  const usernameFontSize = autoFontSize(croppedUsername, 28);
   ctx.font = `${usernameFontSize} Arial`;
   ctx.textAlign = "center";
   ctx.fillText(`${croppedUsername}'s balance`, 200, 225);
