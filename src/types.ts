@@ -23,7 +23,11 @@ export interface Player {
 
 export interface PurchaseResponse {
   player: Player
-  purchasedItem: InventoryItem
+  purchasedItem: PurchasedItem
+}
+
+export interface PurchasedItem extends InventoryItem {
+  amountPurchased: number
 }
 
 export interface InventoryItem {
