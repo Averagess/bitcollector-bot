@@ -17,11 +17,12 @@ export const fetchPlayerProfile = async (discordId: string, discordDisplayName: 
   return { data, status };
 };
 
-export const buyItem = async (discordId: string, itemName: string, amount: number) => {
+export const buyItem = async (discordId: string, itemName: string, amount: number, max: boolean) => {
   const body = {
     discordId,
     itemName,
     amount,
+    max
   };
 
   const { data, status } = await axios.post<PurchaseResponse>(`${BACKEND_URL}/buyItem`, body, { headers });
