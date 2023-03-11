@@ -16,6 +16,7 @@ const storeCommand = {
       const { data } = await fetchPlayerShop(interaction.user.id);
 
       const shopEmbed = GenericSuccessEmbed({ title: "Store", interaction })
+        .setDescription("Here is the store, you can use the /buy command to buy an item")
         .addFields(
           data.map((item, index) => {
             const priceReadable = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
