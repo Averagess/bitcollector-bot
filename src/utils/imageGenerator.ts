@@ -1,10 +1,8 @@
 import { CanvasRenderingContext2D, createCanvas, loadImage } from "canvas";
-import { calcMinutesAfterDate, calcMinutesToDate } from "./calcMinutesHelper";
 import { NODE_ENV, VERSION } from "./config";
 
 import {
   generateBalanceParams,
-  generateLeaderboardParams,
   generateCompareParams,
 } from "../types";
 
@@ -40,7 +38,7 @@ const roundedImage = (x: number,y: number,width: number,height: number,radius: n
   ctx.closePath();
 };
 
-const generateBalance = async ({
+export const generateBalance = async ({
   balance,
   cps,
   username,
@@ -89,84 +87,6 @@ const generateBalance = async ({
 
   const buffer = canvas.toBuffer("image/png");
   return buffer;
-};
-
-const generateLeaderboard = async ({
-  players,
-  createdAt,
-  nextUpdate,
-}: generateLeaderboardParams): Promise<Buffer> => {
-  const canvas = createCanvas(800, 500);
-  const ctx = canvas.getContext("2d");
-
-  const bg = await loadImage("./src/resources/backdrop-wide.png");
-  ctx.drawImage(bg, 0, 0, 800, 500);
-
-  players.forEach((player, index) => {
-    const capitalizedUsername = (player.discordDisplayName.split(""))[0].toUpperCase() + player.discordDisplayName.slice(1);
-    const croppedUsername = autoCropName(capitalizedUsername);
-
-    const balanceReadable = readableNumber(player.balance);
-    const cpsReadable = readableNumber(player.cps.toString());
-    const usernameFontSize = autoFontSize(croppedUsername, 25);
-
-    if (index < 5) {
-      ctx.fillStyle = "#FFFFFF";
-      ctx.font = `${36}px Arial`;
-      ctx.textAlign = "center";
-      ctx.fillText(`${index + 1}.`, 50, 70 + index * 80);
-
-      ctx.font = `${usernameFontSize} Arial`;
-      ctx.textAlign = "left";
-      ctx.fillText(`${croppedUsername}`, 90, 70 + index * 80);
-
-      ctx.textAlign = "center";
-      ctx.font = `${15}px Arial`;
-
-      ctx.fillText("Balance", 50, 90 + index * 80);
-      ctx.textAlign = "left";
-      ctx.fillText(`${balanceReadable} Bits`, 90, 90 + index * 80);
-      ctx.textAlign = "center";
-      ctx.fillText("CPS", 50, 110 + index * 80);
-      ctx.textAlign = "left";
-      ctx.fillText(`${cpsReadable} Bits/s`, 90, 110 + index * 80);
-    } else {
-      ctx.fillStyle = "#FFFFFF";
-      ctx.font = `${36}px Arial`;
-      ctx.textAlign = "center";
-      ctx.fillText(`${index + 1}.`, 500, 70 + (index - 5) * 80);
-
-      ctx.font = `${usernameFontSize} Arial`;
-      ctx.textAlign = "left";
-      ctx.fillText(`${croppedUsername}`, 540, 70 + (index - 5) * 80);
-
-      ctx.font = `${15}px Arial`;
-      ctx.textAlign = "center";
-
-      ctx.fillText("Balance", 500, 90 + (index - 5) * 80);
-      ctx.textAlign = "left";
-      ctx.fillText(`${balanceReadable} Bits`, 540, 90 + (index - 5) * 80);
-      ctx.textAlign = "center";
-      ctx.fillText("CPS", 500, 110 + (index - 5) * 80);
-      ctx.textAlign = "left";
-      ctx.fillText(`${cpsReadable} Bits/s`, 540, 110 + (index - 5) * 80);
-    }
-  });
-  ctx.fillStyle = "#808080";
-  ctx.font = `${15}px Arial`;
-  ctx.textAlign = "center";
-
-  const now = new Date();
-  const minutesSinceCreation = calcMinutesAfterDate(createdAt);
-  const minutesToUpdate = calcMinutesToDate(now, nextUpdate);
-
-  ctx.fillText(
-    `Leaderboard updated ${minutesSinceCreation} minutes ago, next update in ${minutesToUpdate} minutes`,
-    400,
-    470
-  );
-
-  return canvas.toBuffer("image/png");
 };
 
 export const generateCompare = async ({
@@ -274,5 +194,3 @@ export const generateCompare = async ({
 
   return canvas.toBuffer("image/png");
 };
-
-export { generateBalance, generateLeaderboard };
