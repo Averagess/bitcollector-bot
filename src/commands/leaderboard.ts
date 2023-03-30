@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
-import { generateLeaderboard } from "../utils/imageGenerator";
 import { getLeaderboard } from "../services/getters";
 
 const leaderboardCommand = {
@@ -12,14 +11,7 @@ const leaderboardCommand = {
     await interaction.deferReply();
 
     const { data } = await getLeaderboard();
-
-    const Params = {
-      players: data.players,
-      createdAt: new Date(data.createdAt),
-      nextUpdate: new Date(data.nextUpdate),
-    };
-
-    const LeaderboardImage = await generateLeaderboard(Params);
+    const LeaderboardImage = Buffer.from(data.bufferB64, "base64");
 
     await interaction.editReply({ files: [LeaderboardImage] });
   },

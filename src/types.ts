@@ -40,7 +40,7 @@ export interface InventoryItem {
 export type Item = Omit<InventoryItem, "amount">
 
 export interface Leaderboard {
-  players: PlayerInLeaderboard[]
+  bufferB64: string
   createdAt: string
   nextUpdate: string
 }
@@ -80,12 +80,6 @@ export interface generateBalanceParams {
   cps: string;
   username: string;
   avatarURL: string;
-}
-
-export interface generateLeaderboardParams {
-  players: PlayerInLeaderboard[];
-  createdAt: Date;
-  nextUpdate: Date;
 }
 
 export interface generateCompareParams {
