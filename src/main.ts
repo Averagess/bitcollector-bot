@@ -1,14 +1,10 @@
 import { AxiosError } from "axios";
-import {
-  Events,
-} from "discord.js";
+import { Events } from "discord.js";
 import cron from "node-cron";
-import shopbuttons from "./actions/shopbuttons";
 
 import { client } from "./client";
-import { ShopItemEmbed } from "./embeds";
 import GenericErrorEmbed from "./embeds/GenericErrorEmbed";
-import { addBitToPlayer, fetchPlayerShop } from "./services/posters";
+import { addBitToPlayer } from "./services/posters";
 import {
   refreshCommands,
   updateAnalytics,
@@ -130,76 +126,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         interaction.commandName
       }] by ${interaction.user.tag}. took ${end - start} Reason: ${error}`
     );
-  }
-});
-
-// Used for handling the store buttons
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isButton()) return;
-
-  if (interaction.message.interaction?.commandName === "store") {
-    await interaction.deferUpdate();
-    const matchCurrI =
-      interaction.message.embeds[0].title?.match(/\((\d+)\/\d+\)/);
-    const matchMaxI =
-      interaction.message.embeds[0].title?.match(/\(\d+\/(\d+)\)/);
-    if (!matchCurrI || !matchMaxI) return;
-
-    const curr = Number(matchCurrI[1]) - 1;
-    const max = Number(matchMaxI[1]) - 1;
-
-    const currItemIsFirst = !(curr + 1 > 0);
-    const currItemIsLast = !(curr + 1 < max);
-
-    const { data } = await fetchPlayerShop(interaction.user.id);
-
-    if (interaction.customId === "nextShopItem") {
-      if (curr === max) return;
-
-      // Update embed with the next item
-      const embed = ShopItemEmbed({
-        title: "Store",
-        indexes: [curr + 1, max],
-        item: data[curr + 1],
-      });
-
-      const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
-
-      await interaction.editReply({ embeds: [embed], components: [buttonRow] });
-    } else if (interaction.customId === "previousShopItem") {
-      // ...
-      if (curr === 0) return;
-
-      // Update embed with the previous item
-      const embed = ShopItemEmbed({
-        title: "Store",
-        indexes: [curr - 1, max],
-        item: data[curr - 1],
-      });
-
-      const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
-      await interaction.editReply({ embeds: [embed], components: [buttonRow] });
-    } else if(interaction.customId === "toFirstShopItem"){
-      const embed = ShopItemEmbed({
-        title: "Store",
-        indexes: [0, max],
-        item: data[0],
-      });
-
-      const buttonRow = shopbuttons(true, false);
-
-      await interaction.editReply({ embeds: [embed], components: [buttonRow] });
-    } else if(interaction.customId === "toLastShopItem"){
-      const embed = ShopItemEmbed({
-        title: "Store",
-        indexes: [max, max],
-        item: data[max],
-      });
-
-      const buttonRow = shopbuttons(false, true);
-
-      await interaction.editReply({ embeds: [embed], components: [buttonRow] });
-    }
   }
 });
 
