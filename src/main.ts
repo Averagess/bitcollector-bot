@@ -148,34 +148,36 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const curr = Number(matchCurrI[1]) - 1;
     const max = Number(matchMaxI[1]) - 1;
 
+    const currItemIsFirst = !(curr + 1 > 0);
+    const currItemIsLast = !(curr + 1 < max);
+
     const { data } = await fetchPlayerShop(interaction.user.id);
 
     if (interaction.customId === "nextShopItem") {
       if (curr === max) return;
 
-      // Update embed
+      // Update embed with the next item
       const embed = ShopItemEmbed({
         title: "Store",
         indexes: [curr + 1, max],
         item: data[curr + 1],
       });
 
-      const currentItemIsFirst = !(curr + 1 > 0);
-      const currentItemIsLast = !(curr + 1 < max);
-      const buttonRow = shopbuttons(currentItemIsFirst, currentItemIsLast);
+      const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
 
       await interaction.editReply({ embeds: [embed], components: [buttonRow] });
     } else if (interaction.customId === "previousShopItem") {
       // ...
       if (curr === 0) return;
-      // Update embed
+
+      // Update embed with the previous item
       const embed = ShopItemEmbed({
         title: "Store",
         indexes: [curr - 1, max],
         item: data[curr - 1],
       });
 
-      const buttonRow = shopbuttons(!(curr - 1 > 0), !(curr + 1 < max));
+      const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
       await interaction.editReply({ embeds: [embed], components: [buttonRow] });
     } else if(interaction.customId === "toFirstShopItem"){
       const embed = ShopItemEmbed({
