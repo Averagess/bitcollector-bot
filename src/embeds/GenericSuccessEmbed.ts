@@ -12,7 +12,7 @@ interface GenericSuccessEmbedParams {
   color?: ColorResolvable;
   footer?: string;
   tip?: boolean;
-  interaction: ChatInputCommandInteraction;
+  interaction?: ChatInputCommandInteraction;
 }
 
 const GenericSuccessEmbed = ({
@@ -39,7 +39,7 @@ const GenericSuccessEmbed = ({
   } else if (footer) {
     embed.setFooter({ text: footer });
     if(footer.length <= 15) embed.setTimestamp();
-  } else {
+  } else if(interaction) {
     embed.setFooter({ text: `Requested by ${interaction.user.tag} | Bit Collector v${VERSION} |` });
     embed.setTimestamp();
   }
