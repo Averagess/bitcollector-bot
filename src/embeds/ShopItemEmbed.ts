@@ -3,19 +3,21 @@ import readableNumber from "../utils/readableNumber";
 import GenericSuccessEmbed from "./GenericSuccessEmbed";
 
 interface ShopItemEmbedParams {
-  title: string;
+  title?: string;
   description?: string;
   item: InventoryItem;
-  indexes: [number, number] // First value is the current items index, and the second is total number of items
+  indexes: [number, number]; // First value is the current items index, and the second is total number of items
+  sessionOwnerTag: string;
 }
 const ShopItemEmbed = ({
   title,
   description,
   item,
   indexes,
+  sessionOwnerTag,
 }: ShopItemEmbedParams) => {
   const embed = GenericSuccessEmbed({
-    title: `${title} (${indexes[0] + 1}/${indexes[1] + 1})`,
+    title: `${title ?? "Bit Collector's store, page"} (${indexes[0] + 1}/${indexes[1] + 1})`,
     description,
     tip: false,
   });
@@ -28,12 +30,12 @@ const ShopItemEmbed = ({
     },
     {
       name: "Price",
-      value: readableNumber(item.price.toString()),
+      value: readableNumber(item.price.toString()) + " bits",
       inline: false,
     },
     {
       name: "CPS",
-      value: readableNumber(item.cps.toString()),
+      value: readableNumber(item.cps.toString()) + " bits/s",
       inline: false,
     },
     {
@@ -44,6 +46,7 @@ const ShopItemEmbed = ({
   ];
 
   embed.addFields(fields);
+  embed.setFooter({ text: `${sessionOwnerTag}'s store page.` });
 
   return embed;
 };
