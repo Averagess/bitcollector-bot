@@ -38,7 +38,7 @@ const storeCommand = {
 
       const collector = message.createMessageComponentCollector({
         componentType: ComponentType.Button,
-        time: 900000, // 15 minutes
+        time: 875000, // About 14.5 minutes
       });
 
       collector.on("collect", async (i) => {
