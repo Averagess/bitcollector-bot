@@ -43,6 +43,7 @@ const storeCommand = {
 
       collector.on("collect", async (i) => {
         if (i.user.id !== interaction.user.id) return;
+        else if(i.message.embeds.length === 0 || i.message.embeds[0].title === null) return; // Prevents bot crashing if the embed has been deleted
         await i.deferUpdate();
 
         const matchCurrI = i.message.embeds[0].title?.match(/\((\d+)\/\d+\)/);
