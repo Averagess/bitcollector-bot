@@ -2,7 +2,8 @@ import  { AxiosError } from "axios";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import { fetchPlayerShop } from "../services/posters";
-import { GenericSuccessEmbed, NoAccountEmbed } from "../embeds";
+import { NoAccountEmbed, ShopItemEmbed } from "../embeds";
+import shopbuttons from "../actions/shopbuttons";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -15,21 +16,16 @@ const storeCommand = {
 
       const { data } = await fetchPlayerShop(interaction.user.id);
 
-      const shopEmbed = GenericSuccessEmbed({ title: "Store", interaction })
-        .setDescription("Here is the store, you can use the /buy command to buy an item")
-        .addFields(
-          data.map((item, index) => {
-            const priceReadable = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const cpsReadable = item.cps.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-            return {
-              name: `${index + 1}. ${item.name}`,
-              value: `**Price:** ${priceReadable} bits\n**CPS:** ${cpsReadable} bits/s\n**You own:** ${item.amount}`,
-              inline: true,
-            };
-          })
-        );
+      const shopEmbed = ShopItemEmbed({
+        title: "Store",
+        description: "Here's the store, you can use the buttons to navigate between items.\nTo buy an item, use the /buy command.",
+        indexes: [0, data.length - 1],
+        item: data[0],
+      });
 
-      await interaction.editReply({ embeds: [shopEmbed] });
+      const buttonRow = shopbuttons(true, false);
+
+      await interaction.editReply({ embeds: [shopEmbed], components: [buttonRow] });
     } catch (error) {
       if(error instanceof AxiosError && error.response?.status === 404) {
         const errorEmbed = NoAccountEmbed(interaction);
