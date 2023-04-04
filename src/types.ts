@@ -34,6 +34,7 @@ export interface InventoryItem {
   name: string
   price: number
   cps: number
+  baseCps: number
   amount: number
 }
 

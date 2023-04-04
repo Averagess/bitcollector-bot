@@ -24,7 +24,7 @@ const readableNumber = (value: string): string => {
 
 const stamp = `| Bit Collector | ${NODE_ENV} | ${VERSION} |`;
 
-const roundedImage = (x: number,y: number,width: number,height: number,radius: number, ctx: CanvasRenderingContext2D) => {
+const roundedImage = (x: number, y: number, width: number, height: number, radius: number, ctx: CanvasRenderingContext2D) => {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
   ctx.lineTo(x + width - radius, y);
