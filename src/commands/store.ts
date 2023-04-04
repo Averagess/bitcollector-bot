@@ -22,7 +22,8 @@ const storeCommand = {
       const { data } = await fetchPlayerShop(interaction.user.id);
 
       const shopEmbed = ShopItemEmbed({
-        description: "Here's the store, you can use the buttons to navigate between items.\nTo buy an items in bulk, use the `/buy [item name]` command.\nThis session will automatically close in 15 minutes, to open a new session use the /store command again.",
+        description:
+          "Here's the store, you can use the buttons to navigate between items.\nTo buy an items in bulk, use the `/buy [item name]` command.\nThis session will automatically close in 15 minutes, to open a new session use the /store command again.",
         indexes: [0, data.length - 1],
         item: data[0],
         sessionOwnerTag: interaction.user.tag,
@@ -123,7 +124,8 @@ const storeCommand = {
             const response = await buyItem(i.user.id, `${curr + 1}`, 1, false);
             console.log(response.data);
             // nasty but hey it works
-            response.data.purchasedItem.cps = response.data.purchasedItem.baseCps;
+            response.data.purchasedItem.cps =
+              response.data.purchasedItem.baseCps;
             const newEmbed = ShopItemEmbed({
               indexes: [curr, max],
               item: response.data.purchasedItem,
@@ -142,12 +144,10 @@ const storeCommand = {
             });
           } catch (error) {
             console.log("error buying item", error);
-            // Implement error handling
-            // We could edit the existing message embed to display errors like not enough money etc.
             const target = i.user.id;
             let message = `<@${target}> I couldn't complete your transaction.\nReason: `;
 
-            if(error instanceof AxiosError && error.response?.status === 400){
+            if (error instanceof AxiosError && error.response?.status === 400) {
               message += "You don't have enough bits to buy this item.";
             } else {
               message += "An unknown error occured. Please try again later.";
