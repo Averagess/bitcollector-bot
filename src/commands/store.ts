@@ -157,7 +157,7 @@ const storeCommand = {
         }
       });
       collector.on("end", async () => {
-        const buttonRow = shopbuttons(true, false, true);
+        const buttonRow = shopbuttons(true, true, true);
         const shopEmbed = new EmbedBuilder()
           .setTitle("This store session was closed automatically.")
           .setDescription(
