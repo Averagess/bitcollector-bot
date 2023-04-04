@@ -6,7 +6,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
-import { fetchPlayerShop } from "../services/posters";
+import { buyItem, fetchPlayerShop } from "../services/posters";
 import { NoAccountEmbed, ShopItemEmbed } from "../embeds";
 import shopbuttons from "../actions/shopbuttons";
 
@@ -22,14 +22,13 @@ const storeCommand = {
       const { data } = await fetchPlayerShop(interaction.user.id);
 
       const shopEmbed = ShopItemEmbed({
-        description:
-          "Here's the store, you can use the buttons to navigate between items.\nTo buy an item, use the `/buy [item name]` command.\nThis session will automatically close in 15 minutes, to open a new session use the /store command again.",
+        description: "Here's the store, you can use the buttons to navigate between items.\nTo buy an items in bulk, use the `/buy [item name]` command.\nThis session will automatically close in 15 minutes, to open a new session use the /store command again.",
         indexes: [0, data.length - 1],
         item: data[0],
         sessionOwnerTag: interaction.user.tag,
       });
 
-      const buttonRow = shopbuttons(true, false);
+      const buttonRow = shopbuttons(true, false, false);
 
       const message = await interaction.editReply({
         embeds: [shopEmbed],
@@ -43,7 +42,11 @@ const storeCommand = {
 
       collector.on("collect", async (i) => {
         if (i.user.id !== interaction.user.id) return;
-        else if(i.message.embeds.length === 0 || i.message.embeds[0].title === null) return; // Prevents bot crashing if the embed has been deleted
+        else if (
+          i.message.embeds.length === 0 ||
+          i.message.embeds[0].title === null
+        )
+          return; // Prevents bot crashing if the embed has been deleted
         await i.deferUpdate();
 
         const matchCurrI = i.message.embeds[0].title?.match(/\((\d+)\/\d+\)/);
@@ -68,7 +71,7 @@ const storeCommand = {
             sessionOwnerTag: interaction.user.tag,
           });
 
-          const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
+          const buttonRow = shopbuttons(currItemIsFirst, false, currItemIsLast);
 
           await interaction.editReply({
             embeds: [embed],
@@ -84,7 +87,7 @@ const storeCommand = {
             sessionOwnerTag: interaction.user.tag,
           });
 
-          const buttonRow = shopbuttons(currItemIsFirst, currItemIsLast);
+          const buttonRow = shopbuttons(currItemIsFirst, false, currItemIsLast);
           await interaction.editReply({
             embeds: [embed],
             components: [buttonRow],
@@ -96,7 +99,7 @@ const storeCommand = {
             sessionOwnerTag: interaction.user.tag,
           });
 
-          const buttonRow = shopbuttons(true, false);
+          const buttonRow = shopbuttons(true, false, false);
 
           await interaction.editReply({
             embeds: [embed],
@@ -109,23 +112,62 @@ const storeCommand = {
             sessionOwnerTag: interaction.user.tag,
           });
 
-          const buttonRow = shopbuttons(false, true);
+          const buttonRow = shopbuttons(false, false, true);
 
           await interaction.editReply({
             embeds: [embed],
             components: [buttonRow],
           });
+        } else if (i.customId === "buyCurrentItem") {
+          try {
+            const response = await buyItem(i.user.id, `${curr + 1}`, 1, false);
+            console.log(response.data);
+            // nasty but hey it works
+            response.data.purchasedItem.cps = response.data.purchasedItem.baseCps;
+            const newEmbed = ShopItemEmbed({
+              indexes: [curr, max],
+              item: response.data.purchasedItem,
+              sessionOwnerTag: interaction.user.tag,
+            });
+
+            const buttonRow = shopbuttons(
+              currItemIsFirst,
+              false,
+              currItemIsLast
+            );
+
+            await interaction.editReply({
+              embeds: [newEmbed],
+              components: [buttonRow],
+            });
+          } catch (error) {
+            console.log("error buying item", error);
+            // Implement error handling
+            // We could edit the existing message embed to display errors like not enough money etc.
+            const target = i.user.id;
+            let message = `<@${target}> I couldn't complete your transaction.\nReason: `;
+
+            if(error instanceof AxiosError && error.response?.status === 400){
+              message += "You don't have enough bits to buy this item.";
+            } else {
+              message += "An unknown error occured. Please try again later.";
+            }
+
+            await interaction.followUp({ content: message, ephemeral: true });
+          }
         }
       });
       collector.on("end", async () => {
-        const buttonRow = shopbuttons(true, true);
+        const buttonRow = shopbuttons(true, false, true);
         const shopEmbed = new EmbedBuilder()
-          .setTitle("Store session over.")
-          .setDescription("store session has been closed, to open a new session use the /store command");
+          .setTitle("This store session was closed automatically.")
+          .setDescription(
+            "Store session has been closed. to open a new session, please use the /store command"
+          );
 
         await interaction.editReply({
           embeds: [shopEmbed],
-          components: [buttonRow]
+          components: [buttonRow],
         });
       });
     } catch (error) {
