@@ -1,9 +1,9 @@
-import winston, { transports, format } from "winston";
+import { createLogger, transports, format } from "winston";
 import "winston-daily-rotate-file";
 
 const logFormat = format.printf(({ level, message, timestamp }) => `[${timestamp}] ${level.toUpperCase()}: ${message}`);
 
-const logger = winston.createLogger({
+const logger = createLogger({
   level: "info",
   format: format.combine(format.timestamp({ format: "D.M.YYYY HH.mm.ss" }), logFormat),
   defaultMeta: { service: "user-service" },

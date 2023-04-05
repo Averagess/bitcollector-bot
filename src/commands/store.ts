@@ -9,6 +9,7 @@ import {
 import { buyItem, fetchPlayerShop } from "../services/posters";
 import { NoAccountEmbed, ShopItemEmbed } from "../embeds";
 import shopbuttons from "../actions/shopbuttons";
+import logger from "../utils/logger";
 
 const storeCommand = {
   data: new SlashCommandBuilder()
@@ -149,6 +150,7 @@ const storeCommand = {
             if (error instanceof AxiosError && error.response?.status === 400) {
               message += "You don't have enough bits to buy this item.";
             } else {
+              logger.error(`An unknown error was thrown while player ${target} was trying to buy an item from the store. error: ${error}`);
               message += "An unknown error occured. Please try again later.";
             }
 
@@ -161,7 +163,7 @@ const storeCommand = {
         const shopEmbed = new EmbedBuilder()
           .setTitle("This store session was closed automatically.")
           .setDescription(
-            "Store session has been closed. to open a new session, please use the /store command"
+            "Store session has been closed. to open a new session, please use the `/store` command"
           );
 
         await interaction.editReply({
