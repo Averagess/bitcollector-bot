@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import {
   ChatInputCommandInteraction,
   ComponentType,
+  DiscordAPIError,
   EmbedBuilder,
   SlashCommandBuilder,
 } from "discord.js";
@@ -150,7 +151,9 @@ const storeCommand = {
             if (error instanceof AxiosError && error.response?.status === 400) {
               message += "You don't have enough bits to buy this item.";
             } else {
-              logger.error(`An unknown error was thrown while player ${target} was trying to buy an item from the store. error: ${error}`);
+              logger.error(
+                `An unknown error was thrown while player ${target} was trying to buy an item from the store. error: ${error}`
+              );
               message += "An unknown error occured. Please try again later.";
             }
 
@@ -165,7 +168,6 @@ const storeCommand = {
           .setDescription(
             "Store session has been closed. to open a new session, please use the `/store` command"
           );
-
         await interaction.editReply({
           embeds: [shopEmbed],
           components: [buttonRow],
@@ -175,7 +177,9 @@ const storeCommand = {
       if (error instanceof AxiosError && error.response?.status === 404) {
         const errorEmbed = NoAccountEmbed(interaction);
         return await interaction.editReply({ embeds: [errorEmbed] });
-      } else throw error;
+      } else if (error instanceof DiscordAPIError && error.code === 10008)
+        return; // 100008 = Unknown message. This error is thrown when the user deletes the message before the collector ends.
+      else throw error;
     }
   },
 };
