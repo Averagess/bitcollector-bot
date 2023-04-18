@@ -168,18 +168,23 @@ const storeCommand = {
           .setDescription(
             "Store session has been closed. to open a new session, please use the `/store` command"
           );
-        await interaction.editReply({
-          embeds: [shopEmbed],
-          components: [buttonRow],
-        });
+
+        try {
+          await interaction.editReply({
+            embeds: [shopEmbed],
+            components: [buttonRow],
+          });
+        } catch (error) {
+          if (error instanceof DiscordAPIError && error.code === 10008)
+            return; // 100008 = Unknown message. This error is thrown when the user deletes the message before the collector ends.
+          else throw error;
+        }
       });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 404) {
         const errorEmbed = NoAccountEmbed(interaction);
         return await interaction.editReply({ embeds: [errorEmbed] });
-      } else if (error instanceof DiscordAPIError && error.code === 10008)
-        return; // 100008 = Unknown message. This error is thrown when the user deletes the message before the collector ends.
-      else throw error;
+      } else throw error;
     }
   },
 };
