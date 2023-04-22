@@ -1,7 +1,6 @@
 # bitcollector-bot
 
 ## Available scripts
-## Available scripts
 | Script | Description |
 |--------|-------------|
 | start  | starts the built project with node in production mode |
