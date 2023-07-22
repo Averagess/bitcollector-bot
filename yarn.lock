@@ -1045,9 +1045,9 @@ __metadata:
   linkType: hard
 
 "detect-libc@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "detect-libc@npm:2.0.1"
-  checksum: ccb05fcabbb555beb544d48080179c18523a343face9ee4e1a86605a8715b4169f94d663c21a03c310ac824592f2ba9a5270218819bb411ad7be578a527593d7
+  version: 2.0.2
+  resolution: "detect-libc@npm:2.0.2"
+  checksum: 2b2cd3649b83d576f4be7cc37eb3b1815c79969c8b1a03a40a4d55d83bc74d010753485753448eacb98784abf22f7dbd3911fd3b60e29fda28fed2d1a997944d
   languageName: node
   linkType: hard
 
@@ -1068,9 +1068,9 @@ __metadata:
   linkType: hard
 
 "discord-api-types@npm:^0.37.41":
-  version: 0.37.48
-  resolution: "discord-api-types@npm:0.37.48"
-  checksum: aebc89f6bd123fb810f282f83a38923918f98692c23ad203f389c9b2666ea090c86dcd397ce85e1a11595a5325d4ef1a8a0e94a93c576cece897b873402d69eb
+  version: 0.37.50
+  resolution: "discord-api-types@npm:0.37.50"
+  checksum: 08dc5145dbefda5f52b479cd42d96ac2b8110300861855e1f92cc8a0a6525a4059e32724cd5237490c286f5afd86797a86823238cd5eee016198560bb36f6d43
   languageName: node
   linkType: hard
 
